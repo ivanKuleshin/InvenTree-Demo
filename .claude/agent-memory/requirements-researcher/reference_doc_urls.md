@@ -24,3 +24,5 @@ Known component paths (relative to base):
 The official site `docs.inventree.org/en/stable/` returns HTTP 403 for all paths — always use GitHub raw content.
 
 Demo/auth info is at `https://inventree.org/demo.html` (not blocked).
+
+**API Schema docs:** The schema MD files in `docs/docs/api/schema/*.md` only contain a single `[OAD(...)]` directive pointing to a YAML spec file. Those YAML spec files are **not committed** to the repo — they are generated at docs build time from the live Django DRF schema. To get the actual API schema data, fetch directly from the live demo: `https://demo.inventree.org/api/schema/` (returns full OpenAPI 3.0.3 YAML, ~945KB). Then filter by path prefix (e.g., `/api/part`) to extract relevant endpoints and schemas.

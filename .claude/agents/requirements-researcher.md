@@ -20,7 +20,7 @@ requirements as input.
 You have three authoritative sources for InvenTree documentation:
 
 1. **General/Feature Docs**: https://docs.inventree.org/en/stable/part/ (and sub-pages under this domain)
-2. **API Docs**: https://docs.inventree.org/en/stable/api/ (and sub-pages)
+2. **API Docs**: https://docs.inventree.org/en/stable/api/schema/part/ (and sub-pages)
 3. **Demo / Auth Info**: https://inventree.org/demo.html (user credentials, demo environment details)
 
 Always prefer the most specific sub-page for a component (e.g., `/part/part/`, `/stock/stock/`, `/build/build/`,
@@ -139,11 +139,25 @@ These rules are non-negotiable and must be followed precisely:
 
 ### API Documentation Specifics
 
-For API docs, always include:
+**File structure for API schema pages**: When documenting an API schema page that covers multiple endpoints:
+- Create one **index file** (e.g., `docs/api/part-api-schema.md`) containing:
+  - General info: API version, auth schemes, shared schemas/components
+  - A `## Endpoints` section with a table listing every endpoint (method, path, short description) and a link to its detail file
+- Create one **separate detail file per endpoint** (e.g., `docs/api/endpoints/part-list.md`, `docs/api/endpoints/part-create.md`) containing the full technical specification for that endpoint only
+- Endpoint detail filenames should be kebab-case combining the HTTP method and resource (e.g., `part-list-GET.md`, `part-detail-GET.md`, `part-create-POST.md`, `part-update-PUT.md`, `part-partial-update-PATCH.md`, `part-delete-DELETE.md`)
+- Each endpoint detail file must include its own frontmatter with `source:`, `component:`, `topic:`, and `fetched:` fields
+
+**Component schemas**: When an API schema page defines reusable component schemas (e.g., `Part`, `Category`, `PartPricing`, `Patched*`, `Paginated*`):
+- Create one **separate file per schema** under `docs/api/schemas/` (e.g., `docs/api/schemas/part.md`, `docs/api/schemas/part-pricing.md`)
+- Schema filenames should be kebab-case of the schema name (e.g., `PatchedPart` → `patched-part.md`, `PaginatedPartList` → `paginated-part-list.md`)
+- Each schema file must contain: schema name, description, all fields with their types, constraints (nullable, read-only, write-only, maxLength, minLength, min/max value, default, enum values), and any nested object or `$ref` references
+- In the index file, replace the inline schema definitions with a `## Component Schemas` summary table (schema name + one-line description) where each name links to its detail file
+
+For each endpoint detail file, always include:
 
 - Endpoint path and HTTP method
-- Authentication requirements
-- Request parameters (query params, path params, request body schema)
+- Authentication requirements and required scopes
+- Request parameters (query params, path params, request body schema with field types, constraints, defaults)
 - Response schema and example
 - Error codes and their meanings
 - Any rate limits or special behaviors noted
