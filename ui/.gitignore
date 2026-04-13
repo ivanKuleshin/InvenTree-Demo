@@ -1,0 +1,15 @@
+node_modules/
+dist/
+
+# Auth session state — contains user tokens, never commit
+.auth/
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# Environment variables — never commit
+.env
+
+# TypeScript build cache
+*.tsbuildinfo

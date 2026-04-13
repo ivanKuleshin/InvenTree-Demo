@@ -33,8 +33,8 @@ The project follows a three-phase agentic workflow:
 
 3. **Automation phase** — Two automation agents implement the manual test cases in code, maintaining 1:1 structural
    traceability:
-    - **API automation agent** → Java (Maven, REST Assured or equivalent)
-    - **UI automation agent** → JavaScript (Playwright or equivalent)
+   - **API automation agent** → Java (Maven, REST Assured or equivalent)
+   - **UI automation agent** → JavaScript (Playwright or equivalent)
 
 ## Coverage Areas
 
