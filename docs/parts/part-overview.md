@@ -1,9 +1,11 @@
 ---
-source: https://raw.githubusercontent.com/inventree/InvenTree/master/docs/docs/part/index.md
+source: https://docs.inventree.org/en/stable/part/
 component: parts
 topic: Part Overview and Attributes
 fetched: 2026-04-13
 ---
+
+> **Source**: [https://docs.inventree.org/en/stable/part/](https://docs.inventree.org/en/stable/part/)
 
 # Part Overview
 
@@ -38,7 +40,7 @@ Part categories are very flexible and can be easily arranged to match a particul
 
 Each part category also shows a list of sub-categories which exist underneath it.
 
-> **[IMAGE DESCRIPTION]**: Screenshot showing a Part Category view in InvenTree. The view displays a list of parts that belong to a specific category, with columns for part name, description, image thumbnail, category, and stock level. A sub-category list is visible, showing the hierarchical nesting of categories. Navigation breadcrumbs are displayed at the top.
+> **[IMAGE DESCRIPTION]**: Screenshot showing a Part Category view in InvenTree (image: part/part_category.png, alt: "Part category"). The view displays a list of parts that belong to a specific category, with columns for part name, description, image thumbnail, category, and stock level. A sub-category list is visible, showing the hierarchical nesting of categories. Navigation breadcrumbs are displayed at the top.
 
 The category part list provides an overview of each part:
 
@@ -61,15 +63,15 @@ A *Virtual* part is one which does not physically exist but should still be trac
 
 ### Template
 
-A *Template* part is one which can have *variants* which exist underneath it. Read further information about [template parts](./part-template.md).
+A *Template* part is one which can have *variants* which exist underneath it. [Read further information about template parts here](./part-template.md).
 
 ### Assembly
 
-If a part is designated as an *Assembly* it can be created (or built) from other component parts. As an example, a circuit board assembly is made using multiple electronic components, which are tracked in the system. An *Assembly* Part has a Bill of Materials (BOM) which lists all the required sub-components.
+If a part is designated as an *Assembly* it can be created (or built) from other component parts. As an example, a circuit board assembly is made using multiple electronic components, which are tracked in the system. An *Assembly* Part has a Bill of Materials (BOM) which lists all the required sub-components. [Read further information about BOM management here](../manufacturing/bom.md).
 
 ### Component
 
-If a part is designated as a *Component* it can be used as a sub-component of an *Assembly*.
+If a part is designated as a *Component* it can be used as a sub-component of an *Assembly*. [Read further information about BOM management here](../manufacturing/bom.md)
 
 ### Testable
 
@@ -79,11 +81,11 @@ Testable parts can have test templates defined against the part, allowing test r
 
 Trackable parts can be assigned batch numbers or serial numbers which uniquely identify a particular stock item. Trackable parts also provide other features (and restrictions) in the InvenTree ecosystem.
 
-Read further information about [trackable parts](./part-trackable.md).
+[Read further information about trackable parts here](./part-trackable.md).
 
 ### Purchaseable
 
-If a part is designated as *Purchaseable* it can be purchased from external suppliers. Setting this flag allows parts to be linked to supplier parts and procured via purchase orders.
+If a part is designated as *Purchaseable* it can be purchased from external suppliers. Setting this flag allows parts be linked to supplier parts and procured via purchase orders.
 
 #### Suppliers
 
@@ -117,13 +119,13 @@ By default, all parts are *Active*. Marking a part as inactive means it is not a
 
 Each type of part can define a custom "unit of measure" which is a standardized unit which is used to track quantities for a particular part. By default, the "unit of measure" for each part is blank, which means that each part is tracked in dimensionless quantities of "pieces".
 
-> **Note:** Read more on how InvenTree supports physical units of measure in the concepts/units documentation.
+> **Note:** Read more on how InvenTree supports [physical units of measure](../concepts/units.md).
 
 ### Physical Units
 
 It is possible to track parts using physical quantity values, such as *metres* or *litres*. For example, it would make sense to track a "wire" in units of "metres":
 
-> **[IMAGE DESCRIPTION]**: Screenshot showing the Part units configuration in InvenTree. A part named something like "Wire" is displayed with a unit of measure field set to "m" (metres). The interface shows how InvenTree supports physical unit tracking for a part, and the unit is visible both in the part detail header and in the stock quantity fields.
+> **[IMAGE DESCRIPTION]**: Screenshot showing the Part units configuration in InvenTree (image: part/part_units.png, alt: "Part units"). A part is displayed with a unit of measure field set to "m" (metres). The interface shows how InvenTree supports physical unit tracking for a part, with the unit visible in the part detail header and stock quantity fields.
 
 ### Supplier Part Units
 
@@ -133,13 +135,13 @@ By default, units of measure for supplier parts are specified in the same unit a
 
 If an incompatible unit type is specified, an error will be displayed:
 
-> **[IMAGE DESCRIPTION]**: Screenshot showing an error message in InvenTree when an invalid/incompatible unit type is entered for a supplier part. The error message appears inline or as a dialog, indicating that the selected unit is not compatible with the base part unit.
+> **[IMAGE DESCRIPTION]**: Screenshot showing an error message in InvenTree when an invalid/incompatible unit type is entered for a supplier part (image: part/part_units_invalid.png, alt: "Invalid supplier part units"). The error message appears inline or as a dialog, indicating that the selected unit is not compatible with the base part unit.
 
 ## Part Images
 
 Each part can have an associated image, which is used for display purposes throughout the InvenTree interface. A prominent example is on the part detail page itself:
 
-> **[IMAGE DESCRIPTION]**: Screenshot of the Part detail page in InvenTree showing a part image prominently displayed in the header/top section of the page. The image appears alongside the part name, IPN, description, and other key fields. The image is displayed at a medium size, serving as a visual identifier for the part.
+> **[IMAGE DESCRIPTION]**: Screenshot of the Part detail page in InvenTree showing a part image prominently displayed (image: part/part_image_example.png, alt: "Part image example"). The image appears alongside the part name, IPN, description, and other key fields. The image is displayed at a medium size, serving as a visual identifier for the part.
 
 ### Image Thumbnails
 
@@ -149,9 +151,9 @@ Thumbnail images are also used throughout the interface, particularly in table v
 
 #### Web Interface
 
-In the web interface, part images can be uploaded directly from the part view. Hover the mouse cursor over the Part image to reveal multiple options:
+In the web interface, part images can be uploaded directly from the [part view](./part-views.md). Hover the mouse cursor over the Part image to reveal multiple options:
 
-> **[IMAGE DESCRIPTION]**: Screenshot showing the part image upload hover interaction in InvenTree. When hovering over the part image in the part detail view, a set of overlay icons or buttons appears, providing options to upload a new image, select from existing images, or delete the current image. The overlay is semi-transparent and positioned over the image area.
+> **[IMAGE DESCRIPTION]**: Screenshot showing the part image upload hover interaction in InvenTree (image: part/part_image_upload.png, alt: "Part image upload"). When hovering over the part image in the part detail view, a set of overlay icons or buttons appears, providing options to upload a new image, select from existing images, or delete the current image.
 
 | Action | Description |
 | --- | --- |
@@ -161,12 +163,12 @@ In the web interface, part images can be uploaded directly from the part view. H
 
 #### API
 
-Image upload is supported via the InvenTree API, allowing images to be associated with parts programmatically. This means that the Python interface also supports image upload.
+Image upload is supported via the [InvenTree API](../api/index.md), allowing images to be associated with parts programmatically. Further, this means that the [Python interface](../api/python/index.md) also supports image upload.
 
 #### Mobile App
 
-The InvenTree mobile app allows part images to be directly uploaded, either from stored files or integrated camera.
+The [InvenTree mobile app](../app/part.md#part-image-view) allows part images to be directly uploaded, either from stored files or integrated camera.
 
 ## Part Import
 
-*Parts* can be imported by staff-members on the part-list-view (this feature must be enabled in the part-settings), in the part-settings or on the admin-page for parts (only accessible if you are also an admin). The first two options provide a multi-stage wizard that enables mapping fields from various spreadsheet or table-data formats while the latter requires a well-formatted file but is much more performant.
+*Parts* can be imported by staff-members on the part-list-view (this feature must be enabled in the part-settings), in the part-settings or on the [admin-page for parts](../settings/import.md) (only accessible if you are also an admin). The first two options provide a multi-stage wizard that enables mapping fields from various spreadsheet or table-data formats while the latter requires a well-formatted file but is much more performant.

@@ -26,6 +26,16 @@ You have three authoritative sources for InvenTree documentation:
 Always prefer the most specific sub-page for a component (e.g., `/part/part/`, `/stock/stock/`, `/build/build/`,
 `/api/part/`, etc.) over generic index pages.
 
+**CRITICAL — source priority and URL rules:**
+- ALWAYS fetch from the rendered `docs.inventree.org` web pages. As a second priority you can use raw GitHub URLs
+  (`raw.githubusercontent.com`) or GitHub repository source files as a source.
+- If a `docs.inventree.org` page is unavailable, fall back to the GitHub-rendered page
+  (`github.com/inventree/InvenTree/blob/...`), never the raw version.
+- The `source:` frontmatter field and the `> **Source**:` link in the document body MUST contain the
+  `docs.inventree.org` URL (or `inventree.org` for demo/auth pages), not any GitHub URL.
+- Content fetched from web pages includes rendered screenshots, resolved admonitions, and expanded
+  partials that raw Markdown files do not — this is why web pages are mandatory.
+
 ---
 
 ## LOCAL DOCUMENTATION STRUCTURE
@@ -125,6 +135,7 @@ These rules are non-negotiable and must be followed precisely:
   distinct topics).
 - If a page covers a single coherent topic, one file is sufficient.
 - Include a `## Table of Contents` section at the top of longer documents.
+- Include link to the original source URL.
 
 ### API Documentation Specifics
 

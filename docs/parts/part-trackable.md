@@ -1,9 +1,11 @@
 ---
-source: https://raw.githubusercontent.com/inventree/InvenTree/master/docs/docs/part/trackable.md
+source: https://docs.inventree.org/en/stable/part/trackable/
 component: parts
 topic: Trackable Parts and Serial Numbers
 fetched: 2026-04-13
 ---
+
+> **Source**: [https://docs.inventree.org/en/stable/part/trackable/](https://docs.inventree.org/en/stable/part/trackable/)
 
 # Trackable Parts
 
@@ -17,11 +19,11 @@ fetched: 2026-04-13
 
 ## Stock Tracking
 
-Denoting a part as *Trackable* changes the way that stock items associated with the particular part are handled in the database. A trackable part also has more restrictions imposed by the database scheme.
+Denoting a part as *Trackable* changes the way that [stock items](../stock/index.md) associated with the particular part are handled in the database. A trackable part also has more restrictions imposed by the database scheme.
 
 For many parts in an InvenTree database, simply tracking current stock levels (and locations) is sufficient. However, some parts require more extensive tracking than simple stock level knowledge.
 
-Any stock item associated with a trackable part *must* have either a batch number or a serial number. This includes stock created manually or via an internal process (such as a Purchase Order or a Build Order).
+Any stock item associated with a trackable part *must* have either a batch number or a serial number. This includes stock created manually or via an internal process (such as a [Purchase Order](../purchasing/purchase_order.md) or a [Build Order](../manufacturing/build.md)).
 
 ## Assign Serial Numbers
 
@@ -47,4 +49,4 @@ For example:
 
 ## Build Orders
 
-Build orders have some extra requirements when either building a trackable part, or using parts in the Bill of Materials which are themselves trackable.
+[Build orders](../manufacturing/build.md) have some extra requirements when either building a trackable part, or using parts in the Bill of Materials which are themselves trackable.

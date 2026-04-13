@@ -5,6 +5,8 @@ topic: Demo Environment Credentials
 fetched: 2026-04-13
 ---
 
+> **Source**: [https://inventree.org/demo.html](https://inventree.org/demo.html)
+
 # InvenTree Demo Environment
 
 ## Demo URL

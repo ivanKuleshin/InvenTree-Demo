@@ -1,9 +1,11 @@
 ---
-source: https://raw.githubusercontent.com/inventree/InvenTree/master/docs/docs/part/views.md
+source: https://docs.inventree.org/en/stable/part/views/
 component: parts
 topic: Part Views - Part Detail Page
 fetched: 2026-04-13
 ---
+
+> **Source**: [https://docs.inventree.org/en/stable/part/views/](https://docs.inventree.org/en/stable/part/views/)
 
 # Part Views
 
@@ -37,26 +39,31 @@ The Part detail view page provides a detailed view of a single part in the syste
 
 ### Category Breadcrumb List
 
-The categories of each part is displayed on the top navigation bar. This breadcrumb provides the hierarchical path of the part's category structure, allowing users to navigate up to parent categories.
+The categories of each part is displayed on the top navigation bar as shown in the above screenshot. [Click here](./part-overview.md#part-category) for more information about categories.
 
 ## Part Details
 
 Details provides information about the particular part. Parts details can be displayed in the header panel clicking on "Show Part Details" toggle button.
 
-> **[IMAGE DESCRIPTION]**: Screenshot of the Part Overview page in InvenTree. The header panel shows the part image on the left, and part metadata on the right including fields such as IPN (Internal Part Number), Name, Description, Revision, Keywords, External Link, Creation Date, and Units. A "Show Part Details" toggle button is visible. The category breadcrumb navigation is shown at the top of the page. Below the header, tabs are visible for navigating to different sections such as Stock, BOM, Build Orders, etc.
+> **[IMAGE DESCRIPTION]**: Screenshot of the Part Overview page in InvenTree (image: part/part_overview.png, alt: "Part Overview"). The header panel shows the part image on the left, and part metadata on the right including fields such as IPN (Internal Part Number), Name, Description, Revision, Keywords, External Link, Creation Date, and Units. A "Show Part Details" toggle button is visible. The category breadcrumb navigation is shown at the top of the page. Below the header, tabs are visible for navigating to different sections such as Stock, BOM, Build Orders, etc.
 
 A Part is defined in the system by the following parameters:
 
-| Field | Description |
-| --- | --- |
-| **Internal Part Number (IPN)** | A special code which can be used to link a part to a numbering system. The IPN field is not required, but may be useful where a part numbering system has been defined. |
-| **Name** | The Part name is a simple (unique) text label |
-| **Description** | Longer form text field describing the Part |
-| **Revision** | An optional revision code denoting the particular version for the part. Used when there are multiple revisions of the same master part object. |
-| **Keywords** | Optional few words to describe the part and make the part search more efficient. |
-| **External Link** | An external URL field is provided to link to an external page. This could be useful if the part has extra documentation located on an external server. |
-| **Creation Date** | Indicates when the part was created and by which user (label on right-hand side) |
-| **Units** | Units of measure (UoM) for this Part. The default is 'pcs' |
+**Internal Part Number (IPN)** - A special code which can be used to link a part to a numbering system. The IPN field is not required, but may be useful where a part numbering system has been defined.
+
+**Name** - The Part name is a simple (unique) text label
+
+**Description** - Longer form text field describing the Part
+
+**Revision** - An optional revision code denoting the particular version for the part. Used when there are multiple revisions of the same master part object. Read [more about part revisions here](./revision.md).
+
+**Keywords** - Optional few words to describe the part and make the part search more efficient.
+
+**External Link** - An external URL field is provided to link to an external page. This could be useful if the part has extra documentation located on an external server.
+
+**Creation Date** - Indicates when the part was created and by which user (label on right-hand side)
+
+**Units** - Units of measure (UoM) for this Part. The default is 'pcs'
 
 ## Part Tabs
 
@@ -66,13 +73,13 @@ The Part view page organizes part data into sections, displayed as tabs. Each ta
 
 If a part is a *Template Part* then the *Variants* tab will be visible.
 
-This tab lists all variant parts created under the template part. Read about [Part templates and variants](./part-template.md).
+[Read about Part templates and variants](./part-template.md).
 
 ### Stock
 
 The *Stock* tab shows all the stock items for the selected *Part*. The user can quickly determine how many parts are in stock, where they are located, and the status of each *Stock Item*.
 
-> **[IMAGE DESCRIPTION]**: Screenshot of the Part Stock tab in InvenTree. The tab displays a table listing all stock items for the selected part. Columns include quantity, location, batch number, serial number (if applicable), status, and other stock-related fields. Toolbar buttons are visible for exporting data, creating a new stock item, and performing stock actions on selected rows.
+> **[IMAGE DESCRIPTION]**: Screenshot of the Part Stock tab in InvenTree (image: part/part_stock.png, alt: "Part Stock"). The tab displays a table listing all stock items for the selected part. Columns include quantity, location, batch number, serial number (if applicable), status, and other stock-related fields. Toolbar buttons are visible for exporting data, creating a new stock item, and performing stock actions on selected rows.
 
 #### Functions
 
@@ -96,7 +103,7 @@ The *Allocated* tab displays how many units of this part have been allocated to 
 
 ### Bill of Materials
 
-The *BOM* tab displays the Bill of Materials - a list of sub-components used to build an assembly. Each row in the BOM specifies a quantity of another Part which is required to build the assembly. This tab is only visible if the Part is an *assembly* (meaning it can be built from other parts).
+The *BOM* tab displays the [Bill of Materials](../manufacturing/bom.md) - a list of sub-components used to build an assembly. Each row in the BOM specifies a quantity of another Part which is required to build the assembly. This tab is only visible if the Part is an *assembly* (meaning it can be built from other parts).
 
 ### Build Orders
 
@@ -112,7 +119,7 @@ The *Suppliers* tab displays all the *Part Suppliers* and *Part Manufacturers* f
 
 This tab is only visible if the *Part* is designated as *Purchaseable*.
 
-> **[IMAGE DESCRIPTION]**: Screenshot of the Part Suppliers and Manufacturers tab in InvenTree. The tab shows two sections or sub-tables: one listing all supplier parts (each row showing the supplier name, supplier SKU, packaging, price breaks, etc.) and another showing manufacturer parts (manufacturer name, MPN - manufacturer part number, etc.). Action buttons for adding new supplier/manufacturer entries are visible in the toolbar.
+> **[IMAGE DESCRIPTION]**: Screenshot of the Part Suppliers and Manufacturers tab in InvenTree (image: part/part_manufacturers_suppliers.png, alt: "Part Suppliers and Manufacturers"). The tab shows two sections or sub-tables: one listing all supplier parts (each row showing the supplier name, supplier SKU, packaging, price breaks, etc.) and another showing manufacturer parts (manufacturer name, MPN - manufacturer part number, etc.). Action buttons for adding new supplier/manufacturer entries are visible in the toolbar.
 
 ### Purchase Orders
 
@@ -126,11 +133,11 @@ The *Sales Orders* tab shows a list of the sales orders for this part. It provid
 
 ### Stock History
 
-The *Stock History* tab provides historical stock level information. Refer to the stock history documentation for further information.
+The *Stock History* tab provides historical stock level information. Refer to the [stock history documentation](./stocktake.md) for further information.
 
 ### Test Templates
 
-If a part is marked as *testable*, the user can define tests which must be performed on any stock items which are instances of this part. Read more about [testing](./part-test-templates.md).
+If a part is marked as *testable*, the user can define tests which must be performed on any stock items which are instances of this part. [Read more about testing](./part-test-templates.md).
 
 ### Related Parts
 
@@ -138,21 +145,21 @@ Related Part denotes a relationship between two parts, when users want to show t
 
 Related parts can be added and are shown under a table of the same name in the "Part" view:
 
-> **[IMAGE DESCRIPTION]**: Screenshot of the Related Parts section within the Part view in InvenTree. A table is displayed showing parts that have been manually linked as "related" to the current part. Each row shows the related part's name, description, category, and stock level. Buttons are available to add a new related part relationship or remove existing ones. This section appears as a tab or sub-section within the part detail page.
+> **[IMAGE DESCRIPTION]**: Screenshot of the Related Parts section within the Part view in InvenTree (image: part/part_related.png, alt: "Related Parts Example View"). A table is displayed showing parts that have been manually linked as "related" to the current part. Each row shows the related part's name, description, category, and stock level. Buttons are available to add a new related part relationship or remove existing ones.
 
 This feature can be enabled or disabled in the global part settings.
 
 ### Parameters
 
-Parts can have multiple defined parameters. Parameters allow additional technical specifications or attributes to be stored against a part (e.g., resistance, voltage rating, package type).
+Parts can have multiple defined parameters.
 
-Read about parameters in the concepts/parameters documentation.
+[Read about parameters](../concepts/parameters.md).
 
 ### Attachments
 
 The *Part Attachments* tab displays file attachments associated with the selected *Part*. Multiple file attachments (such as datasheets) can be uploaded for each *Part*.
 
-Read about attachments in the concepts/attachments documentation.
+[Read about attachments](../concepts/attachments.md).
 
 ### Notes
 

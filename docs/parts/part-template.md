@@ -1,9 +1,11 @@
 ---
-source: https://raw.githubusercontent.com/inventree/InvenTree/master/docs/docs/part/template.md
+source: https://docs.inventree.org/en/stable/part/template/
 component: parts
 topic: Part Templates and Variants
 fetched: 2026-04-13
 ---
+
+> **Source**: [https://docs.inventree.org/en/stable/part/template/](https://docs.inventree.org/en/stable/part/template/)
 
 # Part Templates
 
@@ -41,6 +43,6 @@ Any part can be set as "Template" part. To do so:
 
 ### Create Variant
 
-When a part's *Template option* is turned-on, "Variants" of this part can be created.
+When a part's [*Template option*](#enable-template-part) is turned-on, "Variants" of this part can be created.
 
 To create a variant, navigate to a specific part detail page, click on the "Variants" tab then click on the "New Variant" button. The `Duplicate Part` form will be displayed. Fill it out then click **Submit** to create the variant.
