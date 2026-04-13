@@ -1,6 +1,6 @@
 ---
 name: playwright-explore-website
-description: 'Website exploration for testing using Playwright MCP'
+description: "Website exploration for testing using Playwright MCP"
 ---
 
 # Website Exploration for Testing
