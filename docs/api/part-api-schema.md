@@ -15,52 +15,52 @@ fetched: 2026-04-13
 - [Authentication](#authentication)
 - [OAuth2 Scopes](#oauth2-scopes)
 - [Endpoints Summary](#endpoints-summary)
-    - [Parts (Core)](#parts-core)
-    - [Part Categories](#part-categories)
-    - [Part Internal Pricing](#part-internal-pricing)
-    - [Part Sale Pricing](#part-sale-pricing)
-    - [Part Related Parts](#part-related-parts)
-    - [Part Stocktake](#part-stocktake)
-    - [Part Test Templates](#part-test-templates)
-    - [Part Thumbnails](#part-thumbnails)
+  - [Parts (Core)](#parts-core)
+  - [Part Categories](#part-categories)
+  - [Part Internal Pricing](#part-internal-pricing)
+  - [Part Sale Pricing](#part-sale-pricing)
+  - [Part Related Parts](#part-related-parts)
+  - [Part Stocktake](#part-stocktake)
+  - [Part Test Templates](#part-test-templates)
+  - [Part Thumbnails](#part-thumbnails)
 - [Component Schemas](#component-schemas)
-    - [BulkRequest](schemas/bulk-request.md)
-    - [Category](schemas/category.md)
-    - [CategoryParameterTemplate](schemas/category-parameter-template.md)
-    - [PaginatedCategoryList](schemas/paginated-category-list.md)
-    - [PaginatedCategoryParameterTemplateList](schemas/paginated-category-parameter-template-list.md)
-    - [PaginatedCategoryTreeList](schemas/paginated-category-tree-list.md)
-    - [PaginatedPartInternalPriceList](schemas/paginated-part-internal-price-list.md)
-    - [PaginatedPartList](schemas/paginated-part-list.md)
-    - [PaginatedPartRelationList](schemas/paginated-part-relation-list.md)
-    - [PaginatedPartSalePriceList](schemas/paginated-part-sale-price-list.md)
-    - [PaginatedPartStocktakeList](schemas/paginated-part-stocktake-list.md)
-    - [PaginatedPartTestTemplateList](schemas/paginated-part-test-template-list.md)
-    - [PaginatedPartThumbList](schemas/paginated-part-thumb-list.md)
-    - [Part](schemas/part.md)
-    - [PartBomValidate](schemas/part-bom-validate.md)
-    - [PartCopyBOM](schemas/part-copy-bom.md)
-    - [PartInternalPrice](schemas/part-internal-price.md)
-    - [PartPricing](schemas/part-pricing.md)
-    - [PartRelation](schemas/part-relation.md)
-    - [PartRequirements](schemas/part-requirements.md)
-    - [PartSalePrice](schemas/part-sale-price.md)
-    - [PartSerialNumber](schemas/part-serial-number.md)
-    - [PartStocktake](schemas/part-stocktake.md)
-    - [PartStocktakeGenerate](schemas/part-stocktake-generate.md)
-    - [PartTestTemplate](schemas/part-test-template.md)
-    - [PartThumbSerializerUpdate](schemas/part-thumb-serializer-update.md)
-    - [PatchedCategory](schemas/patched-category.md)
-    - [PatchedCategoryParameterTemplate](schemas/patched-category-parameter-template.md)
-    - [PatchedPart](schemas/patched-part.md)
-    - [PatchedPartBomValidate](schemas/patched-part-bom-validate.md)
-    - [PatchedPartInternalPrice](schemas/patched-part-internal-price.md)
-    - [PatchedPartPricing](schemas/patched-part-pricing.md)
-    - [PatchedPartRelation](schemas/patched-part-relation.md)
-    - [PatchedPartSalePrice](schemas/patched-part-sale-price.md)
-    - [PatchedPartStocktake](schemas/patched-part-stocktake.md)
-    - [PatchedPartTestTemplate](schemas/patched-part-test-template.md)
-    - [PatchedPartThumbSerializerUpdate](schemas/patched-part-thumb-serializer-update.md)
+  - [BulkRequest](schemas/bulk-request.md)
+  - [Category](schemas/category.md)
+  - [CategoryParameterTemplate](schemas/category-parameter-template.md)
+  - [PaginatedCategoryList](schemas/paginated-category-list.md)
+  - [PaginatedCategoryParameterTemplateList](schemas/paginated-category-parameter-template-list.md)
+  - [PaginatedCategoryTreeList](schemas/paginated-category-tree-list.md)
+  - [PaginatedPartInternalPriceList](schemas/paginated-part-internal-price-list.md)
+  - [PaginatedPartList](schemas/paginated-part-list.md)
+  - [PaginatedPartRelationList](schemas/paginated-part-relation-list.md)
+  - [PaginatedPartSalePriceList](schemas/paginated-part-sale-price-list.md)
+  - [PaginatedPartStocktakeList](schemas/paginated-part-stocktake-list.md)
+  - [PaginatedPartTestTemplateList](schemas/paginated-part-test-template-list.md)
+  - [PaginatedPartThumbList](schemas/paginated-part-thumb-list.md)
+  - [Part](schemas/part.md)
+  - [PartBomValidate](schemas/part-bom-validate.md)
+  - [PartCopyBOM](schemas/part-copy-bom.md)
+  - [PartInternalPrice](schemas/part-internal-price.md)
+  - [PartPricing](schemas/part-pricing.md)
+  - [PartRelation](schemas/part-relation.md)
+  - [PartRequirements](schemas/part-requirements.md)
+  - [PartSalePrice](schemas/part-sale-price.md)
+  - [PartSerialNumber](schemas/part-serial-number.md)
+  - [PartStocktake](schemas/part-stocktake.md)
+  - [PartStocktakeGenerate](schemas/part-stocktake-generate.md)
+  - [PartTestTemplate](schemas/part-test-template.md)
+  - [PartThumbSerializerUpdate](schemas/part-thumb-serializer-update.md)
+  - [PatchedCategory](schemas/patched-category.md)
+  - [PatchedCategoryParameterTemplate](schemas/patched-category-parameter-template.md)
+  - [PatchedPart](schemas/patched-part.md)
+  - [PatchedPartBomValidate](schemas/patched-part-bom-validate.md)
+  - [PatchedPartInternalPrice](schemas/patched-part-internal-price.md)
+  - [PatchedPartPricing](schemas/patched-part-pricing.md)
+  - [PatchedPartRelation](schemas/patched-part-relation.md)
+  - [PatchedPartSalePrice](schemas/patched-part-sale-price.md)
+  - [PatchedPartStocktake](schemas/patched-part-stocktake.md)
+  - [PatchedPartTestTemplate](schemas/patched-part-test-template.md)
+  - [PatchedPartThumbSerializerUpdate](schemas/patched-part-thumb-serializer-update.md)
 
 ## Overview
 
@@ -107,7 +107,7 @@ All endpoints require authentication unless otherwise noted. The following authe
 ## OAuth2 Scopes
 
 | Scope                     | Description                          |
-|---------------------------|--------------------------------------|
+| ------------------------- | ------------------------------------ |
 | `a:staff`                 | User Role Staff                      |
 | `a:superuser`             | User Role Superuser                  |
 | `g:read`                  | General Read scope                   |
@@ -157,7 +157,7 @@ and response details.
 ### Parts (Core)
 
 | Method | Path                             | Operation ID                       | Detail File                                                                      |
-|--------|----------------------------------|------------------------------------|----------------------------------------------------------------------------------|
+| ------ | -------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------- |
 | GET    | `/api/part/`                     | `part_list`                        | [part-list-GET.md](endpoints/part-list-GET.md)                                   |
 | POST   | `/api/part/`                     | `part_create`                      | [part-create-POST.md](endpoints/part-create-POST.md)                             |
 | PUT    | `/api/part/`                     | `part_bulk_update`                 | [part-bulk-update-PUT.md](endpoints/part-bulk-update-PUT.md)                     |
@@ -179,7 +179,7 @@ and response details.
 ### Part Categories
 
 | Method | Path                                  | Operation ID                              | Detail File                                                                                        |
-|--------|---------------------------------------|-------------------------------------------|----------------------------------------------------------------------------------------------------|
+| ------ | ------------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | GET    | `/api/part/category/`                 | `part_category_list`                      | [part-category-list-GET.md](endpoints/part-category-list-GET.md)                                   |
 | POST   | `/api/part/category/`                 | `part_category_create`                    | [part-category-create-POST.md](endpoints/part-category-create-POST.md)                             |
 | PUT    | `/api/part/category/`                 | `part_category_bulk_update`               | [part-category-bulk-update-PUT.md](endpoints/part-category-bulk-update-PUT.md)                     |
@@ -199,7 +199,7 @@ and response details.
 ### Part Internal Pricing
 
 | Method | Path                             | Operation ID                         | Detail File                                                                            |
-|--------|----------------------------------|--------------------------------------|----------------------------------------------------------------------------------------|
+| ------ | -------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------- |
 | GET    | `/api/part/internal-price/`      | `part_internal_price_list`           | [part-internal-price-list-GET.md](endpoints/part-internal-price-list-GET.md)           |
 | POST   | `/api/part/internal-price/`      | `part_internal_price_create`         | [part-internal-price-create-POST.md](endpoints/part-internal-price-create-POST.md)     |
 | GET    | `/api/part/internal-price/{id}/` | `part_internal_price_retrieve`       | [part-internal-price-detail-GET.md](endpoints/part-internal-price-detail-GET.md)       |
@@ -210,7 +210,7 @@ and response details.
 ### Part Sale Pricing
 
 | Method | Path                         | Operation ID                     | Detail File                                                                    |
-|--------|------------------------------|----------------------------------|--------------------------------------------------------------------------------|
+| ------ | ---------------------------- | -------------------------------- | ------------------------------------------------------------------------------ |
 | GET    | `/api/part/sale-price/`      | `part_sale_price_list`           | [part-sale-price-list-GET.md](endpoints/part-sale-price-list-GET.md)           |
 | POST   | `/api/part/sale-price/`      | `part_sale_price_create`         | [part-sale-price-create-POST.md](endpoints/part-sale-price-create-POST.md)     |
 | GET    | `/api/part/sale-price/{id}/` | `part_sale_price_retrieve`       | [part-sale-price-detail-GET.md](endpoints/part-sale-price-detail-GET.md)       |
@@ -221,7 +221,7 @@ and response details.
 ### Part Related Parts
 
 | Method | Path                      | Operation ID                  | Detail File                                                              |
-|--------|---------------------------|-------------------------------|--------------------------------------------------------------------------|
+| ------ | ------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
 | GET    | `/api/part/related/`      | `part_related_list`           | [part-related-list-GET.md](endpoints/part-related-list-GET.md)           |
 | POST   | `/api/part/related/`      | `part_related_create`         | [part-related-create-POST.md](endpoints/part-related-create-POST.md)     |
 | GET    | `/api/part/related/{id}/` | `part_related_retrieve`       | [part-related-detail-GET.md](endpoints/part-related-detail-GET.md)       |
@@ -232,7 +232,7 @@ and response details.
 ### Part Stocktake
 
 | Method | Path                            | Operation ID                     | Detail File                                                                              |
-|--------|---------------------------------|----------------------------------|------------------------------------------------------------------------------------------|
+| ------ | ------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | GET    | `/api/part/stocktake/`          | `part_stocktake_list`            | [part-stocktake-list-GET.md](endpoints/part-stocktake-list-GET.md)                       |
 | POST   | `/api/part/stocktake/`          | `part_stocktake_create`          | [part-stocktake-create-POST.md](endpoints/part-stocktake-create-POST.md)                 |
 | DELETE | `/api/part/stocktake/`          | `part_stocktake_bulk_destroy`    | [part-stocktake-bulk-destroy-DELETE.md](endpoints/part-stocktake-bulk-destroy-DELETE.md) |
@@ -245,7 +245,7 @@ and response details.
 ### Part Test Templates
 
 | Method | Path                            | Operation ID                        | Detail File                                                                          |
-|--------|---------------------------------|-------------------------------------|--------------------------------------------------------------------------------------|
+| ------ | ------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------ |
 | GET    | `/api/part/test-template/`      | `part_test_template_list`           | [part-test-template-list-GET.md](endpoints/part-test-template-list-GET.md)           |
 | POST   | `/api/part/test-template/`      | `part_test_template_create`         | [part-test-template-create-POST.md](endpoints/part-test-template-create-POST.md)     |
 | GET    | `/api/part/test-template/{id}/` | `part_test_template_retrieve`       | [part-test-template-detail-GET.md](endpoints/part-test-template-detail-GET.md)       |
@@ -256,7 +256,7 @@ and response details.
 ### Part Thumbnails
 
 | Method | Path                     | Operation ID                 | Detail File                                                          |
-|--------|--------------------------|------------------------------|----------------------------------------------------------------------|
+| ------ | ------------------------ | ---------------------------- | -------------------------------------------------------------------- |
 | GET    | `/api/part/thumbs/`      | `part_thumbs_list`           | [part-thumbs-list-GET.md](endpoints/part-thumbs-list-GET.md)         |
 | GET    | `/api/part/thumbs/{id}/` | `part_thumbs_retrieve`       | [part-thumbs-detail-GET.md](endpoints/part-thumbs-detail-GET.md)     |
 | PUT    | `/api/part/thumbs/{id}/` | `part_thumbs_update`         | [part-thumbs-detail-PUT.md](endpoints/part-thumbs-detail-PUT.md)     |
@@ -268,7 +268,7 @@ The following schemas are referenced by the Parts API endpoints. Each schema has
 `docs/api/schemas/`.
 
 | Schema                                                                                          | Detail File                                             | Description                                                                            |
-|-------------------------------------------------------------------------------------------------|---------------------------------------------------------|----------------------------------------------------------------------------------------|
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | [BulkRequest](schemas/bulk-request.md)                                                          | `schemas/bulk-request.md`                               | Parameters for selecting items for bulk operations                                     |
 | [Category](schemas/category.md)                                                                 | `schemas/category.md`                                   | Serializer for PartCategory                                                            |
 | [CategoryParameterTemplate](schemas/category-parameter-template.md)                             | `schemas/category-parameter-template.md`                | Serializer for the PartCategoryParameterTemplate model                                 |

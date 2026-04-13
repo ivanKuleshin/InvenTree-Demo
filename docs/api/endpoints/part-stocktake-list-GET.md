@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,15 +24,15 @@ fetched: 2026-04-13
 
 ## Query Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `limit` | query | integer | **yes** | Number of results to return per page. |
-| `offset` | query | integer | no | The initial index from which to return the results. |
-| `ordering` | query | enum | no | Which field to use when ordering the results. Values: `part`, `-part`, `item_count`, `-item_count`, `quantity`, `-quantity`, `date`, `-date`, `user`, `-user`, `pk`, `-pk` |
-| `part` | query | integer | no |  |
+| Name       | In    | Type    | Required | Description                                                                                                                                                                |
+| ---------- | ----- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit`    | query | integer | **yes**  | Number of results to return per page.                                                                                                                                      |
+| `offset`   | query | integer | no       | The initial index from which to return the results.                                                                                                                        |
+| `ordering` | query | enum    | no       | Which field to use when ordering the results. Values: `part`, `-part`, `item_count`, `-item_count`, `quantity`, `-quantity`, `date`, `-date`, `user`, `-user`, `pk`, `-pk` |
+| `part`     | query | integer | no       |                                                                                                                                                                            |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PaginatedPartStocktakeList](../part-api-schema.md#paginatedpartstocktakelist) |
+| Status Code | Description | Schema                                                                         |
+| ----------- | ----------- | ------------------------------------------------------------------------------ |
+| 200         | OK          | [PaginatedPartStocktakeList](../part-api-schema.md#paginatedpartstocktakelist) |

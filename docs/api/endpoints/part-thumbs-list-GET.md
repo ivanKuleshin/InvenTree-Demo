@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,14 +24,14 @@ fetched: 2026-04-13
 
 ## Query Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `limit` | query | integer | **yes** | Number of results to return per page. |
-| `offset` | query | integer | no | The initial index from which to return the results. |
-| `search` | query | string | no | A search term. Searched fields: IPN, category__name, description, keywords, name, revision. |
+| Name     | In    | Type    | Required | Description                                                                                   |
+| -------- | ----- | ------- | -------- | --------------------------------------------------------------------------------------------- |
+| `limit`  | query | integer | **yes**  | Number of results to return per page.                                                         |
+| `offset` | query | integer | no       | The initial index from which to return the results.                                           |
+| `search` | query | string  | no       | A search term. Searched fields: IPN, category\_\_name, description, keywords, name, revision. |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PaginatedPartThumbList](../part-api-schema.md#paginatedpartthumblist) |
+| Status Code | Description | Schema                                                                 |
+| ----------- | ----------- | ---------------------------------------------------------------------- |
+| 200         | OK          | [PaginatedPartThumbList](../part-api-schema.md#paginatedpartthumblist) |

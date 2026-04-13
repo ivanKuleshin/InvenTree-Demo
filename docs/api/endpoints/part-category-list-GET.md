@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,24 +24,24 @@ fetched: 2026-04-13
 
 ## Query Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `cascade` | query | boolean | no | Include sub-categories in filtered results |
-| `depth` | query | number | no | Filter by category depth |
-| `exclude_tree` | query | integer | no |  |
-| `limit` | query | integer | **yes** | Number of results to return per page. |
-| `name` | query | string | no |  |
-| `offset` | query | integer | no | The initial index from which to return the results. |
-| `ordering` | query | enum | no | Which field to use when ordering the results. Values: `name`, `-name`, `pathstring`, `-pathstring`, `level`, `-level`, `tree_id`, `-tree_id`, `lft`, `-lft`, `part_count`, `-part_count` |
-| `parent` | query | integer | no | Filter by parent category |
-| `path_detail` | query | boolean | no |  (default: `False`) |
-| `search` | query | string | no | A search term. Searched fields: description, name, pathstring. |
-| `starred` | query | boolean | no | Filter by starred categories |
-| `structural` | query | boolean | no |  |
-| `top_level` | query | boolean | no | Filter by top-level categories |
+| Name           | In    | Type    | Required | Description                                                                                                                                                                              |
+| -------------- | ----- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cascade`      | query | boolean | no       | Include sub-categories in filtered results                                                                                                                                               |
+| `depth`        | query | number  | no       | Filter by category depth                                                                                                                                                                 |
+| `exclude_tree` | query | integer | no       |                                                                                                                                                                                          |
+| `limit`        | query | integer | **yes**  | Number of results to return per page.                                                                                                                                                    |
+| `name`         | query | string  | no       |                                                                                                                                                                                          |
+| `offset`       | query | integer | no       | The initial index from which to return the results.                                                                                                                                      |
+| `ordering`     | query | enum    | no       | Which field to use when ordering the results. Values: `name`, `-name`, `pathstring`, `-pathstring`, `level`, `-level`, `tree_id`, `-tree_id`, `lft`, `-lft`, `part_count`, `-part_count` |
+| `parent`       | query | integer | no       | Filter by parent category                                                                                                                                                                |
+| `path_detail`  | query | boolean | no       | (default: `False`)                                                                                                                                                                       |
+| `search`       | query | string  | no       | A search term. Searched fields: description, name, pathstring.                                                                                                                           |
+| `starred`      | query | boolean | no       | Filter by starred categories                                                                                                                                                             |
+| `structural`   | query | boolean | no       |                                                                                                                                                                                          |
+| `top_level`    | query | boolean | no       | Filter by top-level categories                                                                                                                                                           |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PaginatedCategoryList](../part-api-schema.md#paginatedcategorylist) |
+| Status Code | Description | Schema                                                               |
+| ----------- | ----------- | -------------------------------------------------------------------- |
+| 200         | OK          | [PaginatedCategoryList](../part-api-schema.md#paginatedcategorylist) |

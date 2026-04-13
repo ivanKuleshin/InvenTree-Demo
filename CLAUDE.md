@@ -101,3 +101,7 @@ Stack: TestNG 7.10.2 · REST Assured 5.5.0 · Allure TestNG 2.32.0 · Jackson 2.
 **UI**: Part creation (manual entry and import), Part detail tabs (Stock, BOM, Allocated, Build Orders, Parameters, Variants, Revisions, Attachments, Related Parts, Test Templates), Part categories (hierarchy, filtering, parametric tables), Part attributes (Virtual, Template, Assembly, Component, Trackable, Purchasable, Salable, Active/Inactive), Units of measure, Part revisions, negative/boundary scenarios.
 
 **API**: CRUD on Parts and Part Categories, filtering/pagination/search, field-level validation, relational integrity (category, default location, supplier linkage), edge cases (invalid payloads, unauthorized access, conflicts).
+
+## Current State
+
+The project is at the scaffolding stage. `pom.xml` has no test dependencies yet. The `src/main/resources/archetype-resources/` subtree is a Maven Archetype template (excluded from compilation) — not production source code. Real test framework dependencies (e.g., REST Assured, JUnit 5, Selenium/Playwright) need to be added to `pom.xml` before implementing tests.

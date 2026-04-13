@@ -13,11 +13,11 @@ Serializer for the PartCategoryParameterTemplate model.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `pk` | integer | required, read-only | |
-| `category` | integer | required | Part Category |
-| `category_detail` | $ref: [Category](category.md) | read-only, nullable | |
-| `template` | integer | required | |
-| `template_detail` | $ref: ParameterTemplate | required, read-only | |
-| `default_value` | string | | Default Parameter Value; max length: 500 |
+| Field             | Type                          | Flags               | Description                              |
+| ----------------- | ----------------------------- | ------------------- | ---------------------------------------- |
+| `pk`              | integer                       | required, read-only |                                          |
+| `category`        | integer                       | required            | Part Category                            |
+| `category_detail` | $ref: [Category](category.md) | read-only, nullable |                                          |
+| `template`        | integer                       | required            |                                          |
+| `template_detail` | $ref: ParameterTemplate       | required, read-only |                                          |
+| `default_value`   | string                        |                     | Default Parameter Value; max length: 500 |

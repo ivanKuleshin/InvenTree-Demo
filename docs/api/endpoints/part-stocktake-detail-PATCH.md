@@ -18,6 +18,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -25,22 +26,22 @@ fetched: 2026-04-13
 
 ## Path Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `id` | path | integer | **yes** |  |
+| Name | In   | Type    | Required | Description |
+| ---- | ---- | ------- | -------- | ----------- |
+| `id` | path | integer | **yes**  |             |
 
 ## Request Body
 
 **Optional.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
+| Content-Type                        | Schema                                                             |
+| ----------------------------------- | ------------------------------------------------------------------ |
+| `application/json`                  | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
 | `application/x-www-form-urlencoded` | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
-| `multipart/form-data` | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
+| `multipart/form-data`               | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PartStocktake](../part-api-schema.md#partstocktake) |
+| Status Code | Description | Schema                                               |
+| ----------- | ----------- | ---------------------------------------------------- |
+| 200         | OK          | [PartStocktake](../part-api-schema.md#partstocktake) |

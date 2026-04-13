@@ -42,7 +42,7 @@ The name of the test is a simple string value which defines the name of the test
 
 #### Test Key
 
-The test name is used to generate a test "key" which is then used to match against test results associated with individual stock items. The *key* is a simplified string representation of the test name, which consists only of lowercase alphanumeric characters. This key value is automatically generated (based on the test name) whenever the test template is saved.
+The test name is used to generate a test "key" which is then used to match against test results associated with individual stock items. The _key_ is a simplified string representation of the test name, which consists only of lowercase alphanumeric characters. This key value is automatically generated (based on the test name) whenever the test template is saved.
 
 The generated test key is intended to be a valid python variable name, and can be used to reference the test in the report generation system.
 
@@ -50,12 +50,12 @@ The generated test key is intended to be a valid python variable name, and can b
 
 Some examples of generated test key values are provided below:
 
-| Test Name | Test Key |
-| --- | --- |
-| "Firmware Version" | "firmwareversion" |
-| " My NEW T E sT " | "mynewtest" |
-| "100 Percent Test" | "_100percenttest" *(note that the leading underscore is added to ensure the key is a valid python variable name)* |
-| "Test 123" | "test123" |
+| Test Name          | Test Key                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| "Firmware Version" | "firmwareversion"                                                                                                  |
+| " My NEW T E sT "  | "mynewtest"                                                                                                        |
+| "100 Percent Test" | "\_100percenttest" _(note that the leading underscore is added to ensure the key is a valid python variable name)_ |
+| "Test 123"         | "test123"                                                                                                          |
 
 #### Test Description
 
@@ -63,11 +63,11 @@ This field is a simple description for providing information back to the user. T
 
 #### Required
 
-If the *required* flag is set, this indicates that the test is crucial for the acceptance of a particular stock item.
+If the _required_ flag is set, this indicates that the test is crucial for the acceptance of a particular stock item.
 
 #### Requires Value
 
-If this flag is set, then a corresponding test result against a stock item must set the *value* parameter.
+If this flag is set, then a corresponding test result against a stock item must set the _value_ parameter.
 
 #### Requires Attachment
 
@@ -75,7 +75,7 @@ If this flag is set, then a corresponding test result against a stock item must 
 
 #### Enabled
 
-Tests can be *disabled* by setting the *enabled* flag to `False`. This can be useful if a test is no longer required, but the test template should be retained for historical purposes. Note that *deleting* a test template will also delete any associated test results. So, if a test template is no longer required, it is better to disable it rather than delete it.
+Tests can be _disabled_ by setting the _enabled_ flag to `False`. This can be useful if a test is no longer required, but the test template should be retained for historical purposes. Note that _deleting_ a test template will also delete any associated test results. So, if a test template is no longer required, it is better to disable it rather than delete it.
 
 ### Test Results
 

@@ -15,12 +15,12 @@ fetched: 2026-04-13
 
 ## User Accounts
 
-| Username | Password | Access Level |
-|----------|----------|--------------|
-| allaccess | nolimits | Full create/edit/view permissions |
-| reader | readonly | View-only access |
-| engineer | partsonly | Parts management and stock viewing |
-| admin | inventree | Superuser with admin functions |
+| Username  | Password  | Access Level                       |
+| --------- | --------- | ---------------------------------- |
+| allaccess | nolimits  | Full create/edit/view permissions  |
+| reader    | readonly  | View-only access                   |
+| engineer  | partsonly | Parts management and stock viewing |
+| admin     | inventree | Superuser with admin functions     |
 
 ## Environment Notes
 

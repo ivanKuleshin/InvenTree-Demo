@@ -21,7 +21,7 @@ fetched: 2026-04-13
 
 ## Virtual Parts
 
-A *Virtual* part can be used to represent non-physical items in the InvenTree system. Virtual parts cannot have stock items associated with them, as they do not physically exist.
+A _Virtual_ part can be used to represent non-physical items in the InvenTree system. Virtual parts cannot have stock items associated with them, as they do not physically exist.
 
 Virtual parts can be used to represent things such as:
 

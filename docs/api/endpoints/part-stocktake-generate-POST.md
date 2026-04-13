@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -25,14 +26,14 @@ fetched: 2026-04-13
 
 **Optional.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |
+| Content-Type                        | Schema                                                               |
+| ----------------------------------- | -------------------------------------------------------------------- |
+| `application/json`                  | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |
 | `application/x-www-form-urlencoded` | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |
-| `multipart/form-data` | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |
+| `multipart/form-data`               | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 201 | Created | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |
+| Status Code | Description | Schema                                                               |
+| ----------- | ----------- | -------------------------------------------------------------------- |
+| 201         | Created     | [PartStocktakeGenerate](../part-api-schema.md#partstocktakegenerate) |

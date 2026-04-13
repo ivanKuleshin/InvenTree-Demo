@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,23 +24,23 @@ fetched: 2026-04-13
 
 ## Path Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `id` | path | integer | **yes** |  |
+| Name | In   | Type    | Required | Description |
+| ---- | ---- | ------- | -------- | ----------- |
+| `id` | path | integer | **yes**  |             |
 
 ## Query Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `category_detail` | query | boolean | no |  (default: `False`) |
-| `location_detail` | query | boolean | no | Include detailed information about the stock location in the response (default: `False`) |
-| `parameters` | query | boolean | no | Include part parameters in response (default: `False`) |
-| `path_detail` | query | boolean | no |  (default: `False`) |
-| `price_breaks` | query | boolean | no |  (default: `False`) |
-| `tags` | query | boolean | no |  (default: `False`) |
+| Name              | In    | Type    | Required | Description                                                                              |
+| ----------------- | ----- | ------- | -------- | ---------------------------------------------------------------------------------------- |
+| `category_detail` | query | boolean | no       | (default: `False`)                                                                       |
+| `location_detail` | query | boolean | no       | Include detailed information about the stock location in the response (default: `False`) |
+| `parameters`      | query | boolean | no       | Include part parameters in response (default: `False`)                                   |
+| `path_detail`     | query | boolean | no       | (default: `False`)                                                                       |
+| `price_breaks`    | query | boolean | no       | (default: `False`)                                                                       |
+| `tags`            | query | boolean | no       | (default: `False`)                                                                       |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [Part](../part-api-schema.md#part) |
+| Status Code | Description | Schema                             |
+| ----------- | ----------- | ---------------------------------- |
+| 200         | OK          | [Part](../part-api-schema.md#part) |

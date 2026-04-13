@@ -18,6 +18,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -27,14 +28,14 @@ fetched: 2026-04-13
 
 **Required.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
+| Content-Type                        | Schema                                                                       |
+| ----------------------------------- | ---------------------------------------------------------------------------- |
+| `application/json`                  | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
 | `application/x-www-form-urlencoded` | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
-| `multipart/form-data` | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
+| `multipart/form-data`               | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 201 | Created | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
+| Status Code | Description | Schema                                                                       |
+| ----------- | ----------- | ---------------------------------------------------------------------------- |
+| 201         | Created     | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |

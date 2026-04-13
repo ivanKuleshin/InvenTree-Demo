@@ -18,6 +18,7 @@ Note that the typical DRF list endpoint does not support PATCH, so this method i
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -27,14 +28,14 @@ Note that the typical DRF list endpoint does not support PATCH, so this method i
 
 **Optional.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PatchedPart](../part-api-schema.md#patchedpart) |
+| Content-Type                        | Schema                                           |
+| ----------------------------------- | ------------------------------------------------ |
+| `application/json`                  | [PatchedPart](../part-api-schema.md#patchedpart) |
 | `application/x-www-form-urlencoded` | [PatchedPart](../part-api-schema.md#patchedpart) |
-| `multipart/form-data` | [PatchedPart](../part-api-schema.md#patchedpart) |
+| `multipart/form-data`               | [PatchedPart](../part-api-schema.md#patchedpart) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [Part](../part-api-schema.md#part) |
+| Status Code | Description | Schema                             |
+| ----------- | ----------- | ---------------------------------- |
+| 200         | OK          | [Part](../part-api-schema.md#part) |

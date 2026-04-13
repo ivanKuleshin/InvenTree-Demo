@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,22 +24,22 @@ fetched: 2026-04-13
 
 ## Path Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `id` | path | integer | **yes** |  |
+| Name | In   | Type    | Required | Description |
+| ---- | ---- | ------- | -------- | ----------- |
+| `id` | path | integer | **yes**  |             |
 
 ## Request Body
 
 **Required.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| Content-Type                        | Schema                                                     |
+| ----------------------------------- | ---------------------------------------------------------- |
+| `application/json`                  | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
 | `application/x-www-form-urlencoded` | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
-| `multipart/form-data` | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| `multipart/form-data`               | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| Status Code | Description | Schema                                                     |
+| ----------- | ----------- | ---------------------------------------------------------- |
+| 200         | OK          | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
