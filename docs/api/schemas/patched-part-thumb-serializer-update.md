@@ -13,6 +13,6 @@ Serializer for updating Part thumbnail. Used in PATCH requests where all fields 
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `image` | string (uri) | | |
+| Field   | Type         | Flags | Description |
+| ------- | ------------ | ----- | ----------- |
+| `image` | string (uri) |       |             |

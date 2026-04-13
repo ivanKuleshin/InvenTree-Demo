@@ -27,6 +27,7 @@ Always prefer the most specific sub-page for a component (e.g., `/part/part/`, `
 `/api/part/`, etc.) over generic index pages.
 
 **CRITICAL — source priority and URL rules:**
+
 - ALWAYS fetch from the rendered `docs.inventree.org` web pages. As a second priority you can use raw GitHub URLs
   (`raw.githubusercontent.com`) or GitHub repository source files as a source.
 - If a `docs.inventree.org` page is unavailable, fall back to the GitHub-rendered page
@@ -55,9 +56,9 @@ All documentation files are stored under: `docs/{component-name}/`
 ### Workflow 1: User or Agent Requests Component Information
 
 1. **Check local docs first**: Scan `docs/{component-name}/` for existing MD files relevant to the requested topic.
-    - If files exist and appear complete, return a quick summary and the list of MD file paths. Do NOT re-fetch from the
-      web unless explicitly asked.
-    - If files are missing or incomplete, proceed to step 2.
+   - If files exist and appear complete, return a quick summary and the list of MD file paths. Do NOT re-fetch from the
+     web unless explicitly asked.
+   - If files are missing or incomplete, proceed to step 2.
 
 2. **Fetch from official sources**: Navigate to the appropriate documentation URL(s) for the component. Follow links to
    all relevant sub-pages under that component section.
@@ -65,10 +66,10 @@ All documentation files are stored under: `docs/{component-name}/`
 3. **Document to MD**: Create MD files as described in the DOCUMENTATION RULES section below.
 
 4. **Return to caller**:
-    - For human users: Provide a brief summary of what was found/created and the exact file path(s) of the MD document(
-      s).
-    - For agent callers (ui-manual-tester, api-manual-tester, etc.): Return only the MD filename(s) and a one-line
-      status (created/existing).
+   - For human users: Provide a brief summary of what was found/created and the exact file path(s) of the MD document(
+     s).
+   - For agent callers (ui-manual-tester, api-manual-tester, etc.): Return only the MD filename(s) and a one-line
+     status (created/existing).
 
 ### Workflow 2: Initial Documentation Bootstrap
 
@@ -140,6 +141,7 @@ These rules are non-negotiable and must be followed precisely:
 ### API Documentation Specifics
 
 **File structure for API schema pages**: When documenting an API schema page that covers multiple endpoints:
+
 - Create one **index file** (e.g., `docs/api/part-api-schema.md`) containing:
   - General info: API version, auth schemes, shared schemas/components
   - A `## Endpoints` section with a table listing every endpoint (method, path, short description) and a link to its detail file
@@ -148,6 +150,7 @@ These rules are non-negotiable and must be followed precisely:
 - Each endpoint detail file must include its own frontmatter with `source:`, `component:`, `topic:`, and `fetched:` fields
 
 **Component schemas**: When an API schema page defines reusable component schemas (e.g., `Part`, `Category`, `PartPricing`, `Patched*`, `Paginated*`):
+
 - Create one **separate file per schema** under `docs/api/schemas/` (e.g., `docs/api/schemas/part.md`, `docs/api/schemas/part-pricing.md`)
 - Schema filenames should be kebab-case of the schema name (e.g., `PatchedPart` → `patched-part.md`, `PaginatedPartList` → `paginated-part-list.md`)
 - Each schema file must contain: schema name, description, all fields with their types, constraints (nullable, read-only, write-only, maxLength, minLength, min/max value, default, enum values), and any nested object or `$ref` references

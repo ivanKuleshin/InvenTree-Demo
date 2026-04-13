@@ -71,19 +71,19 @@ The Part view page organizes part data into sections, displayed as tabs. Each ta
 
 ### Variants
 
-If a part is a *Template Part* then the *Variants* tab will be visible.
+If a part is a _Template Part_ then the _Variants_ tab will be visible.
 
 [Read about Part templates and variants](./part-template.md).
 
 ### Stock
 
-The *Stock* tab shows all the stock items for the selected *Part*. The user can quickly determine how many parts are in stock, where they are located, and the status of each *Stock Item*.
+The _Stock_ tab shows all the stock items for the selected _Part_. The user can quickly determine how many parts are in stock, where they are located, and the status of each _Stock Item_.
 
 > **[IMAGE DESCRIPTION]**: Screenshot of the Part Stock tab in InvenTree (image: part/part_stock.png, alt: "Part Stock"). The tab displays a table listing all stock items for the selected part. Columns include quantity, location, batch number, serial number (if applicable), status, and other stock-related fields. Toolbar buttons are visible for exporting data, creating a new stock item, and performing stock actions on selected rows.
 
 #### Functions
 
-The following functions are available from the *Part Stock* view.
+The following functions are available from the _Part Stock_ view.
 
 ##### Export
 
@@ -91,7 +91,7 @@ Exports the stocktake data for the selected Part. Launches a dialog to select ex
 
 ##### New Stock Item
 
-Launches a dialog to create a new *Stock Item* for the selected *Part*.
+Launches a dialog to create a new _Stock Item_ for the selected _Part_.
 
 ##### Stock Actions
 
@@ -99,45 +99,45 @@ If stock items are selected in the table, stock actions are enabled via the drop
 
 ### Allocations
 
-The *Allocated* tab displays how many units of this part have been allocated to pending build orders and/or sales orders. This tab is only visible if the Part is a *component* (meaning it can be used to make assemblies), or it is *salable* (meaning it can be sold to customers).
+The _Allocated_ tab displays how many units of this part have been allocated to pending build orders and/or sales orders. This tab is only visible if the Part is a _component_ (meaning it can be used to make assemblies), or it is _salable_ (meaning it can be sold to customers).
 
 ### Bill of Materials
 
-The *BOM* tab displays the [Bill of Materials](../manufacturing/bom.md) - a list of sub-components used to build an assembly. Each row in the BOM specifies a quantity of another Part which is required to build the assembly. This tab is only visible if the Part is an *assembly* (meaning it can be built from other parts).
+The _BOM_ tab displays the [Bill of Materials](../manufacturing/bom.md) - a list of sub-components used to build an assembly. Each row in the BOM specifies a quantity of another Part which is required to build the assembly. This tab is only visible if the Part is an _assembly_ (meaning it can be built from other parts).
 
 ### Build Orders
 
-The *Build Orders* tab shows a list of the builds for this part. It provides a view for important build information like quantity, status, creation and completion dates.
+The _Build Orders_ tab shows a list of the builds for this part. It provides a view for important build information like quantity, status, creation and completion dates.
 
 ### Used In
 
-The *Used In* tab displays a list of other parts that this part is used to make. This tab is only visible if the Part is a *component*.
+The _Used In_ tab displays a list of other parts that this part is used to make. This tab is only visible if the Part is a _component_.
 
 ### Suppliers
 
-The *Suppliers* tab displays all the *Part Suppliers* and *Part Manufacturers* for the selected *Part*.
+The _Suppliers_ tab displays all the _Part Suppliers_ and _Part Manufacturers_ for the selected _Part_.
 
-This tab is only visible if the *Part* is designated as *Purchaseable*.
+This tab is only visible if the _Part_ is designated as _Purchaseable_.
 
 > **[IMAGE DESCRIPTION]**: Screenshot of the Part Suppliers and Manufacturers tab in InvenTree (image: part/part_manufacturers_suppliers.png, alt: "Part Suppliers and Manufacturers"). The tab shows two sections or sub-tables: one listing all supplier parts (each row showing the supplier name, supplier SKU, packaging, price breaks, etc.) and another showing manufacturer parts (manufacturer name, MPN - manufacturer part number, etc.). Action buttons for adding new supplier/manufacturer entries are visible in the toolbar.
 
 ### Purchase Orders
 
-The *Part Purchase Orders* tab lists all the Purchase Orders against the selected part.
+The _Part Purchase Orders_ tab lists all the Purchase Orders against the selected part.
 
-This tab is only displayed if the part is marked as *Purchaseable*.
+This tab is only displayed if the part is marked as _Purchaseable_.
 
 ### Sales Orders
 
-The *Sales Orders* tab shows a list of the sales orders for this part. It provides a view for important sales order information like customer, status, creation and shipment dates.
+The _Sales Orders_ tab shows a list of the sales orders for this part. It provides a view for important sales order information like customer, status, creation and shipment dates.
 
 ### Stock History
 
-The *Stock History* tab provides historical stock level information. Refer to the [stock history documentation](./stocktake.md) for further information.
+The _Stock History_ tab provides historical stock level information. Refer to the [stock history documentation](./stocktake.md) for further information.
 
 ### Test Templates
 
-If a part is marked as *testable*, the user can define tests which must be performed on any stock items which are instances of this part. [Read more about testing](./part-test-templates.md).
+If a part is marked as _testable_, the user can define tests which must be performed on any stock items which are instances of this part. [Read more about testing](./part-test-templates.md).
 
 ### Related Parts
 
@@ -157,7 +157,7 @@ Parts can have multiple defined parameters.
 
 ### Attachments
 
-The *Part Attachments* tab displays file attachments associated with the selected *Part*. Multiple file attachments (such as datasheets) can be uploaded for each *Part*.
+The _Part Attachments_ tab displays file attachments associated with the selected _Part_. Multiple file attachments (such as datasheets) can be uploaded for each _Part_.
 
 [Read about attachments](../concepts/attachments.md).
 

@@ -13,11 +13,11 @@ Serializer for a PartRelated model. Used in PATCH requests where all fields are 
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `pk` | integer | read-only | |
-| `part_1` | integer | | |
-| `part_1_detail` | $ref: [Part](part.md) | read-only | |
-| `part_2` | integer | | Select Related Part |
-| `part_2_detail` | $ref: [Part](part.md) | read-only | |
-| `note` | string | | Note for this relationship; max length: 500 |
+| Field           | Type                  | Flags     | Description                                 |
+| --------------- | --------------------- | --------- | ------------------------------------------- |
+| `pk`            | integer               | read-only |                                             |
+| `part_1`        | integer               |           |                                             |
+| `part_1_detail` | $ref: [Part](part.md) | read-only |                                             |
+| `part_2`        | integer               |           | Select Related Part                         |
+| `part_2_detail` | $ref: [Part](part.md) | read-only |                                             |
+| `note`          | string                |           | Note for this relationship; max length: 500 |

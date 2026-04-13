@@ -13,7 +13,7 @@ Parameters for selecting items for bulk operations.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `items` | array of integer | | |
-| `filters` | object | | |
+| Field     | Type             | Flags | Description |
+| --------- | ---------------- | ----- | ----------- |
+| `items`   | array of integer |       |             |
+| `filters` | object           |       |             |

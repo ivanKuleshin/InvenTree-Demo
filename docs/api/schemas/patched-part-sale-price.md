@@ -13,10 +13,10 @@ Serializer for sale prices for Part model. Used in PATCH requests where all fiel
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `pk` | integer | read-only | |
-| `part` | integer | | |
-| `quantity` | number (double) | | |
-| `price` | string (decimal) | nullable | |
-| `price_currency` | string | | Purchase currency of this stock item |
+| Field            | Type             | Flags     | Description                          |
+| ---------------- | ---------------- | --------- | ------------------------------------ |
+| `pk`             | integer          | read-only |                                      |
+| `part`           | integer          |           |                                      |
+| `quantity`       | number (double)  |           |                                      |
+| `price`          | string (decimal) | nullable  |                                      |
+| `price_currency` | string           |           | Purchase currency of this stock item |

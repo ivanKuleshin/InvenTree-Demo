@@ -8,8 +8,8 @@ API schema documentation is derived from the live InvenTree demo at `https://dem
 
 ## Created Files
 
-| File | Coverage |
-|------|----------|
+| File                          | Coverage                                                                                            |
+| ----------------------------- | --------------------------------------------------------------------------------------------------- |
 | `docs/api/part-api-schema.md` | 25 path groups (68 operations) for `/api/part/*`; 37 component schemas; auth schemes; OAuth2 scopes |
 
 **Why:** The canonical docs page at `https://docs.inventree.org/en/stable/api/schema/part/` uses a MkDocs `[OAD(...)]` plugin directive to render OpenAPI YAML at build time. That YAML is not in the repo. The live demo API endpoint is the authoritative source.

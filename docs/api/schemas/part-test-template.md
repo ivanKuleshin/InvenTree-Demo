@@ -13,16 +13,16 @@ Serializer for the PartTestTemplate class.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `pk` | integer | required, read-only | |
-| `key` | string | required, read-only | |
-| `part` | integer | required | |
-| `test_name` | string | required | Enter a name for the test; max length: 100 |
-| `description` | string | nullable | Enter description for this test; max length: 100 |
-| `enabled` | boolean | | Is this test enabled? |
-| `required` | boolean | | Is this test required to pass? |
-| `requires_value` | boolean | | Does this test require a value when adding a test result? |
-| `requires_attachment` | boolean | | Does this test require a file attachment when adding a test result? |
-| `results` | integer | required, read-only | Number of results recorded against this template |
-| `choices` | string | | Valid choices for this test (comma-separated); max length: 5000 |
+| Field                 | Type    | Flags               | Description                                                         |
+| --------------------- | ------- | ------------------- | ------------------------------------------------------------------- |
+| `pk`                  | integer | required, read-only |                                                                     |
+| `key`                 | string  | required, read-only |                                                                     |
+| `part`                | integer | required            |                                                                     |
+| `test_name`           | string  | required            | Enter a name for the test; max length: 100                          |
+| `description`         | string  | nullable            | Enter description for this test; max length: 100                    |
+| `enabled`             | boolean |                     | Is this test enabled?                                               |
+| `required`            | boolean |                     | Is this test required to pass?                                      |
+| `requires_value`      | boolean |                     | Does this test require a value when adding a test result?           |
+| `requires_attachment` | boolean |                     | Does this test require a file attachment when adding a test result? |
+| `results`             | integer | required, read-only | Number of results recorded against this template                    |
+| `choices`             | string  |                     | Valid choices for this test (comma-separated); max length: 5000     |

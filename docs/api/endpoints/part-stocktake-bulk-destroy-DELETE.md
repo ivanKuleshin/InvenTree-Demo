@@ -18,6 +18,7 @@ Note that the typical DRF list endpoint does not support DELETE, so this method 
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -27,14 +28,14 @@ Note that the typical DRF list endpoint does not support DELETE, so this method 
 
 **Required.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [BulkRequest](../part-api-schema.md#bulkrequest) |
+| Content-Type                        | Schema                                           |
+| ----------------------------------- | ------------------------------------------------ |
+| `application/json`                  | [BulkRequest](../part-api-schema.md#bulkrequest) |
 | `application/x-www-form-urlencoded` | [BulkRequest](../part-api-schema.md#bulkrequest) |
-| `multipart/form-data` | [BulkRequest](../part-api-schema.md#bulkrequest) |
+| `multipart/form-data`               | [BulkRequest](../part-api-schema.md#bulkrequest) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 204 | No response body |  |
+| Status Code | Description      | Schema |
+| ----------- | ---------------- | ------ |
+| 204         | No response body |        |

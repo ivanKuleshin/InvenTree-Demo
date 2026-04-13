@@ -1,33 +1,33 @@
 {
-    "hooks": {
-      "PostToolUse": [
-        {
-          "matcher": "Write|Edit|MultiEdit",
-          "hooks": [
-            {
-              "type": "command",
-              "command": "npx prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
-            },
-            {
-              "type": "command",
-              "command": "cd ui && npx tsc --noEmit"
-            },
-            {
-              "type": "command",
-              "command": "npx eslint --fix \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
-            }
-          ]
-        }
-      ],
-      "Stop": [
-        {
-          "hooks": [
-            {
-              "type": "command",
-              "command": "osascript -e 'display notification \"Claude finished — Playwright tests ready\" with title \"Claude Code\"' 2>/dev/null || notify-send 'Claude Code' 'Claude finished — Playwright tests ready' 2>/dev/null || true"
-            }
-          ]
-        }
-      ]
-    }
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
+          },
+          {
+            "type": "command",
+            "command": "cd ui && npx tsc --noEmit"
+          },
+          {
+            "type": "command",
+            "command": "npx eslint --fix \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude finished — Playwright tests ready\" with title \"Claude Code\"' 2>/dev/null || notify-send 'Claude Code' 'Claude finished — Playwright tests ready' 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
   }
+}

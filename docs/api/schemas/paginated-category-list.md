@@ -13,9 +13,9 @@ Paginated list response wrapping an array of Category objects.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `count` | integer | required | Total number of results |
-| `next` | string (uri) | nullable | URL of the next page of results |
-| `previous` | string (uri) | nullable | URL of the previous page of results |
-| `results` | array of $ref: [Category](category.md) | required | |
+| Field      | Type                                   | Flags    | Description                         |
+| ---------- | -------------------------------------- | -------- | ----------------------------------- |
+| `count`    | integer                                | required | Total number of results             |
+| `next`     | string (uri)                           | nullable | URL of the next page of results     |
+| `previous` | string (uri)                           | nullable | URL of the previous page of results |
+| `results`  | array of $ref: [Category](category.md) | required |                                     |

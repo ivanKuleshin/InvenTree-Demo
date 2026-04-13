@@ -9,6 +9,7 @@ Demo credentials are stored at `docs/auth/demo-credentials.md`, created 2026-04-
 Demo URL: `https://demo.inventree.org`
 
 Accounts:
+
 - `allaccess` / `nolimits` — Full create/edit/view permissions
 - `reader` / `readonly` — View-only access
 - `engineer` / `partsonly` — Parts management and stock viewing

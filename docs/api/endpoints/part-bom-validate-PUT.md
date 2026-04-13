@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,22 +24,22 @@ fetched: 2026-04-13
 
 ## Path Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `id` | path | integer | **yes** |  |
+| Name | In   | Type    | Required | Description |
+| ---- | ---- | ------- | -------- | ----------- |
+| `id` | path | integer | **yes**  |             |
 
 ## Request Body
 
 **Optional.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
+| Content-Type                        | Schema                                                   |
+| ----------------------------------- | -------------------------------------------------------- |
+| `application/json`                  | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
 | `application/x-www-form-urlencoded` | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
-| `multipart/form-data` | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
+| `multipart/form-data`               | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
+| Status Code | Description | Schema                                                   |
+| ----------- | ----------- | -------------------------------------------------------- |
+| 200         | OK          | [PartBomValidate](../part-api-schema.md#partbomvalidate) |

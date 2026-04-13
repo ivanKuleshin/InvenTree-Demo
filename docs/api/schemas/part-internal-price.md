@@ -13,10 +13,10 @@ Serializer for internal prices for Part model.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `pk` | integer | required, read-only | |
-| `part` | integer | required | |
-| `quantity` | number (double) | required | |
-| `price` | string (decimal) | nullable | |
-| `price_currency` | string | | Purchase currency of this stock item |
+| Field            | Type             | Flags               | Description                          |
+| ---------------- | ---------------- | ------------------- | ------------------------------------ |
+| `pk`             | integer          | required, read-only |                                      |
+| `part`           | integer          | required            |                                      |
+| `quantity`       | number (double)  | required            |                                      |
+| `price`          | string (decimal) | nullable            |                                      |
+| `price_currency` | string           |                     | Purchase currency of this stock item |

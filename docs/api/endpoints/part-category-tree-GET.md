@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,14 +24,14 @@ fetched: 2026-04-13
 
 ## Query Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `limit` | query | integer | **yes** | Number of results to return per page. |
-| `offset` | query | integer | no | The initial index from which to return the results. |
-| `ordering` | query | enum | no | Which field to use when ordering the results. Values: `level`, `-level`, `name`, `-name`, `subcategories`, `-subcategories` |
+| Name       | In    | Type    | Required | Description                                                                                                                 |
+| ---------- | ----- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `limit`    | query | integer | **yes**  | Number of results to return per page.                                                                                       |
+| `offset`   | query | integer | no       | The initial index from which to return the results.                                                                         |
+| `ordering` | query | enum    | no       | Which field to use when ordering the results. Values: `level`, `-level`, `name`, `-name`, `subcategories`, `-subcategories` |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PaginatedCategoryTreeList](../part-api-schema.md#paginatedcategorytreelist) |
+| Status Code | Description | Schema                                                                       |
+| ----------- | ----------- | ---------------------------------------------------------------------------- |
+| 200         | OK          | [PaginatedCategoryTreeList](../part-api-schema.md#paginatedcategorytreelist) |

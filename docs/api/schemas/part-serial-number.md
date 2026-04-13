@@ -13,7 +13,7 @@ Serializer for Part serial number information.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `latest` | string | read-only, nullable | |
-| `next` | string | required, read-only | |
+| Field    | Type   | Flags               | Description |
+| -------- | ------ | ------------------- | ----------- |
+| `latest` | string | read-only, nullable |             |
+| `next`   | string | required, read-only |             |

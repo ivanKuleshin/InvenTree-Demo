@@ -38,3 +38,9 @@ build/
 ### Mac OS ###
 .DS_Store
 /.idea/
+/.playwright-mcp/
+
+### Screenshot ###
+*.png
+*.jpg
+*.jpeg

@@ -13,6 +13,6 @@ Serializer for updating Part thumbnail.
 
 ## Properties
 
-| Field | Type | Flags | Description |
-|-------|------|-------|-------------|
-| `image` | string (uri) | required | |
+| Field   | Type         | Flags    | Description |
+| ------- | ------------ | -------- | ----------- |
+| `image` | string (uri) | required |             |

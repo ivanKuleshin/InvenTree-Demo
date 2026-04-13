@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,22 +24,22 @@ fetched: 2026-04-13
 
 ## Path Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `id` | path | integer | **yes** |  |
+| Name | In   | Type    | Required | Description |
+| ---- | ---- | ------- | -------- | ----------- |
+| `id` | path | integer | **yes**  |             |
 
 ## Request Body
 
 **Required.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [Category](../part-api-schema.md#category) |
+| Content-Type                        | Schema                                     |
+| ----------------------------------- | ------------------------------------------ |
+| `application/json`                  | [Category](../part-api-schema.md#category) |
 | `application/x-www-form-urlencoded` | [Category](../part-api-schema.md#category) |
-| `multipart/form-data` | [Category](../part-api-schema.md#category) |
+| `multipart/form-data`               | [Category](../part-api-schema.md#category) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [Category](../part-api-schema.md#category) |
+| Status Code | Description | Schema                                     |
+| ----------- | ----------- | ------------------------------------------ |
+| 200         | OK          | [Category](../part-api-schema.md#category) |

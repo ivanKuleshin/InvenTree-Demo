@@ -43,6 +43,6 @@ Any part can be set as "Template" part. To do so:
 
 ### Create Variant
 
-When a part's [*Template option*](#enable-template-part) is turned-on, "Variants" of this part can be created.
+When a part's [_Template option_](#enable-template-part) is turned-on, "Variants" of this part can be created.
 
 To create a variant, navigate to a specific part detail page, click on the "Variants" tab then click on the "New Variant" button. The `Duplicate Part` form will be displayed. Fill it out then click **Submit** to create the variant.

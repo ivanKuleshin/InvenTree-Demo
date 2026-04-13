@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -25,14 +26,14 @@ fetched: 2026-04-13
 
 **Required.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
+| Content-Type                        | Schema                                                       |
+| ----------------------------------- | ------------------------------------------------------------ |
+| `application/json`                  | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
 | `application/x-www-form-urlencoded` | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
-| `multipart/form-data` | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
+| `multipart/form-data`               | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 201 | Created | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
+| Status Code | Description | Schema                                                       |
+| ----------- | ----------- | ------------------------------------------------------------ |
+| 201         | Created     | [PartInternalPrice](../part-api-schema.md#partinternalprice) |

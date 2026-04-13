@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,22 +24,22 @@ fetched: 2026-04-13
 
 ## Path Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `id` | path | integer | **yes** |  |
+| Name | In   | Type    | Required | Description |
+| ---- | ---- | ------- | -------- | ----------- |
+| `id` | path | integer | **yes**  |             |
 
 ## Request Body
 
 **Optional.**
 
-| Content-Type | Schema |
-|---|---|
-| `application/json` | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
+| Content-Type                        | Schema                                                         |
+| ----------------------------------- | -------------------------------------------------------------- |
+| `application/json`                  | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
 | `application/x-www-form-urlencoded` | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
-| `multipart/form-data` | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
+| `multipart/form-data`               | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PartPricing](../part-api-schema.md#partpricing) |
+| Status Code | Description | Schema                                           |
+| ----------- | ----------- | ------------------------------------------------ |
+| 200         | OK          | [PartPricing](../part-api-schema.md#partpricing) |

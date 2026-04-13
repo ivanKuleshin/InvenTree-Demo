@@ -16,6 +16,7 @@ fetched: 2026-04-13
 ## Authentication
 
 **Required.** Any of:
+
 - `tokenAuth` — Header: `Authorization: Token <token>`
 - `basicAuth` — HTTP Basic authentication
 - `cookieAuth` — Cookie: `sessionid`
@@ -23,13 +24,13 @@ fetched: 2026-04-13
 
 ## Query Parameters
 
-| Name | In | Type | Required | Description |
-|------|----|------|----------|-------------|
-| `limit` | query | integer | **yes** | Number of results to return per page. |
-| `offset` | query | integer | no | The initial index from which to return the results. |
+| Name     | In    | Type    | Required | Description                                         |
+| -------- | ----- | ------- | -------- | --------------------------------------------------- |
+| `limit`  | query | integer | **yes**  | Number of results to return per page.               |
+| `offset` | query | integer | no       | The initial index from which to return the results. |
 
 ## Responses
 
-| Status Code | Description | Schema |
-|-------------|-------------|--------|
-| 200 | OK | [PaginatedCategoryParameterTemplateList](../part-api-schema.md#paginatedcategoryparametertemplatelist) |
+| Status Code | Description | Schema                                                                                                 |
+| ----------- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| 200         | OK          | [PaginatedCategoryParameterTemplateList](../part-api-schema.md#paginatedcategoryparametertemplatelist) |
