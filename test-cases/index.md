@@ -154,6 +154,11 @@
 | TC-UI-PC-006  | Validation errors — missing required field and invalid input                     | UI / Negative    | P2       |
 | TC-UI-PC-007  | Import parts from CSV — happy path                                               | UI / Functional  | P1       |
 | TC-UI-PC-008  | Import parts from CSV — error rows with inline correction                        | UI / Negative    | P3       |
+| TC-UI-PC-009  | Initial Stock accordion — create part with initial stock quantity and location   | UI / Functional  | P2       |
+| TC-UI-PC-010  | "Keep form open" toggle — create multiple parts in sequence without closing      | UI / Functional  | P2       |
+| TC-UI-PC-011  | Import parts — unsupported file format rejected at Step 1                        | UI / Negative    | P1       |
+| TC-UI-PC-012  | Import parts from CSV — complete 5-step wizard happy path                        | UI / Functional  | P1       |
+| TC-UI-PC-013  | Import parts — invalid Link URL in a CSV row produces row-level Error status     | UI / Negative    | P3       |
 
 ## Deprecated Test Cases
 
@@ -173,9 +178,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 83
+- **Total Test Cases:** 88
 - **API Test Cases:** 75
-- **UI Test Cases:** 8
-- **P1 Priority:** 38
-- **P2 Priority:** 40
-- **P3 Priority:** 5
+- **UI Test Cases:** 13
+- **P1 Priority:** 40
+- **P2 Priority:** 42
+- **P3 Priority:** 6
