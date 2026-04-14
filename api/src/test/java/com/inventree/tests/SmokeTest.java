@@ -9,10 +9,16 @@ import com.inventree.model.PartCategoryRequest;
 import com.inventree.model.PartRequest;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 
 @Test(groups = "smoke")
 public class SmokeTest extends BaseTest {
+
+    // Tests to verify TAF is initializing fine, sort of unit test for TAF
 
     @Test
     public void configLoadsSuccessfully() {
@@ -29,7 +35,7 @@ public class SmokeTest extends BaseTest {
         AuthManager manager = AuthManager.getInstance();
         assertNotNull(manager, "AuthManager singleton must not be null");
         assertSame(AuthManager.getInstance(), manager,
-                "AuthManager.getInstance() must always return the same instance");
+            "AuthManager.getInstance() must always return the same instance");
     }
 
     @Test
@@ -42,27 +48,27 @@ public class SmokeTest extends BaseTest {
     @Test
     public void serviceClassesAreInjected() {
         assertNotNull(partService,
-                "PartService must be initialised by BaseTest.@BeforeSuite");
+            "PartService must be initialised by BaseTest.@BeforeSuite");
         assertNotNull(partCategoryService,
-                "PartCategoryService must be initialised by BaseTest.@BeforeSuite");
+            "PartCategoryService must be initialised by BaseTest.@BeforeSuite");
     }
 
     @Test
     public void modelBuildersWork() {
         PartRequest part = PartRequest.builder()
-                .name("Smoke Test Part")
-                .description("Created by SmokeTest")
-                .active(true)
-                .build();
+            .name("Smoke Test Part")
+            .description("Created by SmokeTest")
+            .active(true)
+            .build();
 
         assertEquals(part.getName(), "Smoke Test Part");
         assertEquals(part.getDescription(), "Created by SmokeTest");
         assertTrue(part.getActive());
 
         PartCategoryRequest category = PartCategoryRequest.builder()
-                .name("Smoke Test Category")
-                .structural(false)
-                .build();
+            .name("Smoke Test Category")
+            .structural(false)
+            .build();
 
         assertEquals(category.getName(), "Smoke Test Category");
         assertFalse(category.getStructural());

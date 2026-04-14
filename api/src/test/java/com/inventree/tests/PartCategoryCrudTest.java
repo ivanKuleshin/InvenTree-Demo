@@ -60,10 +60,9 @@ public class PartCategoryCrudTest extends BaseTest {
         assertNull(response.getPrevious(), "previous must be null on first page");
 
         PartCategory topLevel = response.getResults().stream()
-                .filter(c -> c.getPk().equals(CategoryTestData.ELECTRONICS_PK))
+                .filter(c -> c.getParent() == null)
                 .findFirst()
-                .orElseThrow(() -> new AssertionError(
-                        "Electronics category (pk=" + CategoryTestData.ELECTRONICS_PK + ") must be present in first-page results"));
+                .orElseThrow(() -> new AssertionError("No top-level category (parent=null) found in first-page results"));
 
         assertNotNull(topLevel.getPk(), "pk must not be null");
         assertNotNull(topLevel.getName(), "name must not be null");
@@ -161,6 +160,7 @@ public class PartCategoryCrudTest extends BaseTest {
         PartCategoryRequest request = CategoryTestData.withParentAndDescription(
                 childName, parentPk, description);
 
+        // TODO: ELECTRONICS_PK is changed, dynamic test data creation approach is needed
         Response createResponse = partCategoryService.createCategoryRaw(request, Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
