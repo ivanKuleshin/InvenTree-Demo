@@ -16,6 +16,7 @@ Known component paths (relative to base):
 | Trackable Parts             | `part/trackable.md`       |                                |
 | Virtual Parts               | `part/virtual.md`         |                                |
 | Part Test Templates         | `part/test.md`            |                                |
+| Part Revisions              | `part/revision.md`        |                                |
 | Stock                       | `stock/index.md`          | Not yet fetched                |
 | Build Orders                | `build/index.md`          | Not yet fetched                |
 | Purchase Orders             | `order/purchase_order.md` | Not yet fetched                |

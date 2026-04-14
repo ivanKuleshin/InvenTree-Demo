@@ -224,6 +224,21 @@
 | TC-UI-CAT-022  | Removing a parameter filter restores the unfiltered count                                  | UI / Functional  | P2       |
 | TC-UI-CAT-023  | Unit-aware filter interprets abbreviated unit notation correctly                           | UI / Functional  | P3       |
 
+### Part Revisions (ui-parts-revisions)
+
+| TC ID          | Title                                                                              | Type             | Priority |
+| -------------- | ---------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-UI-REV-001  | Create a revision from an existing part (happy path)                              | UI / Functional  | P1       |
+| TC-UI-REV-002  | Create a revision with a duplicate revision code (validation error)               | UI / Negative    | P2       |
+| TC-UI-REV-003  | Create a revision when PART_ENABLE_REVISION is disabled (feature hidden)          | UI / Negative    | P2       |
+| TC-UI-REV-004  | Navigate between revisions using the revision drop-down                           | UI / Functional  | P1       |
+| TC-UI-REV-005  | Verify revision inherits parent data correctly (name, category, description, IPN) | UI / Functional  | P2       |
+| TC-UI-REV-006  | Set a revision as active (promotion analog)                                       | UI / Functional  | P1       |
+| TC-UI-REV-007  | Set a revision as inactive (deactivation)                                         | UI / Functional  | P2       |
+| TC-UI-REV-008  | Attempt to create a revision of a template part (blocked at submission)           | UI / Negative    | P2       |
+| TC-UI-REV-009  | View all revisions of a part (revision history / list)                            | UI / Functional  | P1       |
+| TC-UI-REV-010  | Attempt to set a circular revision reference via Edit                             | UI / Negative    | P3       |
+
 ## Deprecated Test Cases
 
 The following test cases have been archived and replaced with the standardized TC_APCRUD_* naming convention:
@@ -242,9 +257,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 117
+- **Total Test Cases:** 127
 - **API Test Cases:** 75
-- **UI Test Cases:** 42
-- **P1 Priority:** 54
-- **P2 Priority:** 55
-- **P3 Priority:** 8
+- **UI Test Cases:** 52
+- **P1 Priority:** 58
+- **P2 Priority:** 60
+- **P3 Priority:** 9
