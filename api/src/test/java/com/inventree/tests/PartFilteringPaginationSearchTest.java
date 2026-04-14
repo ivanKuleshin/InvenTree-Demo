@@ -3,6 +3,7 @@ package com.inventree.tests;
 import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
 import com.inventree.model.Part;
+import com.inventree.model.PartCategory;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.testdata.FilteringTestData;
 import com.inventree.util.HttpStatus;
@@ -347,43 +348,48 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Story("Category Search and Parent Filter")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APFLT_006_categorySearchAndParentFilterOnCategoryEndpoint() {
-        Response searchResponse = partCategoryService.listCategoriesRaw(
+        PaginatedResponse<PartCategory> searchResponse = partCategoryService.listCategories(
                 Map.of("search", FilteringTestData.SEARCH_CATEGORY_NAME,
                        "limit", FilteringTestData.LARGE_LIMIT), Role.ADMIN);
 
-        searchResponse.then().statusCode(HttpStatus.SC_OK);
-        int searchCount = searchResponse.jsonPath().getInt("count");
+        int searchCount = searchResponse.getCount();
         assertTrue(searchCount > 0,
                 "count must be > 0 for search=" + FilteringTestData.SEARCH_CATEGORY_NAME);
 
-        List<String> names = searchResponse.jsonPath().getList("results.name");
+        List<String> names = searchResponse.getResults().stream()
+                .map(PartCategory::getName)
+                .toList();
         assertTrue(names.stream().anyMatch(
                         n -> n != null && n.toLowerCase().contains(FilteringTestData.SEARCH_CATEGORY_NAME.toLowerCase())),
                 "results must contain a category whose name includes '" + FilteringTestData.SEARCH_CATEGORY_NAME + "'");
 
-        List<String> pathstrings = searchResponse.jsonPath().getList("results.pathstring");
+        List<String> pathstrings = searchResponse.getResults().stream()
+                .map(PartCategory::getPathstring)
+                .toList();
         assertTrue(
                 pathstrings.stream().anyMatch(
                         ps -> ps != null && ps.contains(FilteringTestData.SEARCH_CATEGORY_NAME)),
                 "At least one result must have pathstring containing '"
                         + FilteringTestData.SEARCH_CATEGORY_NAME + "'");
 
-        Response parentResponse = partCategoryService.listCategoriesRaw(
+        PaginatedResponse<PartCategory> parentResponse = partCategoryService.listCategories(
                 Map.of("parent", FilteringTestData.PARENT_CATEGORY_PK,
                        "limit", FilteringTestData.LARGE_LIMIT), Role.ADMIN);
 
-        parentResponse.then().statusCode(HttpStatus.SC_OK);
-        List<Integer> parents = parentResponse.jsonPath().getList("results.parent");
+        List<Integer> parents = parentResponse.getResults().stream()
+                .map(PartCategory::getParent)
+                .toList();
         parents.forEach(p ->
                 assertEquals(p, Integer.valueOf(FilteringTestData.PARENT_CATEGORY_PK),
                         "All results must have parent=" + FilteringTestData.PARENT_CATEGORY_PK));
 
-        Response topLevelResponse = partCategoryService.listCategoriesRaw(
+        PaginatedResponse<PartCategory> topLevelResponse = partCategoryService.listCategories(
                 Map.of(FilteringTestData.FILTER_PARAM_TOP_LEVEL, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.LARGE_LIMIT), Role.ADMIN);
 
-        topLevelResponse.then().statusCode(HttpStatus.SC_OK);
-        List<Object> topLevelParents = topLevelResponse.jsonPath().getList("results.parent");
+        List<Integer> topLevelParents = topLevelResponse.getResults().stream()
+                .map(PartCategory::getParent)
+                .toList();
         topLevelParents.forEach(p ->
                 assertNull(p, "All top-level categories must have parent=null"));
     }
