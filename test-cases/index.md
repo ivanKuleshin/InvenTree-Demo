@@ -71,6 +71,75 @@
 | TC-APEDGE-006 | DELETE /api/part/{id}/ on a non-existent PK returns 404                          | API / Negative   | P3       |
 | TC-APEDGE-007 | DELETE /api/part/{id}/ on an active part returns 400                             | API / Negative   | P2       |
 
+### Part Test Templates (api-test-templates)
+
+| TC ID       | Title                                                                              | Type             | Priority |
+| ----------- | ---------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-APTT-001 | GET /api/part/test-template/ returns paginated test template list                  | API / Functional | P1       |
+| TC-APTT-002 | GET /api/part/test-template/{id}/ retrieves a single test template                 | API / Functional | P1       |
+| TC-APTT-003 | POST /api/part/test-template/ creates a new test template                          | API / Functional | P1       |
+| TC-APTT-004 | PATCH /api/part/test-template/{id}/ updates description and boolean flags          | API / Functional | P2       |
+| TC-APTT-005 | DELETE /api/part/test-template/{id}/ removes a test template                       | API / Functional | P2       |
+| TC-APTT-006 | GET /api/part/test-template/?part={id} filters templates by part                   | API / Functional | P2       |
+
+### Part Internal Pricing (api-internal-pricing)
+
+| TC ID          | Title                                                                          | Type             | Priority |
+| -------------- | ------------------------------------------------------------------------------ | ---------------- | -------- |
+| TC-APPRICE-001 | GET /api/part/internal-price/ returns paginated internal price break list      | API / Functional | P1       |
+| TC-APPRICE-002 | GET /api/part/internal-price/{id}/ retrieves a single internal price break     | API / Functional | P1       |
+| TC-APPRICE-003 | POST /api/part/internal-price/ creates a new internal price break              | API / Functional | P1       |
+| TC-APPRICE-004 | PATCH /api/part/internal-price/{id}/ updates the price of a price break        | API / Functional | P2       |
+| TC-APPRICE-005 | DELETE /api/part/internal-price/{id}/ removes a price break                    | API / Functional | P2       |
+
+### Part Sale Pricing (api-sale-pricing)
+
+| TC ID            | Title                                                                        | Type             | Priority |
+| ---------------- | ---------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-APSPRICE-001  | GET /api/part/sale-price/ returns paginated sale price break list            | API / Functional | P1       |
+| TC-APSPRICE-002  | GET /api/part/sale-price/{id}/ retrieves a single sale price break           | API / Functional | P1       |
+| TC-APSPRICE-003  | POST /api/part/sale-price/ creates a new sale price break                    | API / Functional | P1       |
+| TC-APSPRICE-004  | DELETE /api/part/sale-price/{id}/ removes a sale price break                 | API / Functional | P2       |
+
+### Part Aggregate Pricing (api-aggregate-pricing)
+
+| TC ID             | Title                                                                       | Type             | Priority |
+| ----------------- | --------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-APAGPRICE-001  | GET /api/part/{id}/pricing/ retrieves the aggregate pricing summary         | API / Functional | P1       |
+| TC-APAGPRICE-002  | PATCH /api/part/{id}/pricing/ sets override_min and override_max            | API / Functional | P2       |
+| TC-APAGPRICE-003  | PATCH /api/part/{id}/pricing/ clears override values with null              | API / Functional | P2       |
+
+### Part Stocktake (api-stocktake)
+
+| TC ID        | Title                                                                              | Type             | Priority |
+| ------------ | ---------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-APSTK-001 | GET /api/part/stocktake/ returns paginated stocktake list                          | API / Functional | P1       |
+| TC-APSTK-002 | GET /api/part/stocktake/{id}/ retrieves a single stocktake record                  | API / Functional | P1       |
+| TC-APSTK-003 | POST /api/part/stocktake/ creates a stocktake record [DIVERGENCE: 500 on demo]     | API / Functional | P1       |
+| TC-APSTK-004 | PATCH /api/part/stocktake/{id}/ updates a stocktake record                         | API / Functional | P2       |
+| TC-APSTK-005 | DELETE /api/part/stocktake/{id}/ returns 404 for non-existent record               | API / Negative   | P2       |
+
+### Part Related Parts CRUD (api-related-parts)
+
+| TC ID            | Title                                                                        | Type             | Priority |
+| ---------------- | ---------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-APRELATED-001 | GET /api/part/related/ returns paginated related part list                   | API / Functional | P1       |
+| TC-APRELATED-002 | GET /api/part/related/{id}/ retrieves a single related part entry            | API / Functional | P1       |
+| TC-APRELATED-003 | POST /api/part/related/ creates a new related part link                      | API / Functional | P1       |
+| TC-APRELATED-004 | PATCH /api/part/related/{id}/ updates the note field                         | API / Functional | P2       |
+| TC-APRELATED-005 | DELETE /api/part/related/{id}/ removes a related part link                   | API / Functional | P2       |
+| TC-APRELATED-006 | POST /api/part/related/ with duplicate pair returns 400                      | API / Negative   | P2       |
+
+### Category Parameters CRUD (api-category-parameters)
+
+| TC ID             | Title                                                                       | Type             | Priority |
+| ----------------- | --------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-APCATPARAM-001 | GET /api/part/category/parameters/ returns paginated category parameter list | API / Functional | P1       |
+| TC-APCATPARAM-002 | GET /api/part/category/parameters/{id}/ retrieves a single assignment        | API / Functional | P1       |
+| TC-APCATPARAM-003 | POST /api/part/category/parameters/ creates a category parameter assignment  | API / Functional | P1       |
+| TC-APCATPARAM-004 | PATCH /api/part/category/parameters/{id}/ updates the default_value          | API / Functional | P2       |
+| TC-APCATPARAM-005 | DELETE /api/part/category/parameters/{id}/ removes a category parameter      | API / Functional | P2       |
+
 ## UI Test Suites
 
 ### Part Creation (ui-parts-creation)
@@ -104,9 +173,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 48
-- **API Test Cases:** 40
+- **Total Test Cases:** 83
+- **API Test Cases:** 75
 - **UI Test Cases:** 8
-- **P1 Priority:** 16
-- **P2 Priority:** 27
+- **P1 Priority:** 38
+- **P2 Priority:** 40
 - **P3 Priority:** 5
