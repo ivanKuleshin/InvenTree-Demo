@@ -146,6 +146,6 @@ export class PartDetailsTabPage extends BasePage {
 
   override async waitForLoad(): Promise<void> {
     await this.partTitle.waitFor({ state: "visible", timeout: 30_000 });
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
   }
 }

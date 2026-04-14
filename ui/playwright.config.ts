@@ -9,7 +9,7 @@ export default defineConfig({
 
   // ── Execution ────────────────────────────────────────────────────────────
   fullyParallel: true,
-  workers: process.env["CI"] ? 1 : undefined,
+  workers: process.env["CI"] ? 5 : undefined,
   retries: process.env["CI"] ? 2 : 0,
   timeout: 90000,
   expect: { timeout: 40000 },

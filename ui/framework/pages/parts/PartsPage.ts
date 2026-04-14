@@ -46,7 +46,7 @@ class PartsTable extends BaseTable {
  * URL: /part/category/index/parts
  */
 export class PartsPage extends BasePage {
-  readonly url = "/part/category/index/parts";
+  readonly url = "web/part/category/index/parts";
 
   readonly table: PartsTable;
 
@@ -114,7 +114,7 @@ export class PartsPage extends BasePage {
 
   override async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
     await this.addPartsButton.waitFor({ state: "visible", timeout: 40_000 });
   }
 }

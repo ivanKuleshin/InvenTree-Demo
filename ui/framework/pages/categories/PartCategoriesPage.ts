@@ -30,7 +30,7 @@ export class PartCategoriesPage extends BasePage {
 
   override async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
     await this.partCategoriesTab.waitFor({ state: "visible", timeout: 30_000 });
   }
 }

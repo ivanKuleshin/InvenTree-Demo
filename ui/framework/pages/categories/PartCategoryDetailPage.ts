@@ -89,6 +89,6 @@ export class PartCategoryDetailPage extends BasePage {
 
   override async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
   }
 }

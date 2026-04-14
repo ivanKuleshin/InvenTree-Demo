@@ -91,7 +91,7 @@ export class PartsListPage extends BasePage {
 
   override async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
     await this.page
       .locator(
         '[data-testid="part-table-list"], table, [role="table"], text=No parts found',
