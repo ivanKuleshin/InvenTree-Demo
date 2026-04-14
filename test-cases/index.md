@@ -155,6 +155,34 @@
 | TC-UI-PC-007  | Import parts from CSV — happy path                                               | UI / Functional  | P1       |
 | TC-UI-PC-008  | Import parts from CSV — error rows with inline correction                        | UI / Negative    | P3       |
 
+### Part Categories (ui-categories)
+
+| TC ID          | Title                                                                                      | Type             | Priority |
+| -------------- | ------------------------------------------------------------------------------------------ | ---------------- | -------- |
+| TC-UI-CAT-001  | Top-level category list loads with expected columns and data                               | UI / Functional  | P1       |
+| TC-UI-CAT-002  | Navigating into a child category opens its dedicated page                                  | UI / Functional  | P1       |
+| TC-UI-CAT-003  | Category Details tab shows all metadata fields                                             | UI / Functional  | P1       |
+| TC-UI-CAT-004  | Three-level nested category shows full pathstring and multi-segment breadcrumb             | UI / Functional  | P2       |
+| TC-UI-CAT-005  | Structural category shows Structural = YES and contains no directly assigned parts         | UI / Functional  | P2       |
+| TC-UI-CAT-006  | Breadcrumb link navigates up to parent category                                            | UI / Functional  | P2       |
+| TC-UI-CAT-007  | Sub-categories tab lists direct children of a parent category                             | UI / Functional  | P2       |
+| TC-UI-CAT-008  | Leaf-node category shows empty Subcategories tab                                           | UI / Edge Case   | P3       |
+| TC-UI-CAT-009  | Parts tab shows all parts including sub-category parts by default (cascade on)             | UI / Functional  | P1       |
+| TC-UI-CAT-010  | Parts table search filter narrows results by part name                                     | UI / Functional  | P1       |
+| TC-UI-CAT-011  | "Table Filters" drawer opens and contains an "Add Filter" button                           | UI / Functional  | P2       |
+| TC-UI-CAT-012  | Category search in top-level list filters categories by name                               | UI / Functional  | P2       |
+| TC-UI-CAT-013  | Parts table Name column is sortable                                                        | UI / Functional  | P2       |
+| TC-UI-CAT-014  | Parts table shows pagination controls and navigates between pages                          | UI / Functional  | P3       |
+| TC-UI-CAT-015  | Clicking the Parametric View button switches the parts table to parametric mode            | UI / Functional  | P1       |
+| TC-UI-CAT-016  | Clicking the standard view button returns the table to standard mode                       | UI / Functional  | P2       |
+| TC-UI-CAT-017  | Clicking a parameter column header sorts the parametric table                              | UI / Functional  | P1       |
+| TC-UI-CAT-018  | Parameter column filter dialog shows operator dropdown and value input                     | UI / Functional  | P1       |
+| TC-UI-CAT-019  | Filtering by a parameter value narrows the parts list                                      | UI / Functional  | P1       |
+| TC-UI-CAT-020  | Multiple parameter filters applied simultaneously narrow results with AND logic            | UI / Functional  | P2       |
+| TC-UI-CAT-021  | Two filters on the same parameter create a range query                                     | UI / Functional  | P2       |
+| TC-UI-CAT-022  | Removing a parameter filter restores the unfiltered count                                  | UI / Functional  | P2       |
+| TC-UI-CAT-023  | Unit-aware filter interprets abbreviated unit notation correctly                           | UI / Functional  | P3       |
+
 ## Deprecated Test Cases
 
 The following test cases have been archived and replaced with the standardized TC_APCRUD_* naming convention:
@@ -173,9 +201,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 83
+- **Total Test Cases:** 106
 - **API Test Cases:** 75
-- **UI Test Cases:** 8
-- **P1 Priority:** 38
-- **P2 Priority:** 40
-- **P3 Priority:** 5
+- **UI Test Cases:** 31
+- **P1 Priority:** 50
+- **P2 Priority:** 49
+- **P3 Priority:** 7
