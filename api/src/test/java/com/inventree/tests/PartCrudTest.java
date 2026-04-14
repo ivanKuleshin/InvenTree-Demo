@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -82,8 +83,9 @@ public class PartCrudTest extends BaseTest {
             "results must contain exactly " + PartTestData.DEFAULT_PAGE_LIMIT + " items");
         assertNull(response.getPrevious(), "previous must be null on first page");
         assertNotNull(response.getNext(), "next must be non-null when more pages exist");
-        assertTrue(response.getNext().startsWith("http"), "next must be a URI string");
+        assertTrue(response.getNext().startsWith(PartTestData.URI_PREFIX), "next must be a URI string");
 
+        assertFalse(response.getResults().isEmpty(), "results must be non-empty");
         Part first = response.getResults().getFirst();
         assertNotNull(first.getPk(), "pk must not be null");
         assertNotNull(first.getName(), "name must not be null");
@@ -125,12 +127,10 @@ public class PartCrudTest extends BaseTest {
         assertNotNull(part.getInStock(), "in_stock must not be null");
         assertTrue(part.getInStock() >= 0, "in_stock must be >= 0");
 
-        assertNull(rawResponse.jsonPath().get(PartTestData.QUERY_PARAM_PARAMETERS),
-            "parameters must be absent without ?parameters=true");
-        assertNull(rawResponse.jsonPath().get(PartTestData.QUERY_PARAM_TAGS),
-            "tags must be absent without ?tags=true");
-        assertNull(rawResponse.jsonPath().get(PartTestData.QUERY_PARAM_CATEGORY_DETAIL),
-            "category_detail must be absent without ?category_detail=true");
+        rawResponse.then()
+            .body(PartTestData.QUERY_PARAM_PARAMETERS, nullValue())
+            .body(PartTestData.QUERY_PARAM_TAGS, nullValue())
+            .body(PartTestData.QUERY_PARAM_CATEGORY_DETAIL, nullValue());
     }
 
     @Test(groups = {"regression", "parts"})
@@ -169,13 +169,7 @@ public class PartCrudTest extends BaseTest {
         assertNull(response.jsonPath().get(PartTestData.FIELD_CATEGORY_DETAIL),
             "category_detail must be null when part has no category");
 
-        PaginatedResponse<Part> listing = partService.listParts(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.READER);
-        int categorizedPartPk = listing.getResults().stream()
-            .filter(p -> p.getCategory() != null)
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("No categorized part found in first-page results"))
-            .getPk();
+        int categorizedPartPk = findCategorizedPartPk();
 
         Response pathDetailResponse = partService.getPartByIdRaw(categorizedPartPk, Role.READER,
             Map.of(PartTestData.QUERY_PARAM_PATH_DETAIL, PartTestData.QUERY_VALUE_TRUE));
@@ -203,7 +197,7 @@ public class PartCrudTest extends BaseTest {
         PartRequest updateRequest = PartTestData.fullUpdateRequest(
             updatedName,
             PartTestData.PUT_UPDATE_DESCRIPTION,
-            "IPN-APCRUD-004",
+            PartTestData.PUT_UPDATE_IPN,
             true,
             true,
             true,
@@ -230,11 +224,7 @@ public class PartCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_005_patchPartPartiallyUpdatesSelectedFields() {
         String setupName = PartTestData.testPartName("TC-APCRUD-005", "Setup");
-        PartRequest setupRequest = PartRequest.builder()
-            .name(setupName)
-            .active(true)
-            .keywords(PartTestData.ORIGINAL_KEYWORDS)
-            .build();
+        PartRequest setupRequest = PartTestData.partWithKeywords(setupName, PartTestData.ORIGINAL_KEYWORDS);
         Part created = partService.createPart(setupRequest, Role.ADMIN);
         int partPk = created.getPk();
         createdPartIds.add(partPk);
@@ -276,13 +266,7 @@ public class PartCrudTest extends BaseTest {
     @Story("Create Part via Duplicate")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_007_postPartWithDuplicateFieldCreatesIndependentPart() {
-        PaginatedResponse<Part> listing = partService.listParts(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.READER);
-        int sourcePk = listing.getResults().stream()
-            .filter(p -> p.getCategory() != null)
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("No categorized part found in first-page results"))
-            .getPk();
+        int sourcePk = findCategorizedPartPk();
 
         String newName = PartTestData.testPartName("TC-APCRUD-007", PartTestData.DUPLICATE_PART_NAME_SUFFIX);
         Map<String, Object> duplicatePayload = Map.of(
@@ -297,18 +281,17 @@ public class PartCrudTest extends BaseTest {
         Response createResponse = partService.createPartRaw(duplicatePayload, Role.ADMIN);
         ResponseValidator.assertStatusAndContentType(createResponse, HttpStatus.SC_CREATED);
 
-        int newPartPk = createResponse.jsonPath().getInt("pk");
+        int newPartPk = createResponse.jsonPath().getInt(PartTestData.FIELD_PK);
         createdPartIds.add(newPartPk);
 
-        assertEquals(createResponse.jsonPath().getString("name"), newName);
-        assertNull(createResponse.jsonPath().get(PartTestData.FIELD_DUPLICATE),
-            "duplicate must be absent from response (write-only)");
-        assertNull(createResponse.jsonPath().get("category"),
-            "category must be null — not inherited from source part");
+        assertEquals(createResponse.jsonPath().getString(PartTestData.FIELD_NAME), newName);
+        createResponse.then()
+            .body(PartTestData.FIELD_DUPLICATE, nullValue())
+            .body(PartTestData.FIELD_CATEGORY, nullValue());
 
         Response getResponse = partService.getPartByIdRaw(newPartPk, Role.READER);
         ResponseValidator.assertStatusAndContentType(getResponse, HttpStatus.SC_OK);
-        assertEquals(getResponse.jsonPath().getInt("pk"), newPartPk);
+        assertEquals(getResponse.jsonPath().getInt(PartTestData.FIELD_PK), newPartPk);
     }
 
     @Test(groups = {"regression", "parts"})
@@ -317,6 +300,7 @@ public class PartCrudTest extends BaseTest {
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
         PaginatedResponse<StockLocation> locations = stockService.listStockLocations(
             Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
+        assertFalse(locations.getResults().isEmpty(), "stock locations must be non-empty");
         int locationPk = locations.getResults().getFirst().getPk();
 
         String newName = PartTestData.testPartName("TC-APCRUD-008", PartTestData.INITIAL_STOCK_PART_NAME_SUFFIX);
@@ -329,7 +313,7 @@ public class PartCrudTest extends BaseTest {
         Response createResponse = partService.createPartRaw(payload, Role.ADMIN);
         ResponseValidator.assertStatusAndContentType(createResponse, HttpStatus.SC_CREATED);
 
-        int newPartPk = createResponse.jsonPath().getInt("pk");
+        int newPartPk = createResponse.jsonPath().getInt(PartTestData.FIELD_PK);
         createdPartIds.add(newPartPk);
 
         assertNull(createResponse.jsonPath().get(PartTestData.FIELD_INITIAL_STOCK),
@@ -337,7 +321,6 @@ public class PartCrudTest extends BaseTest {
 
         List<StockItem> stockItems = stockService.listStockItems(
             Map.of(PartTestData.QUERY_PARAM_PART, newPartPk), Role.ADMIN);
-        log.info("Stock items count: {}", stockItems.size());
         assertEquals(stockItems.size(), 1, "exactly one stock item must exist");
         StockItem stockItem = stockItems.getFirst();
         assertEquals(stockItem.getQuantity(), (double) PartTestData.INITIAL_STOCK_QUANTITY,
@@ -355,6 +338,7 @@ public class PartCrudTest extends BaseTest {
         PaginatedResponse<Company> companies = companyService.listCompanies(
             Map.of(PartTestData.QUERY_PARAM_IS_SUPPLIER, PartTestData.QUERY_VALUE_TRUE,
                 PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
+        assertFalse(companies.getResults().isEmpty(), "supplier companies must be non-empty");
         int supplierPk = companies.getResults().getFirst().getPk();
 
         String newName = PartTestData.testPartName("TC-APCRUD-009", PartTestData.INITIAL_SUPPLIER_PART_NAME_SUFFIX);
@@ -366,10 +350,9 @@ public class PartCrudTest extends BaseTest {
                 PartTestData.FIELD_SKU_INPUT, PartTestData.SUPPLIER_SKU));
 
         Response createResponse = partService.createPartRaw(payload, Role.ADMIN);
-        log.info("Create part response body: {}", createResponse.getBody().asString());
         ResponseValidator.assertStatusAndContentType(createResponse, HttpStatus.SC_CREATED);
 
-        int newPartPk = createResponse.jsonPath().getInt("pk");
+        int newPartPk = createResponse.jsonPath().getInt(PartTestData.FIELD_PK);
         createdPartIds.add(newPartPk);
 
         assertNull(createResponse.jsonPath().get(PartTestData.FIELD_INITIAL_SUPPLIER),
@@ -377,10 +360,19 @@ public class PartCrudTest extends BaseTest {
 
         List<SupplierPart> supplierParts = companyService.listSupplierParts(
             Map.of(PartTestData.QUERY_PARAM_PART, newPartPk), Role.ADMIN);
-        log.info("Supplier parts count: {}", supplierParts.size());
         assertEquals(supplierParts.size(), 1, "exactly one supplier part must exist");
         SupplierPart supplierPart = supplierParts.getFirst();
         assertEquals(supplierPart.getSupplier(), Integer.valueOf(supplierPk), "supplier pk must match");
         assertEquals(supplierPart.getSku(), PartTestData.SUPPLIER_SKU, "SKU must match");
+    }
+
+    private int findCategorizedPartPk() {
+        PaginatedResponse<Part> listing = partService.listParts(
+            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.READER);
+        return listing.getResults().stream()
+            .filter(p -> p.getCategory() != null)
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("No categorized part found in first-page results"))
+            .getPk();
     }
 }

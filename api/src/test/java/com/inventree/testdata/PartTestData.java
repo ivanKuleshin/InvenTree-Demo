@@ -28,6 +28,10 @@ public final class PartTestData {
     public static final String ERROR_MSG_NOT_FOUND = "No Part matches the given query.";
     public static final String EMPTY_BODY = "";
 
+    public static final String URI_PREFIX = "http";
+    public static final String PUT_UPDATE_IPN = "IPN-APCRUD-004";
+    public static final String FIELD_PK = "pk";
+
     public static final String PUT_UPDATE_DESCRIPTION = "PUT full update applied";
     public static final String PUT_UPDATE_KEYWORDS = "put update test";
     public static final String PATCH_UPDATE_KEYWORDS = "patch-test qa";
@@ -43,6 +47,7 @@ public final class PartTestData {
 
     public static final String FIELD_PARAMETERS = "parameters";
     public static final String FIELD_TAGS = "tags";
+    public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_CATEGORY_DETAIL = "category_detail";
     public static final String FIELD_CATEGORY_PATH = "category_path";
     public static final String FIELD_DUPLICATE = "duplicate";
@@ -127,6 +132,14 @@ public final class PartTestData {
         return PartRequest.builder()
                 .name(name)
                 .purchaseable(true)
+                .build();
+    }
+
+    public static PartRequest partWithKeywords(String name, String keywords) {
+        return PartRequest.builder()
+                .name(name)
+                .active(true)
+                .keywords(keywords)
                 .build();
     }
 }
