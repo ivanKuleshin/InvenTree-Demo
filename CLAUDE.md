@@ -5,117 +5,157 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Test Automation Framework (TAF) for [InvenTree](https://demo.inventree.org/) — an open-source inventory management
-product. The framework targets the **Parts** domain via API (Java) and UI (JavaScript) automation, driven by an
-AI-assisted agentic workflow.
+product. The framework targets the **Parts** domain via both UI and API automation, driven by an AI-assisted agentic
+workflow.
 
 - InvenTree docs: https://docs.inventree.org/en/stable/part/#part-attributes
 - InvenTree API docs: https://docs.inventree.org/en/stable/api/
 
 ## Build Commands
 
+### Java (API tests)
+
 ```bash
-mvn clean install                        # Full build + all tests
-mvn test                                 # Run all tests (via testng.xml)
-mvn test -Dtest=PartCategoryCrudTest     # Run a single test class
-mvn test -Dtest=PartCategoryCrudTest#tc_ACCRUD_001  # Run a single test method
-mvn test -Dsurefire.suiteXmlFiles=api/src/test/resources/testng.xml  # Explicit suite file
-mvn allure:report                        # Generate Allure HTML report after tests
+mvn clean install     # Clean build
+mvn test              # Run tests
+mvn package           # Package
 ```
 
 Java version: JDK 21 (Amazon Corretto 21). CheckStyle is configured with Google/Sun profiles (v13.4.0).
 
-The default test suite is `api/src/test/resources/testng.xml` — it discovers all classes under `com.inventree.tests`
-by package. The `-Dsurefire.suiteXmlFiles` override is useful for pointing at a custom suite XML (e.g. a subset of
-tests or a different parallel configuration) without changing `pom.xml`.
+### UI tests (Playwright / TypeScript)
 
-## Tech Stack
+All commands run from the `ui/` directory.
 
-| Layer | Technology |
-|---|---|
-| Language | Java 21 (Amazon Corretto) |
-| Build | Maven 3 |
-| Test runner | TestNG 7.10 |
-| HTTP / API testing | REST Assured 5.5 |
-| Serialization | Jackson 2.18 (Databind, XML, JSR-310) |
-| Reporting | Allure 2.32 (allure-testng + allure-rest-assured filter) |
-| Logging | Log4j2 2.25 + SLF4J bridge |
-| Boilerplate reduction | Lombok 1.18 |
+```bash
+npm install                          # Install dependencies (first time)
+npx playwright install chromium      # Install browser binary (first time)
+npm test                             # Run all tests (headless)
+npm run test:headed                  # Run with visible browser
+npm run test:debug                   # Open Playwright inspector
+npm run test:report                  # Open HTML report from last run
+npm run type-check                   # TypeScript type check
+npm run lint                         # ESLint
+```
+
+Run a single test file:
+
+```bash
+npx playwright test tests/ui/parts/create-part.spec.ts
+```
+
+Run a specific test by title substring:
+
+```bash
+npx playwright test --grep "TC-UI-PC-001"
+```
+
+Environment: copy `ui/.env.example` to `ui/.env` and set `BASE_URL` (defaults to `https://demo.inventree.org`).
 
 ## Architecture
 
-### Project Layout
+**Just for information and flow description. Not rules to follow.**
 
-The root `pom.xml` wires `api/src/main/java` and `api/src/test/java` as source roots — there is no Maven
-sub-module. All Java production code lives under `api/src/main/java/com/inventree/` and tests under
-`api/src/test/java/com/inventree/`.
+The project follows a four-phase agentic workflow:
+
+1. **Documentation phase** — An AI agent(or researcher agent) reads InvenTree `/docs` folder for needed docs. If no
+   desired docs found, then researcher should follow the flow when it needs to fetch docs from remote web resources.
+
+2. **Manual test case phase** — A manual tester AI agent (with UI + API testing skills) reads those docs and generates
+   test cases in Markdown format. Each functional area is a separate test suite, mirroring the coverage areas below.
+
+3. **Automation phase** — Two automation agents implement the manual test cases in code, maintaining 1:1 structural
+   traceability:
+    - **API automation agent** → Java (Maven, REST Assured or equivalent)
+    - **UI automation agent** → JavaScript (Playwright or equivalent)
+
+4. **Review phase** — A reviewer agent checks the generated code for correctness, style, and adherence to coding rules.
+
+## Repository Layout (non-code)
 
 ```
-api/src/main/java/com/inventree/
-  auth/          AuthManager (token cache), AuthStrategy enum, Role enum, Credentials
-  client/        BaseClient (REST Assured executor), SpecBuilder
-  config/        ApiConfig (typed getters), ConfigManager (loads config.properties)
-  model/         POJOs: Part, PartCategory, PartRequest, PartCategoryRequest, PaginatedResponse<T>
-  service/       PartService, PartCategoryService — service layer over BaseClient
-  util/          ApiConstants (endpoint paths, property keys), HttpStatus, ResponseValidator
+docs/
+├── api/endpoints/      # Per-endpoint API snapshots (method-named .md files)
+├── api/schemas/        # API schema snapshots
+└── api/part-api-schema.md
 
-api/src/test/java/com/inventree/
-  base/          BaseTest — @BeforeSuite wires services + pre-warms auth tokens; @AfterSuite clears cache
-  testdata/      CategoryTestData, FilteringTestData — all constants and name-builder helpers
-  tests/         PartCategoryCrudTest, PartFilteringPaginationSearchTest, SmokeTest
+test-cases/
+├── index.md            # Master index — all TC IDs, titles, priorities
+├── api/
+│   ├── parts/          # TC_APCRUD_*.md
+│   ├── categories/     # TC_ACCRUD_*.md
+│   ├── filtering/      # TC_APFLT_*.md
+│   ├── validation/     # TC_APVAL_*.md
+│   ├── relational/     # TC_APREL_*.md
+│   └── edge-cases/     # TC_APEDGE_*.md
+└── ui/
+    └── parts/          # TC_UI_PART_CREATE.md (source for create-part.spec.ts)
 ```
 
-### Service Layer Pattern
+`test-cases/index.md` is the authoritative traceability map. Each automated spec must implement exactly the TC IDs
+listed there. New test cases go to `test-cases/` first; automation follows.
 
-Each `*Service` extends `BaseClient` and exposes two method variants:
-- **Typed** (`createPart`, `listParts`, …) — asserts status + deserializes to POJO; use for happy-path steps.
-- **Raw** (`createPartRaw`, `listPartsRaw`, …) — returns `Response` as-is; use when the test needs to inspect
-  status codes, headers, or error bodies directly.
+## Coverage Areas
 
-### Configuration
+**UI**: Part creation (manual entry and import), Part detail tabs (Stock, BOM, Allocated, Build Orders, Parameters,
+Variants, Revisions, Attachments, Related Parts, Test Templates), Part categories (hierarchy, filtering, parametric
+tables), Part attributes (Virtual, Template, Assembly, Component, Trackable, Purchasable, Salable, Active/Inactive),
+Units of measure, Part revisions, negative/boundary scenarios.
 
-Runtime config is loaded from `api/src/main/resources/config.properties`. Key properties:
+**API**: CRUD on Parts and Part Categories, filtering/pagination/search, field-level validation, relational integrity (
+category, default location, supplier linkage), edge cases (invalid payloads, unauthorized access, conflicts).
 
-| Property | Default |
-|---|---|
-| `api.base.url` | `https://demo.inventree.org` |
-| `api.auth.strategy` | `TOKEN` |
-| `api.credentials.<role>.username/password` | per-role demo credentials |
+## Test Case ID Conventions
 
-Roles available: `ADMIN`, `ALLACCESS`, `READER`, `ENGINEER`.
+| Suite                      | Prefix          | Example         |
+|----------------------------|-----------------|-----------------|
+| API — Parts CRUD           | `TC-APCRUD-NNN` | `TC-APCRUD-001` |
+| API — Categories CRUD      | `TC-ACCRUD-NNN` | `TC-ACCRUD-003` |
+| API — Filtering            | `TC-APFLT-NNN`  | `TC-APFLT-002`  |
+| API — Field Validation     | `TC-APVAL-NNN`  | `TC-APVAL-001`  |
+| API — Relational Integrity | `TC-APREL-NNN`  | `TC-APREL-004`  |
+| API — Edge Cases           | `TC-APEDGE-NNN` | `TC-APEDGE-007` |
+| UI — Part Creation         | `TC-UI-PC-NNN`  | `TC-UI-PC-001`  |
 
-### Test Data Pattern
-
-All literals (status codes, query params, expected messages, page limits) must live in `*TestData` classes, never
-inline in test methods. Test names use helper builders, e.g. `CategoryTestData.testCategoryName("TC-001", "label")`.
-
-### Cleanup Pattern
-
-Track created entity IDs in a `List<Integer>` field, delete them in `@AfterMethod` inside a try-catch. Never put
-cleanup inline at the end of a test method — it will be skipped on assertion failure.
-
-## Agentic Workflow
-
-Four dedicated Claude agents build the framework end-to-end:
-
-| Agent | Role |
-|---|---|
-| `requirements-researcher` | Fetches InvenTree docs → `docs/` |
-| `manual-qa-agent` | Produces manual test cases → `test-cases/` |
-| `api-automation-agent` | Implements Java tests from manual cases |
-| `api-automation-code-reviewer` | Reviews generated tests; reports only, does not auto-fix |
-
-UI automation agent is **TODO** — manual UI test cases exist in `test-cases/ui/` but no automation yet.
-
-## Coverage Status
-
-**API (Java — done):** Parts CRUD, Part Categories CRUD, Filtering/Pagination/Search.  
-**API (TODO):** Field-level Validation, Relational Integrity, Edge Cases.  
-**UI (TODO):** All suites (Part creation, detail tabs, categories, attributes, UoM, revisions, negative).
+Spec `describe` blocks use the underscore form of the prefix (e.g. `TC_UI_PART_CREATE`, `TC_APCRUD`). Individual `test`/
+`it` titles start with the full TC ID.
 
 ## Coding Rules
 
-- **No comments in code.** No inline comments, block comments, or Javadoc unless explicitly requested.
+- **No comments in code.** Do not add any inline comments, block comments, or Javadoc to generated or edited code unless
+  the user explicitly requests them.
 
-## Response Rules
+## Response rules
 
-- **Terse responses.** Brief and direct — skip trailing summaries, let the code speak.
+- **Terse responses.** Keep responses brief and direct—focus on what was done or decided, not explanations of how to
+  read diffs or tool output. Skip trailing summaries; let the code changes speak for themselves.
+
+## UI Test Architecture (`ui/`)
+
+TypeScript + Playwright. All source lives under `ui/`.
+
+```
+ui/
+├── framework/
+│   ├── core/           # Base classes: BasePage, BaseComponent, BaseTable, BaseTableRow, ElementHolder
+│   ├── components/     # Reusable UI components (NavigationBar, PartDetailTabBar, tab panels)
+│   └── pages/          # Page Objects (PartsPage, PartsDetailViewPage, CreatePartModal, EditPartModal, …)
+├── fixtures/           # Playwright fixture extensions (parts.fixtures.ts → partsPage, partDetailPage)
+├── config/             # storageState.ts (auth file paths), users.ts (role definitions)
+├── data/               # Static test data (parts.ts)
+├── tests/
+│   ├── setup/          # auth.setup.ts — logs in all roles, writes .auth/<role>.json
+│   └── ui/parts/       # Spec files (create-part.spec.ts, …)
+└── playwright.config.ts
+```
+
+**Key conventions:**
+
+- `BasePage` validates the current URL on `waitForLoad()`. Pages with dynamic URLs (e.g. `/part/42/`) declare `url` as a
+  `RegExp` and override `navigate()`.
+- Auth is handled via a `setup` project that runs before `chromium`. Tests select a role with
+  `test.use({ storageState: STORAGE_STATE.ENGINEER })`.
+- Fixtures extend `@playwright/test` with typed page-object instances. Import from `@fixtures/parts.fixtures` (not
+  directly from `@playwright/test`) to get the extended `test` and `expect`.
+- Path aliases (`@framework/*`, `@fixtures/*`, `@config/*`, `@data/*`) are defined in `tsconfig.json`.
+- Tests follow Given/When/Then using `test.step()`.
