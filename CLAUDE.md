@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# General behavior
+
+You should act as an orchestrator of AI agents. When use asks to do something you should first try to find appropriate
+agent and only no agent found - implement ask by yourself leveraging skills.
+
 ## Project Overview
 
 Test Automation Framework (TAF) for [InvenTree](https://demo.inventree.org/) — an open-source inventory management

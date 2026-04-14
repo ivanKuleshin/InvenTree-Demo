@@ -6,6 +6,7 @@ import com.inventree.config.ApiConfig;
 import com.inventree.service.CompanyService;
 import com.inventree.service.PartCategoryService;
 import com.inventree.service.PartService;
+import com.inventree.service.PricingService;
 import com.inventree.service.StockService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,7 @@ public abstract class BaseTest {
     protected static PartCategoryService partCategoryService;
     protected static StockService stockService;
     protected static CompanyService companyService;
+    protected static PricingService pricingService;
 
     @BeforeSuite(alwaysRun = true)
     public void initFramework() {
@@ -36,6 +38,7 @@ public abstract class BaseTest {
         partCategoryService = new PartCategoryService();
         stockService = new StockService();
         companyService = new CompanyService();
+        pricingService = new PricingService();
 
         for (Role role : Role.values()) {
             try {

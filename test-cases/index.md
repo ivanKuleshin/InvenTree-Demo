@@ -86,20 +86,25 @@
 
 | TC ID          | Title                                                                          | Type             | Priority |
 | -------------- | ------------------------------------------------------------------------------ | ---------------- | -------- |
-| TC-APPRICE-001 | GET /api/part/internal-price/ returns paginated internal price break list      | API / Functional | P1       |
-| TC-APPRICE-002 | GET /api/part/internal-price/{id}/ retrieves a single internal price break     | API / Functional | P1       |
-| TC-APPRICE-003 | POST /api/part/internal-price/ creates a new internal price break              | API / Functional | P1       |
-| TC-APPRICE-004 | PATCH /api/part/internal-price/{id}/ updates the price of a price break        | API / Functional | P2       |
-| TC-APPRICE-005 | DELETE /api/part/internal-price/{id}/ removes a price break                    | API / Functional | P2       |
+| TC-APPRICE-001     | GET /api/part/internal-price/ returns paginated internal price break list      | API / Functional | P1       |
+| TC-APPRICE-002     | GET /api/part/internal-price/{id}/ retrieves a single internal price break     | API / Functional | P1       |
+| TC-APPRICE-003     | POST /api/part/internal-price/ creates a new internal price break              | API / Functional | P1       |
+| TC-APPRICE-004     | PATCH /api/part/internal-price/{id}/ updates the price of a price break        | API / Functional | P2       |
+| TC-APPRICE-005     | DELETE /api/part/internal-price/{id}/ removes a price break                    | API / Functional | P2       |
+| TC-APPRICE-NEG-001 | GET /api/part/internal-price/{nonexistent}/ returns 404                        | API / Negative   | P2       |
+| TC-APPRICE-NEG-002 | POST /api/part/internal-price/ with non-existent part FK returns 400           | API / Negative   | P2       |
+| TC-APPRICE-NEG-003 | POST /api/part/internal-price/ with READER role returns 403                    | API / Security   | P1       |
 
 ### Part Sale Pricing (api-sale-pricing)
 
 | TC ID            | Title                                                                        | Type             | Priority |
 | ---------------- | ---------------------------------------------------------------------------- | ---------------- | -------- |
-| TC-APSPRICE-001  | GET /api/part/sale-price/ returns paginated sale price break list            | API / Functional | P1       |
-| TC-APSPRICE-002  | GET /api/part/sale-price/{id}/ retrieves a single sale price break           | API / Functional | P1       |
-| TC-APSPRICE-003  | POST /api/part/sale-price/ creates a new sale price break                    | API / Functional | P1       |
-| TC-APSPRICE-004  | DELETE /api/part/sale-price/{id}/ removes a sale price break                 | API / Functional | P2       |
+| TC-APSPRICE-001     | GET /api/part/sale-price/ returns paginated sale price break list            | API / Functional | P1       |
+| TC-APSPRICE-002     | GET /api/part/sale-price/{id}/ retrieves a single sale price break           | API / Functional | P1       |
+| TC-APSPRICE-003     | POST /api/part/sale-price/ creates a new sale price break                    | API / Functional | P1       |
+| TC-APSPRICE-004     | DELETE /api/part/sale-price/{id}/ removes a sale price break                 | API / Functional | P2       |
+| TC-APSPRICE-NEG-001 | GET /api/part/sale-price/{nonexistent}/ returns 404                          | API / Negative   | P2       |
+| TC-APSPRICE-NEG-002 | POST /api/part/sale-price/ with non-existent part FK returns 400             | API / Negative   | P2       |
 
 ### Part Aggregate Pricing (api-aggregate-pricing)
 
@@ -280,9 +285,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 145
-- **API Test Cases:** 75
+- **Total Test Cases:** 150
+- **API Test Cases:** 80
 - **UI Test Cases:** 70
-- **P1 Priority:** 63
-- **P2 Priority:** 69
+- **P1 Priority:** 65
+- **P2 Priority:** 72
 - **P3 Priority:** 13
