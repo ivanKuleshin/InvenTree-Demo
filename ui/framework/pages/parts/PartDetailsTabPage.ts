@@ -3,57 +3,54 @@ import { BasePage } from "@framework/core/BasePage";
 import { PartDetailTabBar } from "@framework/components/parts/PartDetailTabBar";
 import { CreatePartModal } from "@framework/pages/parts/CreatePartModal";
 import { EditPartModal } from "@framework/pages/parts/EditPartModal";
-import { PartDetailsPanel } from "@framework/components/parts/tabs/PartDetailsPanel";
-import { StockPanel } from "@framework/components/parts/tabs/StockPanel";
-import { AllocationsPanel } from "@framework/components/parts/tabs/AllocationsPanel";
-import { UsedInPanel } from "@framework/components/parts/tabs/UsedInPanel";
-import { PartPricingPanel } from "@framework/components/parts/tabs/PartPricingPanel";
-import { SuppliersPanel } from "@framework/components/parts/tabs/SuppliersPanel";
-import { PurchaseOrdersPanel } from "@framework/components/parts/tabs/PurchaseOrdersPanel";
-import { StockHistoryPanel } from "@framework/components/parts/tabs/StockHistoryPanel";
-import { RelatedPartsPanel } from "@framework/components/parts/tabs/RelatedPartsPanel";
-import { ParametersPanel } from "@framework/components/parts/tabs/ParametersPanel";
-import { AttachmentsPanel } from "@framework/components/parts/tabs/AttachmentsPanel";
-import { NotesPanel } from "@framework/components/parts/tabs/NotesPanel";
+import { StockTab } from "@framework/components/parts/tabs/StockTab";
+import { AllocationsTab } from "@framework/components/parts/tabs/AllocationsTab";
+import { UsedInTab } from "@framework/components/parts/tabs/UsedInTab";
+import { PartPricingTab } from "@framework/components/parts/tabs/PartPricingTab";
+import { SuppliersTab } from "@framework/components/parts/tabs/SuppliersTab";
+import { PurchaseOrdersTab } from "@framework/components/parts/tabs/PurchaseOrdersTab";
+import { StockHistoryTab } from "@framework/components/parts/tabs/StockHistoryTab";
+import { RelatedPartsTab } from "@framework/components/parts/tabs/RelatedPartsTab";
+import { ParametersTab } from "@framework/components/parts/tabs/ParametersTab";
+import { AttachmentsTab } from "@framework/components/parts/tabs/AttachmentsTab";
+import { NotesTab } from "@framework/components/parts/tabs/NotesTab";
 
-export class PartsDetailViewPage extends BasePage {
+export class PartDetailsTabPage extends BasePage {
   readonly url = /\/web\/part\/\d+\/details/;
 
   readonly tabBar: PartDetailTabBar;
-  readonly partDetailsPanel: PartDetailsPanel;
-  readonly stockPanel: StockPanel;
-  readonly allocationsPanel: AllocationsPanel;
-  readonly usedInPanel: UsedInPanel;
-  readonly partPricingPanel: PartPricingPanel;
-  readonly suppliersPanel: SuppliersPanel;
-  readonly purchaseOrdersPanel: PurchaseOrdersPanel;
-  readonly stockHistoryPanel: StockHistoryPanel;
-  readonly relatedPartsPanel: RelatedPartsPanel;
-  readonly parametersPanel: ParametersPanel;
-  readonly attachmentsPanel: AttachmentsPanel;
-  readonly notesPanel: NotesPanel;
+  readonly stockTab: StockTab;
+  readonly allocationsTab: AllocationsTab;
+  readonly usedInTab: UsedInTab;
+  readonly partPricingTab: PartPricingTab;
+  readonly suppliersTab: SuppliersTab;
+  readonly purchaseOrdersTab: PurchaseOrdersTab;
+  readonly stockHistoryTab: StockHistoryTab;
+  readonly relatedPartsTab: RelatedPartsTab;
+  readonly parametersTab: ParametersTab;
+  readonly attachmentsTab: AttachmentsTab;
+  readonly notesTab: NotesTab;
 
   constructor(page: Page) {
     super(page);
     this.tabBar = new PartDetailTabBar(page);
-    this.partDetailsPanel = new PartDetailsPanel(page);
-    this.stockPanel = new StockPanel(page);
-    this.allocationsPanel = new AllocationsPanel(page);
-    this.usedInPanel = new UsedInPanel(page);
-    this.partPricingPanel = new PartPricingPanel(page);
-    this.suppliersPanel = new SuppliersPanel(page);
-    this.purchaseOrdersPanel = new PurchaseOrdersPanel(page);
-    this.stockHistoryPanel = new StockHistoryPanel(page);
-    this.relatedPartsPanel = new RelatedPartsPanel(page);
-    this.parametersPanel = new ParametersPanel(page);
-    this.attachmentsPanel = new AttachmentsPanel(page);
-    this.notesPanel = new NotesPanel(page);
+    this.stockTab = new StockTab(page);
+    this.allocationsTab = new AllocationsTab(page);
+    this.usedInTab = new UsedInTab(page);
+    this.partPricingTab = new PartPricingTab(page);
+    this.suppliersTab = new SuppliersTab(page);
+    this.purchaseOrdersTab = new PurchaseOrdersTab(page);
+    this.stockHistoryTab = new StockHistoryTab(page);
+    this.relatedPartsTab = new RelatedPartsTab(page);
+    this.parametersTab = new ParametersTab(page);
+    this.attachmentsTab = new AttachmentsTab(page);
+    this.notesTab = new NotesTab(page);
   }
 
   override async navigate(partId?: number | string): Promise<void> {
     if (partId == null) {
       throw new Error(
-        "PartsDetailViewPage.navigate() requires a partId argument.",
+        "PartDetailsTabPage.navigate() requires a partId argument.",
       );
     }
     await this.navigateTo(`/web/part/${partId}/details`);
@@ -118,6 +115,14 @@ export class PartsDetailViewPage extends BasePage {
   currentPartId(): string {
     const match = this.page.url().match(/\/web\/part\/(\d+)\//);
     return match ? match[1] : "";
+  }
+
+  // ── Part Details tab ──────────────────────────────────────────────────────
+
+  fieldValue(text: string): Locator {
+    return this.page
+      .getByRole("tabpanel", { name: "Part Details" })
+      .getByText(text);
   }
 
   // ── Header queries ────────────────────────────────────────────────────────

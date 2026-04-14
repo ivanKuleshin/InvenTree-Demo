@@ -1,8 +1,8 @@
 import { type Page } from "@playwright/test";
 import { BaseComponent } from "@framework/core/BaseComponent";
 
-export class StockPanel extends BaseComponent {
+export class PartPricingTab extends BaseComponent {
   constructor(page: Page) {
-    super(page, page.getByRole("tabpanel", { name: "Stock" }));
+    super(page, page.getByRole("tabpanel", { name: "Part Pricing" }));
   }
 }

@@ -1,8 +1,8 @@
 import { type Page } from "@playwright/test";
 import { BaseComponent } from "@framework/core/BaseComponent";
 
-export class RelatedPartsPanel extends BaseComponent {
+export class AllocationsTab extends BaseComponent {
   constructor(page: Page) {
-    super(page, page.getByRole("tabpanel", { name: "Related Parts" }));
+    super(page, page.getByRole("tabpanel", { name: "Allocations" }));
   }
 }
