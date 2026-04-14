@@ -75,7 +75,7 @@ export class PartDetailsTabPage extends BasePage {
   }
 
   get successToast(): Locator {
-    return this.page.getByText("Item Created");
+    return this.page.getByRole("alert").filter({ hasText: "Item Created" });
   }
 
   // ── Actions menu ──────────────────────────────────────────────────────────

@@ -11,7 +11,17 @@
       "mcp__ide__getDiagnostics",
       "Bash(python3 -m json.tool)",
       "Bash(mvn test:*)",
-      "mcp__playwright__browser_snapshot"
+      "mcp__playwright__browser_snapshot",
+      "Bash(npm run:*)",
+      "Skill(playwright-cli)",
+      "Bash(playwright-cli open:*)",
+      "Bash(playwright-cli snapshot:*)",
+      "WebFetch(domain:demo.inventree.org)",
+      "Bash(playwright-cli:*)",
+      "Bash(TOKEN=\"inv-8bd2a55d33421c6e9494d2a054c3a45bda79874e-20260414\" curl -s \"https://demo.inventree.org/api/part/category/?limit=50\" -H \"Authorization: Token $TOKEN\")",
+      "Bash(TOKEN=\"inv-8bd2a55d33421c6e9494d2a054c3a45bda79874e-20260414\" curl -s \"https://demo.inventree.org/api/part/category/?parent=719&limit=25\" -H \"Authorization: Token $TOKEN\")",
+      "Bash(python3 -c \":*)",
+      "Bash(ls /Users/andriifrolov/Downloads/InvenTree-Demo/.playwright-cli/console*.log)"
     ]
   }
 }

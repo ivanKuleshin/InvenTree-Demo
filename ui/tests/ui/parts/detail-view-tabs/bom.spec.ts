@@ -36,8 +36,8 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
 
     await test.step("AND the validate-bom action button is visible", async () => {
       await expect(
-        page.locator('button[aria-label="action-button-validate-bom"]'),
-      ).toBeVisible({ timeout: 15_000 });
+        page.locator('button[aria-label="bom-validation-info"]'),
+      ).toBeVisible();
     });
 
     await test.step("AND at least one BOM row is visible in the table", async () => {
@@ -46,7 +46,7 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
           .getByRole("tabpanel", { name: "Bill of Materials" })
           .getByRole("row")
           .nth(1),
-      ).toBeVisible({ timeout: 15_000 });
+      ).toBeVisible();
     });
   });
 

@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { ElementHolder } from "./ElementHolder";
 
 /**
@@ -57,28 +57,14 @@ export abstract class BasePage extends ElementHolder {
    */
   async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
   }
 
   /**
    * Assert that the browser's current URL matches `this.url`.
    * Called internally by `waitForLoad()`.
    */
-  protected assertCurrentUrl(): void {
-    const current = this.page.url();
-
-    if (typeof this.url === "string") {
-      if (!current.includes(this.url)) {
-        throw new Error(
-          `${this.constructor.name}: expected URL to include "${this.url}" but got "${current}"`,
-        );
-      }
-    } else {
-      if (!this.url.test(current)) {
-        throw new Error(
-          `${this.constructor.name}: expected URL to match ${this.url} but got "${current}"`,
-        );
-      }
-    }
+  async assertCurrentUrl(): Promise<void> {
+    await expect(this.page).toHaveURL(this.url);
   }
 }

@@ -25,13 +25,13 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
     await test.step("AND the add-stock-item action button is visible", async () => {
       await expect(
         page.locator('button[aria-label="action-button-add-stock-item"]'),
-      ).toBeVisible({ timeout: 15_000 });
+      ).toBeVisible();
     });
 
     await test.step("AND at least one stock row is visible in the table", async () => {
       await expect(
         partDetailPage.stockTab.root.getByRole("row").nth(1),
-      ).toBeVisible({ timeout: 15_000 });
+      ).toBeVisible();
     });
   });
 

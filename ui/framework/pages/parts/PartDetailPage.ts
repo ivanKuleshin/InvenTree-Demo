@@ -46,9 +46,7 @@ export class PartDetailPage extends BasePage {
   }
 
   get breadcrumb(): Locator {
-    return this.locator(
-      '[aria-label="breadcrumb"], nav.breadcrumb, .mantine-Breadcrumbs-root',
-    ).first();
+    return this.page.locator("//div[contains(@class, 'Breadcrumbs-root')]");
   }
 
   get editButton(): Locator {

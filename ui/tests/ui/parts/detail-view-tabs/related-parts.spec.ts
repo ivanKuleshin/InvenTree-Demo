@@ -43,6 +43,18 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
       });
     });
 
+    await test.step("AND removes any pre-existing Doohickey relation", async () => {
+      const doohickeyRow = partDetailPage.relatedPartsTab.root
+        .getByRole("row")
+        .filter({ hasText: "Doohickey" });
+      if (await doohickeyRow.isVisible({ timeout: 3_000 }).catch(() => false)) {
+        await doohickeyRow.locator('[aria-label^="row-action-menu"]').click();
+        await page.getByRole("menuitem", { name: "Delete" }).click();
+        await page.getByRole("button", { name: "Delete" }).click();
+        await expect(doohickeyRow).not.toBeVisible({ timeout: 10_000 });
+      }
+    });
+
     await test.step("WHEN user opens the Add Related Part dialog", async () => {
       await page
         .locator('button[aria-label="action-button-add-related-part"]')
@@ -71,7 +83,7 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
     await test.step("THEN Doohickey appears in the Related Parts table", async () => {
       await expect(
         partDetailPage.relatedPartsTab.root.getByText("Doohickey"),
-      ).toBeVisible({ timeout: 15_000 });
+      ).toBeVisible();
     });
   });
 });
