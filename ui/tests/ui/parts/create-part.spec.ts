@@ -5,7 +5,6 @@ test.describe("TC_UI_PART_CREATE", () => {
   test.use({ storageState: STORAGE_STATE.ENGINEER, actionTimeout: 20_000 });
 
   test.beforeEach(async ({ partsPage }) => {
-    test.setTimeout(120_000);
     await partsPage.navigate();
     await partsPage.waitForLoad();
   });
@@ -102,7 +101,6 @@ test.describe("TC_UI_PART_CREATE", () => {
   });
 
   test("TC-UI-PC-003: create part assigned to a specific category", async ({
-    page,
     partsPage,
     partDetailPage,
   }) => {
@@ -113,8 +111,7 @@ test.describe("TC_UI_PART_CREATE", () => {
     });
 
     await test.step("AND selects the Electronics category", async () => {
-      await modal.categoryInput.fill("Electronics");
-      await page.getByRole("option", { name: /^Electronics\b/ }).first().click();
+      await modal.selectCategory("Electronics");
     });
 
     await test.step("AND fills the Name field", async () => {
@@ -296,6 +293,7 @@ test.describe("TC_UI_PART_CREATE", () => {
 
     await test.step("THEN server rejects oversized name with an error on the Name field", async () => {
       await expect(modal.formErrorBanner).toBeVisible();
+      await expect(modal.nameInput).toHaveAttribute("data-error", "true");
     });
 
     await test.step("WHEN user enters an invalid URL in the Link field with a valid name", async () => {
@@ -316,6 +314,7 @@ test.describe("TC_UI_PART_CREATE", () => {
   test("TC-UI-PC-007: import parts from CSV — happy path", async ({
     partsPage,
   }) => {
+    test.setTimeout(120_000);
     const ts = Date.now();
     const part1 = `TC-IMPORT-001-${ts}`;
     const part2 = `TC-IMPORT-002-${ts}`;
@@ -377,11 +376,16 @@ test.describe("TC_UI_PART_CREATE", () => {
     await test.step("AND user imports all rows", async () => {
       await importModal.importAllRows();
     });
+
+    await test.step("THEN all 3 rows are marked as successfully imported", async () => {
+      await expect(importModal.successRows).toHaveCount(3, { timeout: 60_000 });
+    });
   });
 
   test("TC-UI-PC-008: import parts from CSV — error rows with inline correction", async ({
     partsPage,
   }) => {
+    test.setTimeout(120_000);
     const ts = Date.now();
     const validPart1 = `TC-ERR-001-${ts}`;
     const invalidPart3 = `TC-ERR-003-${ts}`;
@@ -413,6 +417,31 @@ test.describe("TC_UI_PART_CREATE", () => {
     await test.step("THEN the valid and invalid rows are visible in the wizard table", async () => {
       await expect(importModal.root.getByText(validPart1)).toBeVisible();
       await expect(importModal.root.getByText(invalidPart3)).toBeVisible();
+    });
+
+    await test.step("AND user attempts to import all rows", async () => {
+      await importModal.importAllRows();
+    });
+
+    await test.step("THEN error rows are flagged with error indicators for invalid data", async () => {
+      await expect(importModal.errorRows.first()).toBeVisible({ timeout: 30_000 });
+    });
+
+    await test.step("AND the valid row is marked as successfully imported", async () => {
+      await expect(importModal.successRows.first()).toBeVisible();
+    });
+
+    await test.step("WHEN user corrects the missing-name row by editing the name cell inline", async () => {
+      const correctedName = `TC-ERR-002-FIXED-${ts}`;
+      const emptyNameRow = importModal.importTableRows
+        .filter({ hasText: /Missing name is invalid/i })
+        .first();
+      await emptyNameRow.getByRole("textbox").first().fill(correctedName);
+    });
+
+    await test.step("AND re-imports the corrected row", async () => {
+      await importModal.importAllRows();
+      await expect(importModal.errorRows).toHaveCount(1, { timeout: 30_000 });
     });
   });
 });

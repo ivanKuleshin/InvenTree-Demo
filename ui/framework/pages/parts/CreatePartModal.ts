@@ -240,6 +240,11 @@ export class CreatePartModal extends BaseComponent {
     await this.linkInput.fill(url);
   }
 
+  async selectCategory(name: string): Promise<void> {
+    await this.categoryInput.fill(name);
+    await this.page.getByRole("option", { name: new RegExp(`^${name}`) }).first().click();
+  }
+
   override async waitForVisible(): Promise<void> {
     await super.waitForVisible();
     await this.nameInput.waitFor({ state: "visible" });

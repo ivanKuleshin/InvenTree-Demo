@@ -87,4 +87,12 @@ export class ImportPartsModal extends BaseComponent {
     await this.selectAllRowsCheckbox.check();
     await this.importSelectedRowsButton.click();
   }
+
+  get successRows(): Locator {
+    return this.importTableRows.filter({ hasText: /\bcomplete\b/i });
+  }
+
+  get errorRows(): Locator {
+    return this.importTableRows.filter({ hasText: /\berror\b/i });
+  }
 }
