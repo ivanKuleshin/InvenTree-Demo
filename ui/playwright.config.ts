@@ -37,10 +37,10 @@ export default defineConfig({
      * Setup project — runs first, logs in all roles, writes .auth/<role>.json.
      * No storageState here: these tests start unauthenticated by design.
      */
-    // {
-    //   name: "setup",
-    //   testMatch: "**/setup/*.setup.ts",
-    // },
+    {
+      name: "setup",
+      testMatch: "**/setup/*.setup.ts",
+    },
 
     /**
      * Main test project — depends on setup.
@@ -53,7 +53,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         viewport: { width: 1440, height: 900 },
       },
-      //dependencies: ["setup"],
+      dependencies: ["setup"],
     },
   ],
 

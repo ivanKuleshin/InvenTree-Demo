@@ -92,10 +92,10 @@ test.describe("TC_UI_PART_CREATE", () => {
     await test.step("AND Part Details tab shows IPN and description", async () => {
       await partDetailPage.tabBar.chooseTab("Part Details");
       await expect(
-        partDetailPage.partDetailsPanel.fieldValue(ipn),
+        partDetailPage.fieldValue(ipn),
       ).toBeVisible();
       await expect(
-        partDetailPage.partDetailsPanel.fieldValue(description),
+        partDetailPage.fieldValue(description),
       ).toBeVisible();
     });
   });
@@ -131,7 +131,7 @@ test.describe("TC_UI_PART_CREATE", () => {
     await test.step("AND Part Details tab shows the assigned category", async () => {
       await partDetailPage.tabBar.chooseTab("Part Details");
       await expect(
-        partDetailPage.partDetailsPanel.fieldValue("Electronics"),
+        partDetailPage.fieldValue("Electronics"),
       ).toBeVisible();
     });
   });

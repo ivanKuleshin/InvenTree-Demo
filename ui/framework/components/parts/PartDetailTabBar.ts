@@ -13,7 +13,14 @@ export type PartDetailTab =
   | "Related Parts"
   | "Parameters"
   | "Attachments"
-  | "Notes";
+  | "Notes"
+  | "Variants"
+  | "Bill of Materials"
+  | "Build Orders"
+  | "Test Templates"
+  | "Test Results"
+  | "Sales Orders"
+  | "Return Orders";
 
 export class PartDetailTabBar extends BaseComponent {
   constructor(page: Page) {
@@ -21,7 +28,7 @@ export class PartDetailTabBar extends BaseComponent {
   }
 
   async chooseTab(tab: PartDetailTab): Promise<void> {
-    await this.root.getByRole("tab", { name: tab }).click();
+    await this.root.getByRole("tab", { name: tab, exact: true }).click();
     await this.page.waitForLoadState("networkidle");
   }
 

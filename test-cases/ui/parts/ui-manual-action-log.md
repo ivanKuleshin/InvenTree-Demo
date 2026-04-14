@@ -140,6 +140,48 @@
 
 ---
 
+---
+
+## Session 2 Exploration (2026-04-14) — Initial Stock, Keep Form Open, Import Validation
+
+### Initial Stock Accordion
+
+- Accordion button text: "**Initial Stock**"
+- `aria-expanded="true"` by default — section is **open** on dialog load
+- Accordion button ID pattern: `mantine-*-control-OpenByDefault`
+- Accordion panel ID pattern: `mantine-*-panel-OpenByDefault`
+- Collapsed state: `aria-expanded="false"`, panel `aria-hidden="true"`, CSS `display: none`, `height: 0px`
+- Expanded state: `aria-expanded="true"`, panel visible
+- "Initial Stock Quantity \*" field: `aria-label="number-field-initial_stock.quantity"`, name=`initial_stock.quantity`, type=`decimal`, required=`true`, default value=`0`
+- "Initial Stock Location" field: `aria-label="related-field-initial_stock.location"`, React-Select combobox, placeholder "Search..."
+
+### "Keep Form Open" Checkbox
+
+- Label text: "**Keep form open**", description: "Keep form open after submitting"
+- No `aria-label` attribute; id is Mantine-generated (e.g., `mantine-4a229vqyl`) — not stable across sessions
+- Default state: `checked=false` (unchecked/OFF)
+- Locating strategy for automation: `page.locator('label').filter({ hasText: 'Keep form open' }).locator('input[type="checkbox"]')`
+
+### Import Dialog — Step 1 Validation
+
+- No-file-submit error (actual): "**No file was submitted.**" (inline below field) + "Form Error — Errors exist for one or more form fields" banner
+- Unsupported format error (actual, confirmed with `test_unsupported.txt`):
+  - Error 1: `File extension "txt" is not allowed. Allowed extensions are: csv, xlsx, tsv.`
+  - Error 2: `Unsupported data file format`
+  - Both messages displayed below the Data File field simultaneously
+
+### Import Session API (Steps 2–5 confirmation)
+
+- `POST /api/importer/session/` with multipart CSV returns 201
+- Auto-mapping confirmed: CSV columns `name`, `description`, `IPN` → mapped to DB fields `name`, `description`, `IPN` respectively
+- Unmapped fields: empty string `""` (UI shows "Ignore this field")
+- Session response includes `columns`, `column_mappings`, `available_fields`, `field_defaults`
+- `row_count: 0` after session creation; rows populated after session accept (Step 3)
+- Import session API endpoint: `/api/importer/session/`
+- Known issue: UI wizard Step 1 Submit fails with "Invalid field type for field 'data_file': 'undefined'" JS error in browser console on demo v1.4.0 dev | 479; API accepts file correctly when called directly
+
+---
+
 ## Divergences from Documentation
 
 | Doc claim                             | Observed                                                   | Notes                                                 |
@@ -151,3 +193,6 @@
 | `copy_bom` in duplicate               | Not seen in UI                                             | Docs mention it; may be server-only                   |
 | `copy_tests` in duplicate             | Not seen in UI                                             | Docs mention it; may be server-only                   |
 | Import wizard multi-step              | Step 1 confirmed; steps 2-4 require file upload to observe | Partially confirmed                                   |
+| No-file submit error: "This field is required." | Actual error: "**No file was submitted.**" | Divergence — docs incorrect for this version |
+| Import wizard Step 1 → Step 2 transition | UI fails to advance in browser (400 from `/api/importer/session/`) | JS error "Invalid field type for field 'data_file': 'undefined'" on v1.4.0 dev |
+| Initial Stock accordion collapsed by default | **Expanded by default** (`aria-expanded="true"`) | Divergence — docs say "collapsible", observed as open |

@@ -1,10 +1,10 @@
 import { test as base } from "@playwright/test";
 import { PartsPage } from "@framework/pages/parts/PartsPage";
-import { PartsDetailViewPage } from "@framework/pages/parts/PartsDetailViewPage";
+import { PartDetailsTabPage } from "@framework/pages/parts/PartDetailsTabPage";
 
 type PartsFixtures = {
   partsPage: PartsPage;
-  partDetailPage: PartsDetailViewPage;
+  partDetailPage: PartDetailsTabPage;
 };
 
 export const test = base.extend<PartsFixtures>({
@@ -12,7 +12,7 @@ export const test = base.extend<PartsFixtures>({
     await use(new PartsPage(page));
   },
   partDetailPage: async ({ page }, use) => {
-    await use(new PartsDetailViewPage(page));
+    await use(new PartDetailsTabPage(page));
   },
 });
 
