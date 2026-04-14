@@ -153,6 +153,36 @@ export class CreatePartModal extends BaseComponent {
     return this.root.getByRole("switch", { name: /keep form open/i });
   }
 
+  // ── Duplicate-only copy switches ──────────────────────────────────────────
+
+  get copyImageSwitch() {
+    return this.root.getByRole("switch", {
+      name: "boolean-field-duplicate.copy_image",
+    });
+  }
+
+  get copyNotesSwitch() {
+    return this.root.getByRole("switch", {
+      name: "boolean-field-duplicate.copy_notes",
+    });
+  }
+
+  get copyParametersSwitch() {
+    return this.root.getByRole("switch", {
+      name: "boolean-field-duplicate.copy_parameters",
+    });
+  }
+
+  // ── Validation error state ────────────────────────────────────────────────
+
+  get formErrorBanner() {
+    return this.root.getByRole("alert").filter({ hasText: "Form Error" });
+  }
+
+  get nameFieldInlineError() {
+    return this.root.getByText("This field is required.");
+  }
+
   // ── Initial Stock accordion ───────────────────────────────────────────────
 
   /** Expand / collapse the "Initial Stock" section */
@@ -208,6 +238,16 @@ export class CreatePartModal extends BaseComponent {
 
   async fillLink(url: string): Promise<void> {
     await this.linkInput.fill(url);
+  }
+
+  async selectCategory(name: string): Promise<void> {
+    await this.categoryInput.fill(name);
+    await this.page.getByRole("option", { name: new RegExp(`^${name}`) }).first().click();
+  }
+
+  override async waitForVisible(): Promise<void> {
+    await super.waitForVisible();
+    await this.nameInput.waitFor({ state: "visible" });
   }
 
   async submit(): Promise<void> {

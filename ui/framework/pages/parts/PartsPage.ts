@@ -2,6 +2,7 @@ import { type Locator, type Page } from "@playwright/test";
 import { BasePage } from "@framework/core/BasePage";
 import { BaseTable } from "@framework/core/BaseTable";
 import { CreatePartModal } from "./CreatePartModal";
+import { ImportPartsModal } from "./ImportPartsModal";
 import { PartsTableRow } from "./PartsTableRow";
 
 // ── Parts table ───────────────────────────────────────────────────────────────
@@ -68,6 +69,13 @@ export class PartsPage extends BasePage {
     );
   }
 
+  /** The "Import from File" menu item inside the add-parts dropdown. */
+  private get importFromFileMenuItem(): Locator {
+    return this.page.locator(
+      'button[aria-label="action-menu-add-parts-import-from-file"]',
+    );
+  }
+
   // ── Actions ───────────────────────────────────────────────────────────────
 
   /**
@@ -78,6 +86,14 @@ export class PartsPage extends BasePage {
     await this.addPartsButton.click();
     await this.createPartMenuItem.click();
     const modal = new CreatePartModal(this.page);
+    await modal.waitForVisible();
+    return modal;
+  }
+
+  async openImportPartsModal(): Promise<ImportPartsModal> {
+    await this.addPartsButton.click();
+    await this.importFromFileMenuItem.click();
+    const modal = new ImportPartsModal(this.page);
     await modal.waitForVisible();
     return modal;
   }
@@ -99,10 +115,6 @@ export class PartsPage extends BasePage {
   override async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
     this.assertCurrentUrl();
-    await this.page
-      .locator('table, [role="table"], text=No parts found')
-      .first()
-      .waitFor({ state: "visible", timeout: 15_000 })
-      .catch(() => undefined);
+    await this.addPartsButton.waitFor({ state: "visible", timeout: 40_000 });
   }
 }

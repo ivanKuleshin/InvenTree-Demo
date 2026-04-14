@@ -1,6 +1,8 @@
 import { type Locator, type Page } from "@playwright/test";
 import { BasePage } from "@framework/core/BasePage";
 import { PartDetailTabBar } from "@framework/components/parts/PartDetailTabBar";
+import { CreatePartModal } from "@framework/pages/parts/CreatePartModal";
+import { EditPartModal } from "@framework/pages/parts/EditPartModal";
 import { PartDetailsPanel } from "@framework/components/parts/tabs/PartDetailsPanel";
 import { StockPanel } from "@framework/components/parts/tabs/StockPanel";
 import { AllocationsPanel } from "@framework/components/parts/tabs/AllocationsPanel";
@@ -71,6 +73,53 @@ export class PartsDetailViewPage extends BasePage {
     return this.page.getByText(/^In Stock:/);
   }
 
+  get noStockBadge(): Locator {
+    return this.page.getByText("No Stock");
+  }
+
+  get successToast(): Locator {
+    return this.page.getByText("Item Created");
+  }
+
+  // ── Actions menu ──────────────────────────────────────────────────────────
+
+  get actionsMenuButton(): Locator {
+    return this.page.locator('button[aria-label="action-menu-part-actions"]');
+  }
+
+  private get duplicateMenuItem(): Locator {
+    return this.page.locator(
+      'button[aria-label="action-menu-part-actions-duplicate"]',
+    );
+  }
+
+  private get editMenuItem(): Locator {
+    return this.page.locator(
+      'button[aria-label="action-menu-part-actions-edit"]',
+    );
+  }
+
+  async openDuplicateModal(): Promise<CreatePartModal> {
+    await this.actionsMenuButton.click();
+    await this.duplicateMenuItem.click();
+    const modal = new CreatePartModal(this.page);
+    await modal.waitForVisible();
+    return modal;
+  }
+
+  async openEditModal(): Promise<EditPartModal> {
+    await this.actionsMenuButton.click();
+    await this.editMenuItem.click();
+    const modal = new EditPartModal(this.page);
+    await modal.waitForVisible();
+    return modal;
+  }
+
+  currentPartId(): string {
+    const match = this.page.url().match(/\/web\/part\/(\d+)\//);
+    return match ? match[1] : "";
+  }
+
   // ── Header queries ────────────────────────────────────────────────────────
 
   async getPartName(): Promise<string> {
@@ -91,8 +140,7 @@ export class PartsDetailViewPage extends BasePage {
   // ── Load ──────────────────────────────────────────────────────────────────
 
   override async waitForLoad(): Promise<void> {
-    await this.page.waitForLoadState("domcontentloaded");
+    await this.partTitle.waitFor({ state: "visible", timeout: 30_000 });
     this.assertCurrentUrl();
-    await this.partTitle.waitFor({ state: "visible", timeout: 15_000 });
   }
 }
