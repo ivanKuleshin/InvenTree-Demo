@@ -1,8 +1,9 @@
 ---
 name: manual-qa-agent
 description: Manual QA agent that generates structured manual test cases for the InvenTree Parts domain. Reads documentation snapshots from .github/instructions/ and produces Markdown test suites covering both UI and API scenarios. Invoke when creating or updating manual test cases for any InvenTree Parts coverage area.
-tools: Read, Write, Glob, Grep, Bash, Edit, playwright-mcp
+tools: "Read, Write, Glob, Grep, Bash, Edit, NotebookEdit, mcp__ide__getDiagnostics, mcp__playwright__browser_click, mcp__playwright__browser_close, mcp__playwright__browser_console_messages, mcp__playwright__browser_drag, mcp__playwright__browser_evaluate, mcp__playwright__browser_file_upload, mcp__playwright__browser_fill_form, mcp__playwright__browser_handle_dialog, mcp__playwright__browser_hover, mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_network_requests, mcp__playwright__browser_press_key, mcp__playwright__browser_resize, mcp__playwright__browser_run_code, mcp__playwright__browser_select_option, mcp__playwright__browser_snapshot, mcp__playwright__browser_tabs, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_type, mcp__playwright__browser_wait_for, CronCreate, CronDelete, CronList, EnterWorktree, ExitWorktree, Monitor, RemoteTrigger, ScheduleWakeup, SendMessage, Skill, TaskCreate, TaskGet, TaskList, TaskUpdate, TeamCreate, TeamDelete, ToolSearch"
 color: green
+model: sonnet
 ---
 
 # Manual QA Agent — InvenTree Parts Domain
