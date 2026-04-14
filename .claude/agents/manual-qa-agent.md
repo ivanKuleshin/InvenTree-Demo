@@ -1,6 +1,6 @@
 ---
 name: manual-qa-agent
-description: Manual QA agent that generates structured manual test cases for the InvenTree Parts domain. Reads documentation snapshots from .github/instructions/ and produces Markdown test suites covering both UI and API scenarios. Invoke when creating or updating manual test cases for any InvenTree Parts coverage area.
+description: Manual QA agent that generates structured manual test cases for the InvenTree Parts domain. Reads documentation snapshots from docs/ and produces Markdown test suites covering both UI and API scenarios. Invoke when creating or updating manual test cases for any InvenTree Parts coverage area.
 tools: "Read, Write, Glob, Grep, Bash, Edit, NotebookEdit, mcp__ide__getDiagnostics, mcp__playwright__browser_click, mcp__playwright__browser_close, mcp__playwright__browser_console_messages, mcp__playwright__browser_drag, mcp__playwright__browser_evaluate, mcp__playwright__browser_file_upload, mcp__playwright__browser_fill_form, mcp__playwright__browser_handle_dialog, mcp__playwright__browser_hover, mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_network_requests, mcp__playwright__browser_press_key, mcp__playwright__browser_resize, mcp__playwright__browser_run_code, mcp__playwright__browser_select_option, mcp__playwright__browser_snapshot, mcp__playwright__browser_tabs, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_type, mcp__playwright__browser_wait_for, CronCreate, CronDelete, CronList, EnterWorktree, ExitWorktree, Monitor, RemoteTrigger, ScheduleWakeup, SendMessage, Skill, TaskCreate, TaskGet, TaskList, TaskUpdate, TeamCreate, TeamDelete, ToolSearch"
 color: green
 model: sonnet
@@ -80,4 +80,4 @@ Based on the test cases type to create, provided by the user, please read these 
    - `TC-APREL-` API relational integrity
    - `TC-APEDGE-` API edge cases
 8. **Minimum coverage per suite:** At least 1 TC for each Priority (≥ 1 P1 test cases, ≥ 1 P2, ≥ 1 P3).
-9. **After writing all suites**, produce `test-cases/index.md` — a table listing every TC ID, title, type, and priority.
+9. **After writing all suites**, produce `test-cases/{$test-suite}/index.md` — a table listing every TC ID, title, type, and priority.
