@@ -239,6 +239,29 @@
 | TC-UI-REV-009  | View all revisions of a part (revision history / list)                            | UI / Functional  | P1       |
 | TC-UI-REV-010  | Attempt to set a circular revision reference via Edit                             | UI / Negative    | P3       |
 
+### Negative / Boundary Scenarios (ui-parts-negative)
+
+| TC ID          | Title                                                                                          | Type                        | Priority |
+| -------------- | ---------------------------------------------------------------------------------------------- | --------------------------- | -------- |
+| TC-UI-NEG-001  | Submit "Add Part" with empty Name field — required field error                                 | UI / Negative               | P1       |
+| TC-UI-NEG-002  | Submit "Add Part" with Name at exactly 100 characters — accepted at boundary                   | UI / Boundary               | P2       |
+| TC-UI-NEG-003  | Submit "Add Part" with Name at 101 characters — rejected above boundary                        | UI / Negative / Boundary    | P2       |
+| TC-UI-NEG-004  | Submit "Add Part" with whitespace-only Name — rejected as blank                                | UI / Negative / Boundary    | P2       |
+| TC-UI-NEG-005  | Submit "Edit Part" with IPN at 101 characters — rejected above boundary                        | UI / Negative / Boundary    | P3       |
+| TC-UI-NEG-006  | Submit "Edit Part" with Description at 251 characters — rejected above boundary                | UI / Negative / Boundary    | P3       |
+| TC-UI-NEG-007  | Submit "Edit Part" with unrecognized unit string — rejected with invalid unit error             | UI / Negative               | P1       |
+| TC-UI-NEG-008  | Submit "Edit Part" with uppercase unit "KG" — rejected due to case sensitivity                 | UI / Negative / Boundary    | P2       |
+| TC-UI-NEG-009  | Submit "Edit Part" with Units field exceeding 20 characters — rejected with two errors         | UI / Negative / Boundary    | P3       |
+| TC-UI-NEG-010  | Submit "Edit Part" with invalid URL in Link field — rejected with URL format error              | UI / Negative               | P2       |
+| TC-UI-NEG-011  | Submit "Edit Part" with javascript: scheme in Link field — rejected as invalid URL             | UI / Negative / Security    | P2       |
+| TC-UI-NEG-012  | Submit "Edit Part" with Default Expiry set to -1 — rejected below minimum                      | UI / Negative / Boundary    | P2       |
+| TC-UI-NEG-013  | Default Expiry at integer maximum (2147483647) accepted; one above (2147483648) rejected        | UI / Boundary               | P2       |
+| TC-UI-NEG-014  | Submit "Edit Part" with Minimum Stock set to -1 — rejected below minimum                       | UI / Negative / Boundary    | P2       |
+| TC-UI-NEG-015  | Virtual part detail page — Stock tab is absent                                                  | UI / Negative / Attribute   | P1       |
+| TC-UI-NEG-016  | Locked assembly part — BOM tab shows read-only message, no edit controls                        | UI / Negative / Attribute   | P1       |
+| TC-UI-NEG-017  | Submit duplicate part (same name + IPN + revision) — uniqueness constraint error in banner      | UI / Negative               | P1       |
+| TC-UI-NEG-018  | Submit "Add Part" with revision_of set but revision code left blank — error on Revision field   | UI / Negative / Relational  | P2       |
+
 ## Deprecated Test Cases
 
 The following test cases have been archived and replaced with the standardized TC_APCRUD_* naming convention:
@@ -257,9 +280,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 127
+- **Total Test Cases:** 145
 - **API Test Cases:** 75
-- **UI Test Cases:** 52
-- **P1 Priority:** 58
-- **P2 Priority:** 60
-- **P3 Priority:** 9
+- **UI Test Cases:** 70
+- **P1 Priority:** 63
+- **P2 Priority:** 69
+- **P3 Priority:** 13
