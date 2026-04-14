@@ -155,6 +155,31 @@
 | TC-UI-PC-007  | Import parts from CSV — happy path                                               | UI / Functional  | P1       |
 | TC-UI-PC-008  | Import parts from CSV — error rows with inline correction                        | UI / Negative    | P3       |
 
+### Part Attribute Toggles (ui-parts-attributes)
+
+| TC ID        | Title                                                                 | Type                        | Priority |
+| ------------ | --------------------------------------------------------------------- | --------------------------- | -------- |
+| TC-UI-PA-001 | Toggle Active attribute OFF — part becomes inactive                   | UI / Functional             | P1       |
+| TC-UI-PA-002 | Inactive part excluded from BOM, PO, SO, and Build Order selections   | UI / Functional / Negative  | P1       |
+| TC-UI-PA-003 | Toggle Virtual ON — stock UI elements are hidden                      | UI / Functional             | P1       |
+| TC-UI-PA-004 | Toggle Virtual OFF — stock actions become available                   | UI / Functional             | P2       |
+| TC-UI-PA-005 | Template attribute — Variants tab appears; stock aggregation visible  | UI / Functional             | P1       |
+| TC-UI-PA-006 | Assembly attribute — BOM tab accessible and editable                  | UI / Functional             | P1       |
+| TC-UI-PA-007 | Assembly + Locked — BOM tab is read-only                              | UI / Functional             | P1       |
+| TC-UI-PA-008 | Component attribute — part appears in BOM sub-part search             | UI / Functional             | P2       |
+| TC-UI-PA-009 | Trackable attribute — stock creation requires batch or serial number  | UI / Functional             | P1       |
+| TC-UI-PA-010 | Purchaseable attribute — Suppliers tab accessible with supplier parts | UI / Functional             | P1       |
+| TC-UI-PA-011 | Salable attribute — Sales Orders tab is accessible                    | UI / Functional             | P1       |
+| TC-UI-PA-012 | Testable attribute — Test Templates tab appears with templates        | UI / Functional             | P2       |
+| TC-UI-PA-013 | Toggle all attributes ON — verify full persistence across page reload | UI / Functional             | P2       |
+| TC-UI-PA-014 | Assembly + Component — part is buildable and usable in other BOMs     | UI / Functional             | P2       |
+| TC-UI-PA-015 | Purchaseable = false — Suppliers tab is absent                        | UI / Negative               | P2       |
+| TC-UI-PA-016 | Salable = false — Sales Orders tab is absent                          | UI / Negative               | P2       |
+| TC-UI-PA-017 | Template = false — Variants tab is absent                             | UI / Negative               | P2       |
+| TC-UI-PA-018 | Boundary — Virtual + Trackable combination set simultaneously         | UI / Exploratory / Boundary | P3       |
+| TC-UI-PA-019 | Boundary — Locked attribute prevents part deletion                    | UI / Negative / Boundary    | P3       |
+| TC-UI-PA-020 | Boundary — Toggling Component OFF on a part already used in a BOM     | UI / Exploratory / Boundary | P3       |
+
 ## Deprecated Test Cases
 
 The following test cases have been archived and replaced with the standardized TC_APCRUD_* naming convention:
@@ -173,9 +198,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 83
+- **Total Test Cases:** 103
 - **API Test Cases:** 75
-- **UI Test Cases:** 8
-- **P1 Priority:** 38
-- **P2 Priority:** 40
-- **P3 Priority:** 5
+- **UI Test Cases:** 28
+- **P1 Priority:** 47
+- **P2 Priority:** 50
+- **P3 Priority:** 6
