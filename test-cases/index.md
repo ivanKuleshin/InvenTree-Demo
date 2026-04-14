@@ -180,6 +180,22 @@
 | TC-UI-PA-019 | Boundary — Locked attribute prevents part deletion                    | UI / Negative / Boundary    | P3       |
 | TC-UI-PA-020 | Boundary — Toggling Component OFF on a part already used in a BOM     | UI / Exploratory / Boundary | P3       |
 
+### Units of Measure (ui-parts-units)
+
+| TC ID           | Title                                                                                     | Type                       | Priority |
+| --------------- | ----------------------------------------------------------------------------------------- | -------------------------- | -------- |
+| TC-UI-UNIT-001  | Assign a valid SI unit (metres) to a new part at creation                                 | UI / Functional            | P1       |
+| TC-UI-UNIT-002  | Assign a valid dimensionless unit (piece, each, dozen) to a new part                      | UI / Functional            | P1       |
+| TC-UI-UNIT-003  | Leave the Units field blank — part defaults to dimensionless (pcs)                        | UI / Functional            | P1       |
+| TC-UI-UNIT-004  | Entering an invalid/unrecognized unit string is rejected with an error                    | UI / Negative              | P1       |
+| TC-UI-UNIT-005  | Case-sensitivity validation — uppercase KG is rejected, lowercase kg is accepted          | UI / Negative / Boundary   | P2       |
+| TC-UI-UNIT-006  | Edit and change the unit on an existing part                                               | UI / Functional            | P2       |
+| TC-UI-UNIT-007  | View Physical Units in System Settings                                                    | UI / Functional            | P2       |
+| TC-UI-UNIT-008  | Supplier part with incompatible unit is rejected with a conversion error                  | UI / Negative              | P1       |
+| TC-UI-UNIT-009  | Supplier part with compatible unit is accepted and native quantity is converted            | UI / Functional            | P2       |
+| TC-UI-UNIT-010  | Unit string at the 20-character boundary is handled correctly                             | UI / Boundary              | P3       |
+| TC-UI-UNIT-011  | Valid volume unit (litres) assigned to a new part                                         | UI / Functional            | P2       |
+
 ### Part Categories (ui-categories)
 
 | TC ID          | Title                                                                                      | Type             | Priority |
@@ -226,14 +242,9 @@ The following test cases have been archived and replaced with the standardized T
 
 ## Summary Statistics
 
-- **Total Test Cases:** 106
-- **Total Test Cases:** 103
+- **Total Test Cases:** 117
 - **API Test Cases:** 75
-- **UI Test Cases:** 31
-- **P1 Priority:** 50
-- **P2 Priority:** 49
-- **P3 Priority:** 7
-- **UI Test Cases:** 28
-- **P1 Priority:** 47
-- **P2 Priority:** 50
-- **P3 Priority:** 6
+- **UI Test Cases:** 42
+- **P1 Priority:** 54
+- **P2 Priority:** 55
+- **P3 Priority:** 8
