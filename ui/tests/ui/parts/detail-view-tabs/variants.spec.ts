@@ -36,7 +36,7 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
 
     await test.step("AND the variants table shows at least 4 variant rows", async () => {
       const tabPanel = page.getByRole("tabpanel", { name: "Variants" });
-      await expect(tabPanel).toBeVisible({ timeout: 15_000 });
+      await expect(tabPanel).toBeVisible();
       await expect(tabPanel.getByRole("row").nth(4)).toBeVisible({
         timeout: 20_000,
       });

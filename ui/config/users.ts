@@ -36,10 +36,10 @@ export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
 };
 
 export const ALL_ROLES: UserRole[] = [
-  //"allaccess",
+  "allaccess",
   "reader",
   "engineer",
-  //"admin",
+  "admin",
 ];
 
 /** Roles that are allowed to create/edit/delete records */

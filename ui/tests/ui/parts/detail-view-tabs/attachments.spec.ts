@@ -71,7 +71,7 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
         partDetailPage.attachmentsTab.root.getByText(
           "tc023-test-datasheet.txt",
         ),
-      ).toBeVisible({ timeout: 15_000 });
+      ).toBeVisible();
     });
   });
 });

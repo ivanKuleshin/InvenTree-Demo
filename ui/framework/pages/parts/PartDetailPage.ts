@@ -46,9 +46,7 @@ export class PartDetailPage extends BasePage {
   }
 
   get breadcrumb(): Locator {
-    return this.locator(
-      '[aria-label="breadcrumb"], nav.breadcrumb, .mantine-Breadcrumbs-root',
-    ).first();
+    return this.page.locator("//div[contains(@class, 'Breadcrumbs-root')]");
   }
 
   get editButton(): Locator {
@@ -136,7 +134,7 @@ export class PartDetailPage extends BasePage {
 
   override async waitForLoad(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
-    this.assertCurrentUrl();
+    await this.assertCurrentUrl();
     await this.partName.waitFor({ state: "visible", timeout: 15_000 });
   }
 }

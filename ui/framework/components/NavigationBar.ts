@@ -8,7 +8,7 @@ import { BaseComponent } from "@framework/core/BaseComponent";
 export class NavigationBar extends BaseComponent {
   constructor(page: Page) {
     // InvenTree sidebar navigation wrapper
-    super(page, 'nav, [data-testid="nav-bar"], .mantine-AppShell-navbar');
+    super(page, '//div[@aria-label="panel-tabs-partcategory"]');
   }
 
   async goToParts(): Promise<void> {

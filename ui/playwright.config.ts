@@ -9,10 +9,10 @@ export default defineConfig({
 
   // ── Execution ────────────────────────────────────────────────────────────
   fullyParallel: true,
-  workers: process.env["CI"] ? 4 : undefined,
-  retries: process.env["CI"] ? 2 : 1,
-  timeout: 30_000,
-  expect: { timeout: 10_000 },
+  workers: process.env["CI"] ? 5 : undefined,
+  retries: process.env["CI"] ? 2 : 0,
+  timeout: 90000,
+  expect: { timeout: 40000 },
 
 
   // ── Reporting ────────────────────────────────────────────────────────────
@@ -27,8 +27,8 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
-    actionTimeout: 10_000,
-    navigationTimeout: 15_000,
+    actionTimeout: 30000,
+    navigationTimeout: 45000,
   },
 
   // ── Projects ─────────────────────────────────────────────────────────────

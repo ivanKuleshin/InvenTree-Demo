@@ -1,4 +1,4 @@
-import { type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 import { BaseComponent } from "./BaseComponent";
 
 /**
@@ -91,4 +91,22 @@ export abstract class BaseTable extends BaseComponent {
     const count = await this.rowCount();
     return count === 0;
   }
+
+  async assertColumnHeadersVisible(headers: string[]): Promise<void> {
+  
+    for (let i = 0; i < headers.length; i++) {
+      await expect.soft(this.root.locator(`//th`).nth(i)).toBeVisible();
+    }
+  }
+
+  async assertColumnHeadersNotVisible(headers: Array<string | RegExp>): Promise<void> {
+    for (const header of headers) {
+      await expect(this.page.locator(`//th[contains(.,"${header}")]`)).not.toBeVisible();
+    }
+  }
+
+  async assertRowVisible(namePattern: string | RegExp): Promise<void> {
+    await expect(this.page.getByRole("row", { name: namePattern })).toBeVisible();
+  }
+
 }

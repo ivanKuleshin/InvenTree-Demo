@@ -30,14 +30,13 @@ test.describe("TC_UI_PART_DETAIL_TABS", () => {
 
     await test.step("THEN URL updates to the test_templates path", async () => {
       await expect(page).toHaveURL(
-        /\/part\/77\/(?:details\/)?test_templates/,
-        { timeout: 15_000 },
+        /\/part\/77\/(?:details\/)?test_templates/
       );
     });
 
     await test.step("AND the Test Templates table shows at least 4 rows", async () => {
       const tabPanel = page.getByRole("tabpanel", { name: "Test Templates" });
-      await expect(tabPanel).toBeVisible({ timeout: 15_000 });
+      await expect(tabPanel).toBeVisible();
       await expect(tabPanel.getByRole("row").nth(4)).toBeVisible({
         timeout: 20_000,
       });
