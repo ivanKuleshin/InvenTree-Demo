@@ -32,14 +32,15 @@ public class PartCategoryCrudTest extends BaseTest {
 
     private final List<Integer> createdCategoryIds = new ArrayList<>();
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void cleanupTestData() {
-        for (Integer id : createdCategoryIds) {
+        createdCategoryIds.forEach(id -> {
             try {
                 partCategoryService.deleteCategory(id, Role.ADMIN);
             } catch (Exception e) {
+                log.error("Error while deleting part category", e);
             }
-        }
+        });
         createdCategoryIds.clear();
     }
 
@@ -54,25 +55,34 @@ public class PartCategoryCrudTest extends BaseTest {
         assertTrue(response.getCount() > 0, "count must be greater than 0");
         assertNotNull(response.getResults(), "results must not be null");
         assertFalse(response.getResults().isEmpty(), "results must be non-empty");
+        assertTrue(response.getNext() == null || response.getNext().startsWith("http"),
+                "next must be null or a URI string");
+        assertNull(response.getPrevious(), "previous must be null on first page");
 
         PartCategory topLevel = response.getResults().stream()
                 .filter(c -> c.getPk().equals(CategoryTestData.ELECTRONICS_PK))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new AssertionError(
+                        "Electronics category (pk=" + CategoryTestData.ELECTRONICS_PK + ") must be present in first-page results"));
 
-        assertNotNull(topLevel, "Electronics category (pk=1) must be present in results");
+        assertNotNull(topLevel.getPk(), "pk must not be null");
+        assertNotNull(topLevel.getName(), "name must not be null");
+        assertNotNull(topLevel.getDescription(), "description must not be null");
+        assertNotNull(topLevel.getLevel(), "level must not be null");
+        assertNotNull(topLevel.getPartCount(), "part_count must not be null");
+        assertNotNull(topLevel.getSubcategories(), "subcategories must not be null");
+        assertNotNull(topLevel.getPathstring(), "pathstring must not be null");
+        assertNotNull(topLevel.getStarred(), "starred must not be null");
+        assertNotNull(topLevel.getStructural(), "structural must not be null");
         assertNull(topLevel.getParent(), "Top-level category parent must be null");
         assertEquals(topLevel.getLevel(), Integer.valueOf(0), "Top-level category level must be 0");
 
         PartCategory childCategory = response.getResults().stream()
                 .filter(c -> c.getParent() != null)
                 .findFirst()
-                .orElse(null);
-
-        if (childCategory != null) {
-            assertNotNull(childCategory.getParent(), "Child category parent must not be null");
-            assertTrue(childCategory.getLevel() > 0, "Child category level must be greater than 0");
-        }
+                .orElseThrow(() -> new AssertionError("No child category found in first-page results"));
+        assertNotNull(childCategory.getParent(), "Child category parent must not be null");
+        assertTrue(childCategory.getLevel() > 0, "Child category level must be greater than 0");
     }
 
     @Test(groups = {"regression", "categories"})
