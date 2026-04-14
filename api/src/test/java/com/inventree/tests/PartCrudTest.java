@@ -2,12 +2,14 @@ package com.inventree.tests;
 
 import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
-import com.inventree.client.SpecBuilder;
+import com.inventree.model.Company;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.model.Part;
 import com.inventree.model.PartRequest;
+import com.inventree.model.StockItem;
+import com.inventree.model.StockLocation;
+import com.inventree.model.SupplierPart;
 import com.inventree.testdata.PartTestData;
-import com.inventree.util.ApiConstants;
 import com.inventree.util.HttpStatus;
 import com.inventree.util.ResponseValidator;
 import io.qameta.allure.Epic;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -40,30 +41,16 @@ public class PartCrudTest extends BaseTest {
     public void cleanupTestData() {
         createdPartIds.forEach(id -> {
             try {
-                List<Map<String, Object>> stockItems = given()
-                    .spec(SpecBuilder.build(Role.ADMIN))
-                    .queryParam(PartTestData.QUERY_PARAM_PART, id)
-                    .get(ApiConstants.STOCK_ENDPOINT)
-                    .jsonPath().getList("$");
-                if (stockItems != null) {
-                    stockItems.forEach(item ->
-                        given().spec(SpecBuilder.build(Role.ADMIN))
-                            .delete(ApiConstants.STOCK_ENDPOINT + item.get("pk") + "/"));
-                }
+                List<StockItem> stockItems = stockService.listStockItems(
+                    Map.of(PartTestData.QUERY_PARAM_PART, id), Role.ADMIN);
+                stockItems.forEach(item -> stockService.deleteStockItem(item.getPk(), Role.ADMIN));
             } catch (Throwable t) {
                 log.error("Error while deleting stock items for part {}", id, t);
             }
             try {
-                List<Map<String, Object>> supplierParts = given()
-                    .spec(SpecBuilder.build(Role.ADMIN))
-                    .queryParam(PartTestData.QUERY_PARAM_PART, id)
-                    .get(ApiConstants.SUPPLIER_PART_ENDPOINT)
-                    .jsonPath().getList("$");
-                if (supplierParts != null) {
-                    supplierParts.forEach(sp ->
-                        given().spec(SpecBuilder.build(Role.ADMIN))
-                            .delete(ApiConstants.SUPPLIER_PART_ENDPOINT + sp.get("pk") + "/"));
-                }
+                List<SupplierPart> supplierParts = companyService.listSupplierParts(
+                    Map.of(PartTestData.QUERY_PARAM_PART, id), Role.ADMIN);
+                supplierParts.forEach(sp -> companyService.deleteSupplierPart(sp.getPk(), Role.ADMIN));
             } catch (Throwable t) {
                 log.error("Error while deleting supplier parts for part {}", id, t);
             }
@@ -328,13 +315,9 @@ public class PartCrudTest extends BaseTest {
     @Story("Create Part with Initial Stock")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
-        Response locationResponse = given()
-            .spec(SpecBuilder.build(Role.ADMIN))
-            .queryParam(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT)
-            .when()
-            .get(ApiConstants.STOCK_LOCATION_ENDPOINT);
-        ResponseValidator.assertStatusAndContentType(locationResponse, HttpStatus.SC_OK);
-        int locationPk = locationResponse.jsonPath().getInt("results[0].pk");
+        PaginatedResponse<StockLocation> locations = stockService.listStockLocations(
+            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
+        int locationPk = locations.getResults().getFirst().getPk();
 
         String newName = PartTestData.testPartName("TC-APCRUD-008", PartTestData.INITIAL_STOCK_PART_NAME_SUFFIX);
         Map<String, Object> payload = Map.of(
@@ -352,22 +335,16 @@ public class PartCrudTest extends BaseTest {
         assertNull(createResponse.jsonPath().get(PartTestData.FIELD_INITIAL_STOCK),
             "initial_stock must be absent from response (write-only)");
 
-        Response stockResponse = given()
-            .spec(SpecBuilder.build(Role.ADMIN))
-            .queryParam(PartTestData.QUERY_PARAM_PART, newPartPk)
-            .when()
-            .get(ApiConstants.STOCK_ENDPOINT);
-        ResponseValidator.assertStatusAndContentType(stockResponse, HttpStatus.SC_OK);
-
-        log.info("Stock response body: {}", stockResponse.getBody().asString());
-        List<?> stockItems = stockResponse.jsonPath().getList("$");
+        List<StockItem> stockItems = stockService.listStockItems(
+            Map.of(PartTestData.QUERY_PARAM_PART, newPartPk), Role.ADMIN);
+        log.info("Stock items count: {}", stockItems.size());
         assertEquals(stockItems.size(), 1, "exactly one stock item must exist");
-        assertEquals(stockResponse.jsonPath().getDouble("[0].quantity"),
-            PartTestData.INITIAL_STOCK_QUANTITY,
+        StockItem stockItem = stockItems.getFirst();
+        assertEquals(stockItem.getQuantity(), (double) PartTestData.INITIAL_STOCK_QUANTITY,
             "stock quantity must equal " + PartTestData.INITIAL_STOCK_QUANTITY);
-        assertEquals(stockResponse.jsonPath().getInt("[0].location"), locationPk,
+        assertEquals(stockItem.getLocation(), Integer.valueOf(locationPk),
             "stock location must match the supplied location pk");
-        assertEquals(stockResponse.jsonPath().getInt("[0].status"), PartTestData.STOCK_STATUS_OK,
+        assertEquals(stockItem.getStatus(), Integer.valueOf(PartTestData.STOCK_STATUS_OK),
             "stock status must be OK (" + PartTestData.STOCK_STATUS_OK + ")");
     }
 
@@ -375,14 +352,10 @@ public class PartCrudTest extends BaseTest {
     @Story("Create Part with Initial Supplier")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_009_postPartWithInitialSupplierCreatesSupplierPartRecord() {
-        Response supplierResponse = given()
-            .spec(SpecBuilder.build(Role.ADMIN))
-            .queryParam(PartTestData.QUERY_PARAM_IS_SUPPLIER, PartTestData.QUERY_VALUE_TRUE)
-            .queryParam(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT)
-            .when()
-            .get(ApiConstants.COMPANY_ENDPOINT);
-        ResponseValidator.assertStatusAndContentType(supplierResponse, HttpStatus.SC_OK);
-        int supplierPk = supplierResponse.jsonPath().getInt("results[0].pk");
+        PaginatedResponse<Company> companies = companyService.listCompanies(
+            Map.of(PartTestData.QUERY_PARAM_IS_SUPPLIER, PartTestData.QUERY_VALUE_TRUE,
+                PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
+        int supplierPk = companies.getResults().getFirst().getPk();
 
         String newName = PartTestData.testPartName("TC-APCRUD-009", PartTestData.INITIAL_SUPPLIER_PART_NAME_SUFFIX);
         Map<String, Object> payload = Map.of(
@@ -402,19 +375,12 @@ public class PartCrudTest extends BaseTest {
         assertNull(createResponse.jsonPath().get(PartTestData.FIELD_INITIAL_SUPPLIER),
             "initial_supplier must be absent from response (write-only)");
 
-        Response supplierPartResponse = given()
-            .spec(SpecBuilder.build(Role.ADMIN))
-            .queryParam(PartTestData.QUERY_PARAM_PART, newPartPk)
-            .when()
-            .get(ApiConstants.SUPPLIER_PART_ENDPOINT);
-        ResponseValidator.assertStatusAndContentType(supplierPartResponse, HttpStatus.SC_OK);
-        log.info("Supplier part response body: {}", supplierPartResponse.getBody().asString());
-
-        List<?> supplierParts = supplierPartResponse.jsonPath().getList("$");
+        List<SupplierPart> supplierParts = companyService.listSupplierParts(
+            Map.of(PartTestData.QUERY_PARAM_PART, newPartPk), Role.ADMIN);
+        log.info("Supplier parts count: {}", supplierParts.size());
         assertEquals(supplierParts.size(), 1, "exactly one supplier part must exist");
-        assertEquals(supplierPartResponse.jsonPath().getInt("[0].supplier"), supplierPk,
-            "supplier pk must match");
-        assertEquals(supplierPartResponse.jsonPath().getString("[0].SKU"), PartTestData.SUPPLIER_SKU,
-            "SKU must match");
+        SupplierPart supplierPart = supplierParts.getFirst();
+        assertEquals(supplierPart.getSupplier(), Integer.valueOf(supplierPk), "supplier pk must match");
+        assertEquals(supplierPart.getSku(), PartTestData.SUPPLIER_SKU, "SKU must match");
     }
 }
