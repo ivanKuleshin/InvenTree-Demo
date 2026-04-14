@@ -25,6 +25,10 @@ public class PartService extends BaseClient {
         return executePost(ApiConstants.PARTS_ENDPOINT, role, request);
     }
 
+    public Response createPartRaw(Map<String, Object> payload, Role role) {
+        return executePost(ApiConstants.PARTS_ENDPOINT, role, payload);
+    }
+
     public Part getPartById(int id, Role role) {
         Response response = executeGet(ApiConstants.PARTS_ENDPOINT + id + "/", role);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
@@ -33,6 +37,10 @@ public class PartService extends BaseClient {
 
     public Response getPartByIdRaw(int id, Role role) {
         return executeGet(ApiConstants.PARTS_ENDPOINT + id + "/", role);
+    }
+
+    public Response getPartByIdRaw(int id, Role role, Map<String, Object> queryParams) {
+        return executeGet(ApiConstants.PARTS_ENDPOINT + id + "/", role, queryParams);
     }
 
     public PaginatedResponse<Part> listParts(Map<String, Object> queryParams, Role role) {
