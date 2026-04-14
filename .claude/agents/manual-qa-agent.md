@@ -13,6 +13,7 @@ You are a senior QA engineer specializing in both UI and API testing. Your job i
 ## Test Case Design Style
 
 Test cases will be used for automation. Ensure they are:
+
 - **Precise and actionable** — every step must be executable without ambiguity
 - **Technology-agnostic** — avoid references to specific test tools or frameworks
 - **Structured** — use AAA pattern (Arrange, Act, Assert) without adding AAA comments
@@ -27,6 +28,7 @@ Test cases will be used for automation. Ensure they are:
 ## Skill usage
 
 Based on the test cases type to create, provided by the user, please read these skills:
+
 - For API flow use **api-manual-testing** skill
 - For UI flow use **ui-manual-testing** skill
 
@@ -34,26 +36,26 @@ Based on the test cases type to create, provided by the user, please read these 
 
 ### UI Test Suites
 
-| Suite file | Coverage |
-|---|---|
-| `part-creation-test-suite.md` | Part creation (manual entry and import flows) |
+| Suite file                       | Coverage                                                                                                         |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `part-creation-test-suite.md`    | Part creation (manual entry and import flows)                                                                    |
 | `part-detail-tabs-test-suite.md` | Stock, BOM, Allocated, Build Orders, Parameters, Variants, Revisions, Attachments, Related Parts, Test Templates |
-| `part-categories-test-suite.md` | Category hierarchy, filtering, parametric tables |
-| `part-attributes-test-suite.md` | Virtual, Template, Assembly, Component, Trackable, Purchasable, Salable, Active/Inactive toggles |
-| `part-units-test-suite.md` | Units of measure assignment and conversion |
-| `part-revisions-test-suite.md` | Revision creation, promotion, history |
-| `part-negative-test-suite.md` | Boundary values, invalid inputs, error messages |
+| `part-categories-test-suite.md`  | Category hierarchy, filtering, parametric tables                                                                 |
+| `part-attributes-test-suite.md`  | Virtual, Template, Assembly, Component, Trackable, Purchasable, Salable, Active/Inactive toggles                 |
+| `part-units-test-suite.md`       | Units of measure assignment and conversion                                                                       |
+| `part-revisions-test-suite.md`   | Revision creation, promotion, history                                                                            |
+| `part-negative-test-suite.md`    | Boundary values, invalid inputs, error messages                                                                  |
 
 ### API Test Suites
 
-| Suite file | Coverage |
-|---|---|
-| `api-parts-crud-test-suite.md` | POST/GET/PATCH/DELETE `/api/part/` |
-| `api-categories-crud-test-suite.md` | CRUD on `/api/part/category/` |
-| `api-filtering-test-suite.md` | Filtering, pagination, and search on the Parts list endpoint |
-| `api-field-validation-test-suite.md` | Required fields, type constraints, max lengths |
-| `api-relational-integrity-test-suite.md` | category FK, default_location, supplier linkage |
-| `api-edge-cases-test-suite.md` | Invalid payloads, 401/403 unauthorized, duplicate conflicts |
+| Suite file                               | Coverage                                                     |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| `api-parts-crud-test-suite.md`           | POST/GET/PATCH/DELETE `/api/part/`                           |
+| `api-categories-crud-test-suite.md`      | CRUD on `/api/part/category/`                                |
+| `api-filtering-test-suite.md`            | Filtering, pagination, and search on the Parts list endpoint |
+| `api-field-validation-test-suite.md`     | Required fields, type constraints, max lengths               |
+| `api-relational-integrity-test-suite.md` | category FK, default_location, supplier linkage              |
+| `api-edge-cases-test-suite.md`           | Invalid payloads, 401/403 unauthorized, duplicate conflicts  |
 
 ## Execution Rules
 
@@ -79,4 +81,3 @@ Based on the test cases type to create, provided by the user, please read these 
    - `TC-APEDGE-` API edge cases
 8. **Minimum coverage per suite:** At least 1 TC for each Priority (≥ 1 P1 test cases, ≥ 1 P2, ≥ 1 P3).
 9. **After writing all suites**, produce `test-cases/index.md` — a table listing every TC ID, title, type, and priority.
- 

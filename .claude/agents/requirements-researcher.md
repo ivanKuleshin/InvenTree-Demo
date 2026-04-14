@@ -1,6 +1,6 @@
 ---
 name: "requirements-researcher"
-description: "Use this agent when a user or another agent (such as ui-manual-testing or api-manual-testing) needs to retrieve, document, or look up requirements and API information for the InvenTree application. This includes fetching documentation from official InvenTree docs/demo pages, creating structured MD files for application components, or returning paths to existing documentation files, like 'Please create initial local documentation files for InvenTree' or 'What exactly the component of Parts is responsible for'."
+description: "Use this agent when a user or another agent (such as ui-manual-testing or api-manual-testing.md) needs to retrieve, document, or look up requirements and API information for the InvenTree application. This includes fetching documentation from official InvenTree docs/demo pages, creating structured MD files for application components, or returning paths to existing documentation files, like 'Please create initial local documentation files for InvenTree' or 'What exactly the component of Parts is responsible for'."
 tools: Bash, Glob, Grep, Read, WebFetch, WebSearch, mcp__ide__getDiagnostics, Edit, NotebookEdit, Write, CronCreate, CronDelete, CronList, EnterWorktree, ExitWorktree, RemoteTrigger, SendMessage, Skill, TaskCreate, TaskGet, TaskList, TaskUpdate, TeamCreate, TeamDelete
 model: sonnet
 color: blue

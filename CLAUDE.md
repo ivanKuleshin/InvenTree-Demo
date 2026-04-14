@@ -23,10 +23,12 @@ Java version: JDK 21 (Amazon Corretto 21). CheckStyle is configured with Google/
 
 ## Architecture
 
-The project follows a three-phase agentic workflow:
+**Just for information and flow description. Not rules to follow.**
 
-1. **Documentation phase** — An AI agent reads InvenTree docs and writes `.md` snapshot files to `.github/instructions/`
-   to serve as a local documentation database for downstream agents.
+The project follows a four-phase agentic workflow:
+
+1. **Documentation phase** — An AI agent(or researcher agent) reads InvenTree `/docs` folder for needed docs. If no
+   desired docs found, then researcher should follow the flow when it needs to fetch docs from remote web resources.
 
 2. **Manual test case phase** — A manual tester AI agent (with UI + API testing skills) reads those docs and generates
    test cases in Markdown format. Each functional area is a separate test suite, mirroring the coverage areas below.
@@ -35,6 +37,8 @@ The project follows a three-phase agentic workflow:
    traceability:
    - **API automation agent** → Java (Maven, REST Assured or equivalent)
    - **UI automation agent** → JavaScript (Playwright or equivalent)
+
+4. **Review phase** — A reviewer agent checks the generated code for correctness, style, and adherence to coding rules.
 
 ## Coverage Areas
 
@@ -58,4 +62,7 @@ category, default location, supplier linkage), edge cases (invalid payloads, una
 
 ## Current State
 
-The project is at the scaffolding stage. `pom.xml` has no test dependencies yet. The `src/main/resources/archetype-resources/` subtree is a Maven Archetype template (excluded from compilation) — not production source code. Real test framework dependencies (e.g., REST Assured, JUnit 5, Selenium/Playwright) need to be added to `pom.xml` before implementing tests.
+The project is at the scaffolding stage. `pom.xml` has no test dependencies yet. The
+`src/main/resources/archetype-resources/` subtree is a Maven Archetype template (excluded from compilation) — not
+production source code. Real test framework dependencies (e.g., REST Assured, JUnit 5, Selenium/Playwright) need to be
+added to `pom.xml` before implementing tests.

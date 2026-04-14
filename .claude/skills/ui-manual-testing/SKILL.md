@@ -22,6 +22,7 @@ If no relevant files in `docs/api/`, use **playwright-mcp** on `https://docs.inv
 ## Phase 1 — Plan
 
 Write a probe plan to `/test-cases/${ui}/{$suite_name}/ui-manual-plan.md` using **Write**:
+
 - Table: Coverage area → page URL(s) → TC IDs to produce → auth required (Yes/No)
 - Flag any area involving form submission or data mutation with `[MUTATING]`
 
@@ -32,7 +33,7 @@ Do not fetch pages or write test cases until confirmed.
 
 For each confirmed coverage area, in order:
 
-1. Use **playwright-mcp** to load each page URL. Log all your actions to reproduce your steps for another run and to be used in actual test cases. Log into file `/test-cases/${ui}/{$suite_name}/ui-manual-action-log.md`. Record: page title, visible navigation items, form field labels (exact text), button labels (exact text), and any visible validation messages.
+1. Use **playwright-mcp** to load each page URL. Log all your actions to reproduce your steps for another run and to be used in actual test cases. Log into file `/test-cases/${ui}/{$suite_name}/{tc-prefix}-ui-manual-action-log.md`. Record: page title, visible navigation items, form field labels (exact text), button labels (exact text), and any visible validation messages.
 2. For form flows, fetch the form page. Record: every input label, field type, placeholder text, required markers, and submit button label.
 3. Note any page elements that differ from documentation, are missing, or behave unexpectedly.
 
@@ -41,7 +42,7 @@ For each confirmed coverage area, in order:
 Use **Read** on `references/tc-template.md` (in this skill's directory) to load the test case format.
 
 For each coverage area, use **Write** to produce test cases to `/test-cases/${ui}/{$suite_name}/`.
-Each TC must include the **Observed** block (see template) filled from Phase 2 page data — exact labels, exact URLs, actual field names as shown in the UI details, which are stored in the `ui-manual-action-log.md`.
+Each TC must include the **Observed** block (see template) filled from Phase 2 page data — exact labels, exact URLs, actual field names as shown in the UI details, which are stored in the `{tc-prefix}-ui-manual-action-log.md`.
 
 Use **Write** to `test-cases/ui/` — one file per functional area. Use the naming convention `<area>-test-suite.md` (e.g., `part-creation-test-suite.md`).
 
@@ -50,8 +51,8 @@ Use **Write** to `test-cases/ui/` — one file per functional area. Use the nami
 Output a table to the conversation:
 
 | Suite | Pages Explored | TCs Written | Diverged from Docs? |
-|---|---|---|---|
-| ... | ... | ... | Yes / No |
+| ----- | -------------- | ----------- | ------------------- |
+| ...   | ...            | ...         | Yes / No            |
 
 ## Constraints
 

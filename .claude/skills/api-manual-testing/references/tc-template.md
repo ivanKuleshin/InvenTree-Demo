@@ -1,6 +1,6 @@
 # API Manual Test Case Template
 
-```markdown
+````markdown
 ### TC-<SUITE_PREFIX>-<NNN>: <Title>
 
 **Type**: API
@@ -9,12 +9,14 @@
 **Preconditions**: <resource state required before this call>
 
 **Steps**:
+
 1. User obtains authorization token
 2. User sends a <GET|POST|PATCH|DELETE> request to `/api/<path>/`
 3. User verifies status code is `<expected status code>`
 4. User verifies response body contains expected fields and values
 
 **Request**:
+
 - Method: `<GET|POST|PATCH|DELETE>`
 - URL: `/api/<path>/`
 - Headers: `Authorization: Basic <base64>`, `Content-Type: application/json`
@@ -22,10 +24,12 @@
   ```json
   { "<field>": "<value>" }
   ```
+````
 
 **Expected Result**: <what should happen per spec>
 
 **Observed** (filled during probe):
+
 - Status: `<HTTP status code>`
 - Response snippet:
   ```json
@@ -34,6 +38,7 @@
 - Matches spec: Yes | No | [ASSUMED — not probed]
 
 **Notes**: <any divergence from docs, unexpected fields, or environment-specific behavior>
+
 ```
 
 ## Priority guide
@@ -43,3 +48,4 @@
 | P1 | Happy path — core CRUD, 200/201 responses |
 | P2 | Validation — 400 on bad payload, 404 on missing resource |
 | P3 | Edge case — 401 unauth, duplicate conflict, boundary values |
+```
