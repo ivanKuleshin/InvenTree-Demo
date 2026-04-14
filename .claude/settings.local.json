@@ -7,7 +7,9 @@
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('count:', d['count']\\)\")",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('count:', d['count']\\); print\\('next:', d['next']\\); print\\('previous:', d['previous']\\); [print\\(' -', r['name']\\) for r in d['results']]\")",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('count:', d['count']\\); [print\\(' -', r['name']\\) for r in d['results']]\")",
-      "mcp__playwright__browser_navigate"
+      "mcp__playwright__browser_navigate",
+      "mcp__ide__getDiagnostics",
+      "Bash(python3 -m json.tool)"
     ]
   }
 }

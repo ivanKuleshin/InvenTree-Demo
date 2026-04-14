@@ -50,6 +50,10 @@ public class PartCategoryService extends BaseClient {
         return listCategories(null, role);
     }
 
+    public Response listCategoriesRaw(Map<String, Object> queryParams, Role role) {
+        return executeGet(ApiConstants.CATEGORIES_ENDPOINT, role, queryParams);
+    }
+
     public PartCategory updateCategory(int id, PartCategoryRequest request, Role role) {
         Response response = executePut(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role, request);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);

@@ -7,6 +7,7 @@ import com.inventree.model.PaginatedResponse;
 import com.inventree.model.Part;
 import com.inventree.model.PartRequest;
 import com.inventree.util.ApiConstants;
+import com.inventree.util.HttpStatus;
 import com.inventree.util.ResponseValidator;
 import io.restassured.response.Response;
 
@@ -16,7 +17,7 @@ public class PartService extends BaseClient {
 
     public Part createPart(PartRequest request, Role role) {
         Response response = executePost(ApiConstants.PARTS_ENDPOINT, role, request);
-        ResponseValidator.assertStatusAndContentType(response, 201);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_CREATED);
         return ResponseValidator.deserialize(response, Part.class);
     }
 
@@ -26,7 +27,7 @@ public class PartService extends BaseClient {
 
     public Part getPartById(int id, Role role) {
         Response response = executeGet(ApiConstants.PARTS_ENDPOINT + id + "/", role);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, Part.class);
     }
 
@@ -36,7 +37,7 @@ public class PartService extends BaseClient {
 
     public PaginatedResponse<Part> listParts(Map<String, Object> queryParams, Role role) {
         Response response = executeGet(ApiConstants.PARTS_ENDPOINT, role, queryParams);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, new TypeReference<PaginatedResponse<Part>>() {});
     }
 
@@ -44,21 +45,29 @@ public class PartService extends BaseClient {
         return listParts(null, role);
     }
 
+    public Response listPartsRaw(Map<String, Object> queryParams, Role role) {
+        return executeGet(ApiConstants.PARTS_ENDPOINT, role, queryParams);
+    }
+
+    public Response listPartsRaw(Role role) {
+        return listPartsRaw(null, role);
+    }
+
     public Part updatePart(int id, PartRequest request, Role role) {
         Response response = executePut(ApiConstants.PARTS_ENDPOINT + id + "/", role, request);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, Part.class);
     }
 
     public Part patchPart(int id, PartRequest request, Role role) {
         Response response = executePatch(ApiConstants.PARTS_ENDPOINT + id + "/", role, request);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, Part.class);
     }
 
     public void deletePart(int id, Role role) {
         Response response = executeDelete(ApiConstants.PARTS_ENDPOINT + id + "/", role);
-        ResponseValidator.assertStatus(response, 204);
+        ResponseValidator.assertStatus(response, HttpStatus.SC_NO_CONTENT);
     }
 
     public Response deletePartRaw(int id, Role role) {

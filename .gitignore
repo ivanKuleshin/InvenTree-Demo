@@ -45,3 +45,6 @@ build/
 
 ### Playwright CLI ###
 .playwright-cli/
+
+.claude/settings.local.json
+/.allure/
