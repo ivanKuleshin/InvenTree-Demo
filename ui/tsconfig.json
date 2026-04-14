@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@framework/*": ["framework/*"],
+      "@fixtures/*": ["fixtures/*"],
+      "@config/*": ["config/*"],
+      "@data/*": ["data/*"],
+      "@utils/*": ["utils/*"]
+    },
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist", ".auth"]
+}
