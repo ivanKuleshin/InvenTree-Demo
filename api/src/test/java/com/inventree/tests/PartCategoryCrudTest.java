@@ -6,14 +6,17 @@ import com.inventree.model.PartCategory;
 import com.inventree.model.PartCategoryRequest;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.testdata.CategoryTestData;
+import com.inventree.util.HttpStatus;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +30,25 @@ import static org.testng.Assert.assertTrue;
 @Feature("Part Category CRUD")
 public class PartCategoryCrudTest extends BaseTest {
 
+    private final List<Integer> createdCategoryIds = new ArrayList<>();
+
+    @AfterMethod
+    public void cleanupTestData() {
+        for (Integer id : createdCategoryIds) {
+            try {
+                partCategoryService.deleteCategory(id, Role.ADMIN);
+            } catch (Exception e) {
+            }
+        }
+        createdCategoryIds.clear();
+    }
+
     @Test(groups = {"regression", "categories"})
     @Story("List Categories")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ACCRUD_001_getPartCategoryListReturnsPaginatedResult() {
         PaginatedResponse<PartCategory> response = partCategoryService.listCategories(
-                Map.of("limit", 10), Role.ADMIN);
+                Map.of("limit", CategoryTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
 
         assertNotNull(response.getCount(), "count must not be null");
         assertTrue(response.getCount() > 0, "count must be greater than 0");
@@ -65,7 +81,7 @@ public class PartCategoryCrudTest extends BaseTest {
     public void tc_ACCRUD_002_getPartCategoryByIdReturnsCorrectData() {
         Response rawResponse = partCategoryService.getCategoryByIdRaw(
                 CategoryTestData.ELECTRONICS_PK, Role.ADMIN);
-        rawResponse.then().statusCode(200);
+        rawResponse.then().statusCode(HttpStatus.SC_OK);
 
         PartCategory category = rawResponse.as(PartCategory.class);
         assertEquals(category.getPk(), Integer.valueOf(CategoryTestData.ELECTRONICS_PK));
@@ -77,8 +93,9 @@ public class PartCategoryCrudTest extends BaseTest {
                 "path field must be absent when path_detail is not requested");
 
         Response pathDetailResponse = partCategoryService.getCategoryByIdRaw(
-                CategoryTestData.ELECTRONICS_PK, Role.ADMIN, Map.of("path_detail", "true"));
-        pathDetailResponse.then().statusCode(200);
+                CategoryTestData.ELECTRONICS_PK, Role.ADMIN,
+                Map.of(CategoryTestData.QUERY_PARAM_PATH_DETAIL, CategoryTestData.QUERY_VALUE_TRUE));
+        pathDetailResponse.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> path = pathDetailResponse.jsonPath().getList("path");
         assertNotNull(path, "path array must be present with path_detail=true");
@@ -95,11 +112,11 @@ public class PartCategoryCrudTest extends BaseTest {
     @Story("Create Category")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ACCRUD_003_postPartCategoryCreatesMinimalTopLevelCategory() {
-        String categoryName = "TC-ACCRUD-003-MinimalCat";
+        String categoryName = CategoryTestData.testCategoryName("TC-ACCRUD-003", "MinimalCat");
         PartCategoryRequest request = CategoryTestData.minimalTopLevel(categoryName);
 
         Response createResponse = partCategoryService.createCategoryRaw(request, Role.ADMIN);
-        createResponse.then().statusCode(201);
+        createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
         int newCatPk = createResponse.jsonPath().getInt("pk");
         assertTrue(newCatPk > 0, "pk must be a positive integer");
@@ -119,7 +136,7 @@ public class PartCategoryCrudTest extends BaseTest {
         assertEquals(path.getFirst().get("pk"), newCatPk);
         assertEquals(path.getFirst().get("name"), categoryName);
 
-        partCategoryService.deleteCategory(newCatPk, Role.ADMIN);
+        createdCategoryIds.add(newCatPk);
     }
 
     @Test(groups = {"regression", "categories"})
@@ -127,7 +144,7 @@ public class PartCategoryCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ACCRUD_004_postPartCategoryCreatesChildCategoryWithParentAssigned() {
         int parentPk = CategoryTestData.ELECTRONICS_PK;
-        String childName = "TC-ACCRUD-004-ChildCat";
+        String childName = CategoryTestData.testCategoryName("TC-ACCRUD-004", "ChildCat");
         String description = "Child category for CRUD test";
         String expectedPathstring = CategoryTestData.ELECTRONICS_NAME + "/" + childName;
 
@@ -135,7 +152,7 @@ public class PartCategoryCrudTest extends BaseTest {
                 childName, parentPk, description);
 
         Response createResponse = partCategoryService.createCategoryRaw(request, Role.ADMIN);
-        createResponse.then().statusCode(201);
+        createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
         int childPk = createResponse.jsonPath().getInt("pk");
         assertTrue(childPk > 0, "pk must be a positive integer");
@@ -154,17 +171,18 @@ public class PartCategoryCrudTest extends BaseTest {
         assertEquals(path.get(1).get("pk"), childPk);
         assertEquals(path.get(1).get("name"), childName);
 
-        partCategoryService.deleteCategory(childPk, Role.ADMIN);
+        createdCategoryIds.add(childPk);
     }
 
     @Test(groups = {"regression", "categories"})
     @Story("Update Category")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ACCRUD_005_putPartCategoryReplacesAllWritableFields() {
-        String setupName = "TC-ACCRUD-005-Setup";
+        String setupName = CategoryTestData.testCategoryName("TC-ACCRUD-005", "Setup");
         PartCategory created = partCategoryService.createCategory(
                 CategoryTestData.minimalTopLevel(setupName), Role.ADMIN);
         int catPk = created.getPk();
+        createdCategoryIds.add(catPk);
 
         String updatedName = "TC-ACCRUD-005-UpdatedName";
         String updatedDescription = "PUT full update applied";
@@ -183,15 +201,13 @@ public class PartCategoryCrudTest extends BaseTest {
         assertNull(updated.getParent(), "parent must be null");
         assertEquals(updated.getPathstring(), updatedName);
         assertEquals(updated.getPartCount(), Integer.valueOf(0));
-
-        partCategoryService.deleteCategory(catPk, Role.ADMIN);
     }
 
     @Test(groups = {"regression", "categories"})
     @Story("Partial Update Category")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ACCRUD_006_patchPartCategoryPartiallyUpdatesDescription() {
-        String setupName = "TC-ACCRUD-006-Setup";
+        String setupName = CategoryTestData.testCategoryName("TC-ACCRUD-006", "Setup");
         String originalDescription = "original description";
         PartCategoryRequest setupRequest = PartCategoryRequest.builder()
                 .name(setupName)
@@ -199,6 +215,7 @@ public class PartCategoryCrudTest extends BaseTest {
                 .build();
         PartCategory created = partCategoryService.createCategory(setupRequest, Role.ADMIN);
         int catPk = created.getPk();
+        createdCategoryIds.add(catPk);
 
         String patchedDescription = "PATCH partial update applied";
         PartCategoryRequest patchRequest = CategoryTestData.descriptionOnly(patchedDescription);
@@ -210,26 +227,25 @@ public class PartCategoryCrudTest extends BaseTest {
         assertEquals(patched.getName(), setupName, "name must be unchanged after PATCH");
         assertNull(patched.getParent(), "parent must be unchanged after PATCH");
         assertEquals(patched.getStructural(), Boolean.FALSE, "structural must be unchanged after PATCH");
-
-        partCategoryService.deleteCategory(catPk, Role.ADMIN);
     }
 
     @Test(groups = {"regression", "categories"})
     @Story("Delete Category")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ACCRUD_007_deletePartCategoryRemovesCategory() {
-        String setupName = "TC-ACCRUD-007-ToDelete";
+        String setupName = CategoryTestData.testCategoryName("TC-ACCRUD-007", "ToDelete");
         PartCategory created = partCategoryService.createCategory(
                 CategoryTestData.minimalTopLevel(setupName), Role.ADMIN);
         int catPk = created.getPk();
 
         Response deleteResponse = partCategoryService.deleteCategoryRaw(catPk, Role.ADMIN);
-        deleteResponse.then().statusCode(204);
-        assertEquals(deleteResponse.body().asString(), "", "DELETE response body must be empty");
+        deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);
+        assertEquals(deleteResponse.body().asString(), CategoryTestData.EMPTY_BODY,
+                "DELETE response body must be empty");
 
         Response getResponse = partCategoryService.getCategoryByIdRaw(catPk, Role.ADMIN);
-        getResponse.then().statusCode(404);
+        getResponse.then().statusCode(HttpStatus.SC_NOT_FOUND);
         assertEquals(getResponse.jsonPath().getString("detail"),
-                "No PartCategory matches the given query.");
+                CategoryTestData.ERROR_MSG_NOT_FOUND);
     }
 }

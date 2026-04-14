@@ -7,6 +7,7 @@ import com.inventree.model.PartCategory;
 import com.inventree.model.PartCategoryRequest;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.util.ApiConstants;
+import com.inventree.util.HttpStatus;
 import com.inventree.util.ResponseValidator;
 import io.restassured.response.Response;
 
@@ -16,7 +17,7 @@ public class PartCategoryService extends BaseClient {
 
     public PartCategory createCategory(PartCategoryRequest request, Role role) {
         Response response = executePost(ApiConstants.CATEGORIES_ENDPOINT, role, request);
-        ResponseValidator.assertStatusAndContentType(response, 201);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_CREATED);
         return ResponseValidator.deserialize(response, PartCategory.class);
     }
 
@@ -26,7 +27,7 @@ public class PartCategoryService extends BaseClient {
 
     public PartCategory getCategoryById(int id, Role role) {
         Response response = executeGet(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, PartCategory.class);
     }
 
@@ -40,7 +41,7 @@ public class PartCategoryService extends BaseClient {
 
     public PaginatedResponse<PartCategory> listCategories(Map<String, Object> queryParams, Role role) {
         Response response = executeGet(ApiConstants.CATEGORIES_ENDPOINT, role, queryParams);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response,
                 new TypeReference<PaginatedResponse<PartCategory>>() {});
     }
@@ -51,19 +52,19 @@ public class PartCategoryService extends BaseClient {
 
     public PartCategory updateCategory(int id, PartCategoryRequest request, Role role) {
         Response response = executePut(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role, request);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, PartCategory.class);
     }
 
     public PartCategory patchCategory(int id, PartCategoryRequest request, Role role) {
         Response response = executePatch(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role, request);
-        ResponseValidator.assertStatusAndContentType(response, 200);
+        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
         return ResponseValidator.deserialize(response, PartCategory.class);
     }
 
     public void deleteCategory(int id, Role role) {
         Response response = executeDelete(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role);
-        ResponseValidator.assertStatus(response, 204);
+        ResponseValidator.assertStatus(response, HttpStatus.SC_NO_CONTENT);
     }
 
     public Response deleteCategoryRaw(int id, Role role) {
