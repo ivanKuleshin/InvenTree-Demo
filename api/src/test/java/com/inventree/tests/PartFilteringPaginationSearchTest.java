@@ -12,8 +12,10 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,20 @@ import static org.testng.Assert.assertTrue;
 @Epic("Part Management")
 @Feature("Part List — Filtering, Pagination, and Search")
 public class PartFilteringPaginationSearchTest extends BaseTest {
+
+    private final List<Integer> createdPartIds = new ArrayList<>();
+
+    @AfterMethod(alwaysRun = true)
+    public void cleanupTestData() {
+        createdPartIds.forEach(id -> {
+            try {
+                partService.deletePart(id, Role.ADMIN);
+            } catch (Exception e) {
+                log.error("Error while deleting part", e);
+            }
+        });
+        createdPartIds.clear();
+    }
 
     @Test(groups = {"regression", "parts", "pagination"})
     @Story("Pagination")
@@ -116,7 +132,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
 
         PaginatedResponse<Part> cascadeResult = partService.listParts(
                 Map.of("category", FilteringTestData.ELECTRONICS_CATEGORY_PK,
-                       "cascade", "true",
+                       FilteringTestData.FILTER_PARAM_CASCADE, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(cascadeResult.getCount() >= directCount,
@@ -139,7 +155,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         int totalCount = totalPage.getCount();
 
         PaginatedResponse<Part> assemblyTrue = partService.listParts(
-                Map.of("assembly", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_ASSEMBLY, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(assemblyTrue.getCount() > 0, "count must be > 0 for assembly=true");
@@ -148,7 +164,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         int assemblyCount = assemblyTrue.getCount();
 
         PaginatedResponse<Part> assemblyFalse = partService.listParts(
-                Map.of("assembly", "false",
+                Map.of(FilteringTestData.FILTER_PARAM_ASSEMBLY, FilteringTestData.FILTER_VALUE_FALSE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assemblyFalse.getResults().forEach(p ->
@@ -170,7 +186,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         int totalCount = totalPage.getCount();
 
         PaginatedResponse<Part> hasStockTrue = partService.listParts(
-                Map.of("has_stock", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_HAS_STOCK, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(hasStockTrue.getCount() > 0, "count must be > 0 for has_stock=true");
@@ -180,7 +196,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         int hasStockCount = hasStockTrue.getCount();
 
         PaginatedResponse<Part> hasStockFalse = partService.listParts(
-                Map.of("has_stock", "false",
+                Map.of(FilteringTestData.FILTER_PARAM_HAS_STOCK, FilteringTestData.FILTER_VALUE_FALSE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         hasStockFalse.getResults().forEach(p ->
@@ -225,16 +241,16 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     public void tc_APFLT_025_combinedSearchAndBooleanFiltersApplyAndLogicToNarrowResults() {
         PaginatedResponse<Part> assemblyOnly = partService.listParts(
-                Map.of("assembly", "true", "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
+                Map.of(FilteringTestData.FILTER_PARAM_ASSEMBLY, FilteringTestData.FILTER_VALUE_TRUE, "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
         int assemblyCount = assemblyOnly.getCount();
 
         PaginatedResponse<Part> activeOnly = partService.listParts(
-                Map.of("active", "true", "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
+                Map.of(FilteringTestData.FILTER_PARAM_ACTIVE, FilteringTestData.FILTER_VALUE_TRUE, "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
         int activeCount = activeOnly.getCount();
 
         PaginatedResponse<Part> combined = partService.listParts(
-                Map.of("assembly", "true",
-                       "active", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_ASSEMBLY, FilteringTestData.FILTER_VALUE_TRUE,
+                       FilteringTestData.FILTER_PARAM_ACTIVE, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(combined.getCount() > 0, "combined count must be > 0");
@@ -252,7 +268,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
 
         PaginatedResponse<Part> searchWithAssembly = partService.listParts(
                 Map.of("search", FilteringTestData.SEARCH_TERM_LOWER,
-                       "assembly", "true",
+                       FilteringTestData.FILTER_PARAM_ASSEMBLY, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(searchWithAssembly.getCount() <= assemblyCount,
@@ -270,7 +286,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         int totalCount = totalPage.getCount();
 
         PaginatedResponse<Part> activeResult = partService.listParts(
-                Map.of("active", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_ACTIVE, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         activeResult.getResults().forEach(p ->
@@ -278,7 +294,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         int activeCount = activeResult.getCount();
 
         PaginatedResponse<Part> inactiveResult = partService.listParts(
-                Map.of("active", "false",
+                Map.of(FilteringTestData.FILTER_PARAM_ACTIVE, FilteringTestData.FILTER_VALUE_FALSE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         inactiveResult.getResults().forEach(p ->
@@ -363,7 +379,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
                         "All results must have parent=" + FilteringTestData.PARENT_CATEGORY_PK));
 
         Response topLevelResponse = partCategoryService.listCategoriesRaw(
-                Map.of("top_level", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_TOP_LEVEL, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.LARGE_LIMIT), Role.ADMIN);
 
         topLevelResponse.then().statusCode(HttpStatus.SC_OK);
@@ -377,7 +393,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APFLT_007_limitZeroReturnsUnpaginatedRawJsonArray() {
         Response response = partService.listPartsRaw(
-                Map.of("limit", 0, "search", FilteringTestData.SEARCH_TERM_LOWER), Role.ADMIN);
+                Map.of("limit", FilteringTestData.LIMIT_UNPAGINATED, "search", FilteringTestData.SEARCH_TERM_LOWER), Role.ADMIN);
 
         response.then().statusCode(HttpStatus.SC_OK);
 
@@ -388,9 +404,9 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
         assertFalse(array.isEmpty(), "Array must not be empty");
 
         String body = response.asString();
-        assertFalse(body.contains("\"count\":"), "count key must be absent in unpaginated array response");
-        assertFalse(body.contains("\"next\":"), "next key must be absent in unpaginated array response");
-        assertFalse(body.contains("\"previous\":"), "previous key must be absent in unpaginated array response");
+        assertFalse(body.contains(FilteringTestData.JSON_KEY_COUNT), "count key must be absent in unpaginated array response");
+        assertFalse(body.contains(FilteringTestData.JSON_KEY_NEXT), "next key must be absent in unpaginated array response");
+        assertFalse(body.contains(FilteringTestData.JSON_KEY_PREVIOUS), "previous key must be absent in unpaginated array response");
     }
 
     @Test(groups = {"regression", "parts", "pagination"})
@@ -398,14 +414,14 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Severity(SeverityLevel.MINOR)
     public void tc_APFLT_008_limitNegativeOneIsEquivalentToLimitZero() {
         Response negResponse = partService.listPartsRaw(
-                Map.of("limit", -1, "search", FilteringTestData.SEARCH_TERM_LOWER), Role.ADMIN);
+                Map.of("limit", FilteringTestData.LIMIT_NEGATIVE_ONE, "search", FilteringTestData.SEARCH_TERM_LOWER), Role.ADMIN);
         negResponse.then().statusCode(HttpStatus.SC_OK);
         assertTrue(negResponse.asString().trim().startsWith("["),
                 "Response for limit=-1 must be a JSON array");
         int negLength = negResponse.jsonPath().getList("$").size();
 
         Response zeroResponse = partService.listPartsRaw(
-                Map.of("limit", 0, "search", FilteringTestData.SEARCH_TERM_LOWER), Role.ADMIN);
+                Map.of("limit", FilteringTestData.LIMIT_UNPAGINATED, "search", FilteringTestData.SEARCH_TERM_LOWER), Role.ADMIN);
         zeroResponse.then().statusCode(HttpStatus.SC_OK);
         int zeroLength = zeroResponse.jsonPath().getList("$").size();
 
@@ -492,7 +508,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APFLT_014_virtualTrueFiltersToVirtualPartsOnly() {
         PaginatedResponse<Part> virtualTrue = partService.listParts(
-                Map.of("virtual", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_VIRTUAL, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(virtualTrue.getCount() > 0, "count must be > 0 for virtual=true");
@@ -500,7 +516,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
                 assertTrue(p.getVirtual(), "Part pk=" + p.getPk() + " must have virtual=true"));
 
         PaginatedResponse<Part> virtualFalse = partService.listParts(
-                Map.of("virtual", "false",
+                Map.of(FilteringTestData.FILTER_PARAM_VIRTUAL, FilteringTestData.FILTER_VALUE_FALSE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         virtualFalse.getResults().forEach(p ->
@@ -512,7 +528,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APFLT_015_trackableTrueFiltersToSerialTrackedPartsOnly() {
         PaginatedResponse<Part> trackableTrue = partService.listParts(
-                Map.of("trackable", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_TRACKABLE, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(trackableTrue.getCount() > 0, "count must be > 0 for trackable=true");
@@ -520,7 +536,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
                 assertTrue(p.getTrackable(), "Part pk=" + p.getPk() + " must have trackable=true"));
 
         PaginatedResponse<Part> trackableFalse = partService.listParts(
-                Map.of("trackable", "false",
+                Map.of(FilteringTestData.FILTER_PARAM_TRACKABLE, FilteringTestData.FILTER_VALUE_FALSE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         trackableFalse.getResults().forEach(p ->
@@ -532,16 +548,16 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APFLT_017_purchaseableAndSalableCombinedFiltersApplyAndLogic() {
         PaginatedResponse<Part> purchaseableOnly = partService.listParts(
-                Map.of("purchaseable", "true", "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
+                Map.of(FilteringTestData.FILTER_PARAM_PURCHASEABLE, FilteringTestData.FILTER_VALUE_TRUE, "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
         int purchaseableCount = purchaseableOnly.getCount();
 
         PaginatedResponse<Part> salableOnly = partService.listParts(
-                Map.of("salable", "true", "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
+                Map.of(FilteringTestData.FILTER_PARAM_SALABLE, FilteringTestData.FILTER_VALUE_TRUE, "limit", FilteringTestData.SINGLE_ITEM_LIMIT), Role.ADMIN);
         int salableCount = salableOnly.getCount();
 
         PaginatedResponse<Part> combined = partService.listParts(
-                Map.of("purchaseable", "true",
-                       "salable", "true",
+                Map.of(FilteringTestData.FILTER_PARAM_PURCHASEABLE, FilteringTestData.FILTER_VALUE_TRUE,
+                       FilteringTestData.FILTER_PARAM_SALABLE, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.SMALL_PAGE_LIMIT), Role.ADMIN);
 
         assertTrue(combined.getCount() > 0, "combined count must be > 0");
@@ -634,7 +650,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     public void tc_APFLT_022_categoryWithCascadeTrueIncludesPartsInChildCategories() {
         PaginatedResponse<Part> cascadeResult = partService.listParts(
                 Map.of("category", FilteringTestData.CATEGORY_WITH_CHILD_PK,
-                       "cascade", "true",
+                       FilteringTestData.FILTER_PARAM_CASCADE, FilteringTestData.FILTER_VALUE_TRUE,
                        "limit", FilteringTestData.LARGE_LIMIT), Role.ADMIN);
 
         assertTrue(cascadeResult.getCount() > 0, "count must be > 0 for cascade=true");

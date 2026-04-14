@@ -10,6 +10,8 @@ public final class FilteringTestData {
     public static final int PAGINATION_OFFSET = 3;
     public static final int BEYOND_TOTAL_OFFSET = 99999;
     public static final int LARGE_ENOUGH_LIMIT = 5000;
+    public static final int LIMIT_UNPAGINATED = 0;
+    public static final int LIMIT_NEGATIVE_ONE = -1;
 
     public static final String SEARCH_TERM_LOWER = "resistor";
     public static final String SEARCH_TERM_UPPER = "RESISTOR";
@@ -40,6 +42,22 @@ public final class FilteringTestData {
     public static final String DATE_RANGE_START = "2026-01-01";
     public static final String DATE_RANGE_END = "2026-04-14";
     public static final String DATE_FUTURE = "2030-01-01";
+
+    public static final String FILTER_VALUE_TRUE = "true";
+    public static final String FILTER_VALUE_FALSE = "false";
+    public static final String FILTER_PARAM_CASCADE = "cascade";
+    public static final String FILTER_PARAM_ASSEMBLY = "assembly";
+    public static final String FILTER_PARAM_ACTIVE = "active";
+    public static final String FILTER_PARAM_HAS_STOCK = "has_stock";
+    public static final String FILTER_PARAM_VIRTUAL = "virtual";
+    public static final String FILTER_PARAM_TRACKABLE = "trackable";
+    public static final String FILTER_PARAM_PURCHASEABLE = "purchaseable";
+    public static final String FILTER_PARAM_SALABLE = "salable";
+    public static final String FILTER_PARAM_TOP_LEVEL = "top_level";
+
+    public static final String JSON_KEY_COUNT = "\"count\":";
+    public static final String JSON_KEY_NEXT = "\"next\":";
+    public static final String JSON_KEY_PREVIOUS = "\"previous\":";
 
     private FilteringTestData() {}
 }
