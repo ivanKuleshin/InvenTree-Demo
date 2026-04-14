@@ -1,5 +1,5 @@
 ---
-name: api-manual-testing
+name: api-manual-testing.md
 description: Manually probes the InvenTree REST API, records real observed responses, and writes grounded TC-AP* test cases to test-cases/. Invoke when exploring API behavior, discovering edge cases, or producing evidence-based test cases from live calls.
 tools: [Read, Glob, WebFetch, Write, AskUserQuestion, playwright-mcp]
 ---
@@ -22,6 +22,7 @@ If `docs/api/` is empty, use **playwright-mcp** on `https://docs.inventree.org/e
 ## Phase 1 — Plan
 
 Write a probe plan to `/test-cases/${api}/{$suite_name}/api-manual-plan.md` using **Write**:
+
 - Table: Coverage area → endpoint(s) → HTTP methods → TC IDs to produce
 - Flag any endpoint requiring write access with `[MUTATING]`
 
@@ -32,7 +33,7 @@ Do not probe or write any test cases until confirmed.
 
 For each confirmed coverage area, in order:
 
-1. **GET calls first.** Use **playwright-mcp** to call read-only endpoints. Log all your actions to reproduce your steps for another run and to be used in actual test cases. Log into file `/test-cases/${api}/{$suite_name}/api-manual-log.md`. Record: HTTP status, response shape (field names + types), and any notable values.
+1. **GET calls first.** Use **playwright-mcp** to call read-only endpoints. Log all your actions to reproduce your steps for another run and to be used in actual test cases. Log into file `/test-cases/${api}/{$suite_name}/{tc-prefix}-api-manual-log.md`. Record: HTTP status, response shape (field names + types), and any notable values.
 2. **Write calls second**, only if the user confirmed `[MUTATING]` areas. Use **playwright-mcp** for POST/PATCH/DELETE. If we are going to delete/update something, we need to create this entity first. Like a test data preparation step. Record: request body sent, HTTP status received, response body.
 3. After each endpoint group, note any behavior that differs from documentation.
 
@@ -43,7 +44,7 @@ Use **Read** on `/test-cases/${api}/{$suite_name}/references/tc-template.md` (in
 For each coverage area, use **Write** to produce `/test-cases/${api}/{$suite_name}/api<area>-test-suite.md`.
 Each TC must include the **Observed** block (see template) filled from Phase 2 data.
 
-Use **Write** to append to `/test-cases/${api}/{$suite_name}/api-manual-log.md`:
+Use **Write** to append to `/test-cases/${api}/{$suite_name}/{tc-prefix}-api-manual-log.md`:
 `✓ <suite-file> — <N> TCs written — observed <date> — source: demo.inventree.org`
 
 Use **Write** to `/test-cases/${api}/` — one file per functional area. Use the naming convention `<area>-test-suite.md` (e.g., `part-creation-test-suite.md`).
@@ -53,8 +54,8 @@ Use **Write** to `/test-cases/${api}/` — one file per functional area. Use the
 Output a table to the conversation:
 
 | Suite | Endpoints Probed | TCs Written | Diverged from Docs? |
-|---|---|---|---|
-| ... | ... | ... | Yes / No |
+| ----- | ---------------- | ----------- | ------------------- |
+| ...   | ...              | ...         | Yes / No            |
 
 ## Constraints
 
