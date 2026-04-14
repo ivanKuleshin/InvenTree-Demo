@@ -89,10 +89,27 @@ export class ImportPartsModal extends BaseComponent {
   }
 
   get successRows(): Locator {
-    return this.importTableRows.filter({ hasText: /\bcomplete\b/i });
+    return this.importTableRows.filter({
+      has: this.page.locator(".tabler-icon-circle-dashed-check"),
+    });
   }
 
   get errorRows(): Locator {
-    return this.importTableRows.filter({ hasText: /\berror\b/i });
+    return this.importTableRows.filter({
+      has: this.page.locator(".tabler-icon-exclamation-circle"),
+    });
+  }
+
+  get importCompleteHeading(): Locator {
+    return this.root.getByText("Import Complete");
+  }
+
+  rowCheckbox(rowIndex: number): Locator {
+    return this.importTableRows.nth(rowIndex).getByRole("checkbox");
+  }
+
+  async importRowByIndex(index: number): Promise<void> {
+    await this.rowCheckbox(index).check();
+    await this.importSelectedRowsButton.click();
   }
 }
