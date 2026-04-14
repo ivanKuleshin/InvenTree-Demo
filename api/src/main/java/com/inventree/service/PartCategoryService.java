@@ -34,6 +34,10 @@ public class PartCategoryService extends BaseClient {
         return executeGet(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role);
     }
 
+    public Response getCategoryByIdRaw(int id, Role role, Map<String, Object> queryParams) {
+        return executeGet(ApiConstants.CATEGORIES_ENDPOINT + id + "/", role, queryParams);
+    }
+
     public PaginatedResponse<PartCategory> listCategories(Map<String, Object> queryParams, Role role) {
         Response response = executeGet(ApiConstants.CATEGORIES_ENDPOINT, role, queryParams);
         ResponseValidator.assertStatusAndContentType(response, 200);
