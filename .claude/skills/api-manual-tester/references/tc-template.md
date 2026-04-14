@@ -8,6 +8,12 @@
 **Endpoint**: `<METHOD> /api/<path>/`
 **Preconditions**: <resource state required before this call>
 
+**Steps**:
+1. User obtains authorization token
+2. User sends a <GET|POST|PATCH|DELETE> request to `/api/<path>/`
+3. User verifies status code is `<expected status code>`
+4. User verifies response body contains expected fields and values
+
 **Request**:
 - Method: `<GET|POST|PATCH|DELETE>`
 - URL: `/api/<path>/`
