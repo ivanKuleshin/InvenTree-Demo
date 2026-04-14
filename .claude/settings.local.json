@@ -11,7 +11,9 @@
       "mcp__ide__getDiagnostics",
       "Bash(python3 -m json.tool)",
       "Bash(mvn test:*)",
-      "mcp__playwright__browser_snapshot"
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_run_code",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('category_path:', json.dumps\\(d.get\\('category_path'\\), indent=2\\)\\)\")"
     ]
   }
 }

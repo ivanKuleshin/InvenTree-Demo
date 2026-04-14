@@ -37,8 +37,8 @@ public class PartCategoryCrudTest extends BaseTest {
         createdCategoryIds.forEach(id -> {
             try {
                 partCategoryService.deleteCategory(id, Role.ADMIN);
-            } catch (Exception e) {
-                log.error("Error while deleting part category", e);
+            } catch (Throwable t) {
+                log.error("Error while deleting part category", t);
             }
         });
         createdCategoryIds.clear();
@@ -160,7 +160,6 @@ public class PartCategoryCrudTest extends BaseTest {
         PartCategoryRequest request = CategoryTestData.withParentAndDescription(
                 childName, parentPk, description);
 
-        // TODO: ELECTRONICS_PK is changed, dynamic test data creation approach is needed
         Response createResponse = partCategoryService.createCategoryRaw(request, Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 

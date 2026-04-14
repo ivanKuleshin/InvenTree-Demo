@@ -5,9 +5,13 @@ public final class ApiConstants {
     // -------------------------------------------------
     // API endpoint paths
     // -------------------------------------------------
-    public static final String TOKEN_ENDPOINT      = "/api/user/token/";
-    public static final String PARTS_ENDPOINT      = "/api/part/";
-    public static final String CATEGORIES_ENDPOINT = "/api/part/category/";
+    public static final String TOKEN_ENDPOINT        = "/api/user/token/";
+    public static final String PARTS_ENDPOINT        = "/api/part/";
+    public static final String CATEGORIES_ENDPOINT   = "/api/part/category/";
+    public static final String STOCK_ENDPOINT        = "/api/stock/";
+    public static final String STOCK_LOCATION_ENDPOINT = "/api/stock/location/";
+    public static final String COMPANY_ENDPOINT      = "/api/company/";
+    public static final String SUPPLIER_PART_ENDPOINT = "/api/company/part/";
 
     // -------------------------------------------------
     // config.properties keys
