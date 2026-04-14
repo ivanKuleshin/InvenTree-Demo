@@ -16,6 +16,7 @@ target/
 .factorypath
 .project
 .settings
+settings.local.json
 .springBeans
 .sts4-cache
 
@@ -41,6 +42,10 @@ build/
 *.png
 *.jpg
 *.jpeg
+!evidences/**/*.png
 
 ### Playwright CLI ###
 .playwright-cli/
+
+.claude/settings.local.json
+/.allure/

@@ -4,8 +4,8 @@ import com.inventree.model.PartCategoryRequest;
 
 public final class CategoryTestData {
 
-    public static final int ELECTRONICS_PK = 1;
-    public static final String ELECTRONICS_NAME = "Electronics";
+    public static final int ELECTRONICS_PK = 4;
+    public static final String ELECTRONICS_NAME = "Passives";
 
     public static final int DEFAULT_PAGE_LIMIT = 10;
     public static final String QUERY_PARAM_PATH_DETAIL = "path_detail";

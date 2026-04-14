@@ -19,8 +19,8 @@ public abstract class BaseTest {
 
     protected final Logger log = LogManager.getLogger(getClass());
 
-    protected PartService partService;
-    protected PartCategoryService partCategoryService;
+    protected static PartService partService;
+    protected static PartCategoryService partCategoryService;
 
     @BeforeSuite(alwaysRun = true)
     public void initFramework() {
