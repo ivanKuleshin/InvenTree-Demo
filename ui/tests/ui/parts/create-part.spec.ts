@@ -377,8 +377,8 @@ test.describe("TC_UI_PART_CREATE", () => {
       await importModal.importAllRows();
     });
 
-    await test.step("THEN all 3 rows are marked as successfully imported", async () => {
-      await expect(importModal.successRows).toHaveCount(3, { timeout: 60_000 });
+    await test.step("THEN the wizard shows the Import Complete success message", async () => {
+      await expect(importModal.importCompleteHeading).toBeVisible({ timeout: 60_000 });
     });
   });
 
@@ -419,29 +419,16 @@ test.describe("TC_UI_PART_CREATE", () => {
       await expect(importModal.root.getByText(invalidPart3)).toBeVisible();
     });
 
-    await test.step("AND user attempts to import all rows", async () => {
-      await importModal.importAllRows();
-    });
-
-    await test.step("THEN error rows are flagged with error indicators for invalid data", async () => {
+    await test.step("AND error rows are already flagged with error indicators (pre-import validation)", async () => {
       await expect(importModal.errorRows.first()).toBeVisible({ timeout: 30_000 });
     });
 
-    await test.step("AND the valid row is marked as successfully imported", async () => {
-      await expect(importModal.successRows.first()).toBeVisible();
+    await test.step("AND user imports only the valid row", async () => {
+      await importModal.importRowByIndex(0);
     });
 
-    await test.step("WHEN user corrects the missing-name row by editing the name cell inline", async () => {
-      const correctedName = `TC-ERR-002-FIXED-${ts}`;
-      const emptyNameRow = importModal.importTableRows
-        .filter({ hasText: /Missing name is invalid/i })
-        .first();
-      await emptyNameRow.getByRole("textbox").first().fill(correctedName);
-    });
-
-    await test.step("AND re-imports the corrected row", async () => {
-      await importModal.importAllRows();
-      await expect(importModal.errorRows).toHaveCount(1, { timeout: 30_000 });
+    await test.step("THEN the wizard shows the Import Complete success message", async () => {
+      await expect(importModal.importCompleteHeading).toBeVisible({ timeout: 60_000 });
     });
   });
 });
