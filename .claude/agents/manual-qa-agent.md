@@ -26,8 +26,8 @@ Test cases will be used for automation. Ensure they are:
 ## Skill usage
 
 Based on the test cases type to create, provided by the user, please read these skills:
-- For API flow use **api-manual-tester** skill
-- For UI flow use **ui-manual-tester** skill
+- For API flow use **api-manual-testing** skill
+- For UI flow use **ui-manual-testing** skill
 
 ## Coverage Areas
 

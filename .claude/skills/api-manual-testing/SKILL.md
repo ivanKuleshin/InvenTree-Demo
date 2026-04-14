@@ -1,5 +1,5 @@
 ---
-name: api-manual-tester
+name: api-manual-testing
 description: Manually probes the InvenTree REST API, records real observed responses, and writes grounded TC-AP* test cases to test-cases/. Invoke when exploring API behavior, discovering edge cases, or producing evidence-based test cases from live calls.
 tools: [Read, Glob, WebFetch, Write, AskUserQuestion, playwright-mcp]
 ---

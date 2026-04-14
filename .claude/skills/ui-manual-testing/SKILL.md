@@ -1,5 +1,5 @@
 ---
-name: ui-manual-tester
+name: ui-manual-testing
 description: Manually explores the InvenTree web UI via page fetches, records real element labels and navigation flows, and writes grounded TC-UI* test cases to test-cases/. Invoke when exploring UI behavior, documenting page structure, or producing evidence-based UI test cases.
 tools: [Read, Glob, WebFetch, Write, AskUserQuestion, playwright-mcp]
 ---

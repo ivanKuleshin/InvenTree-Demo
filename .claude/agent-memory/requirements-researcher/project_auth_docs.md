@@ -17,6 +17,6 @@ Accounts:
 
 Database resets daily. Source: `https://inventree.org/demo.html`.
 
-**Why:** Documented as part of initial bootstrap; needed by ui-manual-tester and api-manual-tester agents for authentication.
+**Why:** Documented as part of initial bootstrap; needed by ui-manual-testing and api-manual-testing agents for authentication.
 
 **How to apply:** Direct any agent asking for login credentials or demo environment info to `docs/auth/demo-credentials.md`. Do not re-fetch unless the user suspects credentials have changed.
