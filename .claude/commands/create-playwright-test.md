@@ -17,32 +17,34 @@ When this command is invoked:
    - Expected outcomes/assertions
 
 2. **Generate test file** following these rules:
-   - Use `import { test, expect } from '@playwright/test'`
-   - Use existing Page Objects from `tests/pages/` if available
-   - Group related actions with `test.step()`. Example:
-     await test.step(`GIVEN user is on Book store page`, async () => {
-     await bookStorePage.open();
-     await bookStorePage.verifyPageOpened();
-     });
-
-   await test.step(`WHEN user selects a book`, async () => {
-   await bookStorePage.getBookRow(0).productTitle.click();
-   });
-
-   await test.step(`THEN Book details page should be opened`, async () => {
-   await bookDetailsPage.verifyPageOpenedFor(bookForTest.isbn);
-   });
+   - Import `test` and `expect` from the relevant fixtures file in `@fixtures/`, not from `@playwright/test` directly
+   - Use existing Page Objects from `framework/pages/` if available — never instantiate page objects inside test bodies or `beforeEach`; rely on fixtures instead
+   - Filename: `{feature}.spec.ts` (kebab-case, no test-ID prefix)
+   - Place file under `tests/ui/` or `tests/api/` as appropriate
+   - Do not add `// ── TC-UI-xxx ──` separator comments between tests — the test ID is already in the test name
+   - Group related actions with `test.step()`:
+     ```
+     await test.step(`GIVEN user is on Parts list page`, async () => { ... });
+     await test.step(`WHEN user opens Add Part dialog`, async () => { ... });
+     await test.step(`THEN part detail page loads`, async () => { ... });
+     ```
    - Each test must be independent — no shared state between tests
 
 3. **Test structure**:
    - `test.describe` block for the feature
-   - `test.beforeEach` for common setup (e.g. login, navigation)
-   - Individual `test()` cases for each scenario
+   - `test.use({ storageState: STORAGE_STATE.<ROLE> })` inside the describe block
+   - `test.beforeEach` for navigation only — no page object construction
+   - Individual `test()` cases with fixtures destructured from the function signature
+   - Preserve test IDs in test names (e.g. `"TC-UI-PC-001: ..."`)
 
-4. **Output**:
+4. **Fixtures**:
+   - If no matching fixtures file exists yet, create one at `fixtures/{domain}.fixtures.ts`
+   - Extend `base` from `@playwright/test` and export `test` and `expect`
+   - One fixture per page object; fixtures receive `{ page }` and call `use(new PageObject(page))`
+
+5. **Output**:
    - Full TypeScript test file
-   - Filename suggestion: `{feature}.spec.ts` in `tests/`
-   - List of `data-testid` values needed in the UI
+   - Create or reference the fixtures file
 
 ## Error Handling
 
@@ -55,4 +57,4 @@ When this command is invoked:
 - Tests must not contain implementation details — test behavior, not code
 - Assertions go in tests, not Page Objects
 - Prefer `toBeVisible()` over `toExist()`
-- Avoid `page.waitForTimeout()` — use proper await patterns, typically using expect(element).toBeVisible()
+- Avoid `page.waitForTimeout()` — use proper await patterns, typically `expect(element).toBeVisible()`
