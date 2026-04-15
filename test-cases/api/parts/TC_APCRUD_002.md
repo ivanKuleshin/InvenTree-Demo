@@ -17,7 +17,7 @@
 4. Verify response body field `name` equals `"1551ABK"`
 5. Verify response body field `active` equals `true`
 6. Verify response body field `component` equals `true`
-7. Verify response body field `purchaseable` equals `true`
+7. Verify response body field `purchasable` equals `true`
 8. Verify response body field `assembly` equals `false`
 9. Verify response body field `category` equals `null`
 10. Verify response body field `in_stock` is a number greater than or equal to `0`
@@ -44,7 +44,7 @@
     "description": "Small plastic enclosure, black",
     "active": true,
     "component": true,
-    "purchaseable": true,
+    "purchasable": true,
     "assembly": false,
     "category": null,
     "in_stock": 765

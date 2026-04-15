@@ -29,9 +29,9 @@ All part records confirmed via `GET /api/part/{pk}/` with admin credentials.
 | Assembly (editable BOM) | 77 | Widget Assembly | assembly=true, locked=false, BOM lines=276 |
 | Assembly + Locked | 1934 | AllFlagsPart-TC004-1776159658932-dk4zc | assembly=true, locked=true, all other flags=true |
 | Trackable | 1217 | AUTO_QA_TRACKABLE_PART | trackable=true, in_stock=0, stock_item_count=0 |
-| Purchaseable + Suppliers | 43 | R_100K_0402_1% | purchaseable=true, 10 supplier parts linked |
+| Purchaseable + Suppliers | 43 | R_100K_0402_1% | purchasable=true, 10 supplier parts linked |
 | Salable + on SO | 108 | Blue Chair | salable=true |
-| Inactive | 84 | 1551ACLR | active=false, purchaseable=true, component=true |
+| Inactive | 84 | 1551ACLR | active=false, purchasable=true, component=true |
 | Testable | 74 | Blue Widget | testable=true, trackable=true, is_template=true, salable=true, in_stock=145.0, 4 test templates |
 
 ---
@@ -40,7 +40,7 @@ All part records confirmed via `GET /api/part/{pk}/` with admin credentials.
 
 Defaults confirmed from "Add Part" dialog on first open:
 - `boolean-field-component` = **checked** (true)
-- `boolean-field-purchaseable` = **checked** (true)
+- `boolean-field-purchasable` = **checked** (true)
 - `boolean-field-active` = **checked** (true)
 - `boolean-field-copy_category_parameters` = **checked** (true)
 - `boolean-field-assembly` = unchecked (false)
@@ -61,7 +61,7 @@ Labels confirmed from `querySelectorAll('label')` in the Add Part dialog:
 - "Is Template" → aria-label: `boolean-field-is_template`
 - "Testable" → aria-label: `boolean-field-testable`
 - "Trackable" → aria-label: `boolean-field-trackable`
-- "Purchaseable" → aria-label: `boolean-field-purchaseable`
+- "Purchaseable" → aria-label: `boolean-field-purchasable`
 - "Salable" → aria-label: `boolean-field-salable`
 - "Virtual" → aria-label: `boolean-field-virtual`
 - "Locked" → aria-label: `boolean-field-locked`
@@ -101,7 +101,7 @@ Edit form opened via: `action-menu-part-actions` → "Edit" (aria-label: `action
 5. **Trackable:** Part 1217 has `trackable=true`. Docs state stock items MUST have batch or serial number.
    Stock tab should require batch/serial on stock creation form.
 
-6. **Purchaseable:** Part 43 has `purchaseable=true` and 10 supplier parts linked.
+6. **Purchaseable:** Part 43 has `purchasable=true` and 10 supplier parts linked.
    The Suppliers tab should be visible and list those supplier parts.
 
 7. **Salable:** Part 108 (Blue Chair) has `salable=true` and appears on sales order lines.

@@ -19,7 +19,7 @@
 6. Verify response body field `keywords` equals `"patch-test qa"`
 7. Verify response body field `name` equals `"TC-APCRUD-005-Setup"` (unchanged)
 8. Verify response body field `component` equals `true` (unchanged default)
-9. Verify response body field `purchaseable` equals `true` (unchanged default)
+9. Verify response body field `purchasable` equals `true` (unchanged default)
 10. Verify response body field `pk` equals `PART_PK`
 11. Send `DELETE /api/part/{PART_PK}/` to clean up (part is now inactive so DELETE is allowed)
 12. Verify DELETE response status code is `204`
@@ -47,7 +47,7 @@
     "active": false,
     "keywords": "patch-test qa",
     "component": true,
-    "purchaseable": true
+    "purchasable": true
   }
   ```
 - Matches spec: Yes

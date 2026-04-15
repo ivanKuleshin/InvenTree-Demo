@@ -2,9 +2,15 @@ package com.inventree.tests;
 
 import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
+import com.inventree.model.CategoryDetail;
+import com.inventree.model.CategoryPathEntry;
 import com.inventree.model.Company;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.model.Part;
+import com.inventree.model.PartDetailParams;
+import com.inventree.model.PartListParams;
+import com.inventree.model.PartParameter;
+import com.inventree.model.PartParameterTemplate;
 import com.inventree.model.PartRequest;
 import com.inventree.model.StockItem;
 import com.inventree.model.StockLocation;
@@ -74,7 +80,7 @@ public class PartCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APCRUD_001_getPartListReturnsPaginatedResultWithFullFieldSet() {
         PaginatedResponse<Part> response = partService.listParts(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.READER);
+            PartListParams.builder().limit(PartTestData.DEFAULT_PAGE_LIMIT).build(), Role.READER);
 
         assertNotNull(response.getCount(), "count must not be null");
         assertTrue(response.getCount() > 0, "count must be greater than 0");
@@ -113,17 +119,32 @@ public class PartCrudTest extends BaseTest {
     @Story("Get Part by ID")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APCRUD_002_getPartByIdReturnsSinglePartWithCorrectFields() {
-        Response rawResponse = partService.getPartByIdRaw(PartTestData.KNOWN_PART_PK, Role.READER);
+        String name = PartTestData.testPartName("TC-APCRUD-002", "GetById");
+        boolean active = true;
+        boolean component = true;
+        boolean purchasable = true;
+        boolean assembly = false;
+        PartRequest createRequest = PartTestData.fullPartRequest(
+            name,
+            PartTestData.GET_BY_ID_DESCRIPTION,
+            PartTestData.GET_BY_ID_IPN,
+            PartTestData.GET_BY_ID_KEYWORDS,
+            active, component, purchasable, assembly);
+        Part created = partService.createPart(createRequest, Role.ADMIN);
+        int partPk = created.getPk();
+        createdPartIds.add(partPk);
+
+        Response rawResponse = partService.getPartByIdRaw(partPk, Role.READER);
         ResponseValidator.assertStatusAndContentType(rawResponse, HttpStatus.SC_OK);
 
         Part part = ResponseValidator.deserialize(rawResponse, Part.class);
-        assertEquals(part.getPk(), Integer.valueOf(PartTestData.KNOWN_PART_PK));
-        assertEquals(part.getName(), PartTestData.KNOWN_PART_NAME);
-        assertEquals(part.getActive(), PartTestData.KNOWN_PART_ACTIVE);
-        assertEquals(part.getComponent(), PartTestData.KNOWN_PART_COMPONENT);
-        assertEquals(part.getPurchaseable(), PartTestData.KNOWN_PART_PURCHASEABLE);
-        assertEquals(part.getAssembly(), PartTestData.KNOWN_PART_ASSEMBLY);
-        assertNull(part.getCategory(), "category must be null for this part");
+        assertEquals(part.getPk(), Integer.valueOf(partPk));
+        assertEquals(part.getName(), name);
+        assertEquals(part.getActive(), active);
+        assertEquals(part.getComponent(), component);
+        assertEquals(part.getPurchaseable(), purchasable);
+        assertEquals(part.getAssembly(), assembly);
+        assertNull(part.getCategory(), "category must be null when part created without category");
         assertNotNull(part.getInStock(), "in_stock must not be null");
         assertTrue(part.getInStock() >= 0, "in_stock must be >= 0");
 
@@ -137,49 +158,63 @@ public class PartCrudTest extends BaseTest {
     @Story("Get Part by ID with Query Flags")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_003_getPartByIdWithQueryFlagsReturnsExpandedFields() {
-        Response response = partService.getPartByIdRaw(PartTestData.KNOWN_PART_PK, Role.READER,
-            Map.of(PartTestData.QUERY_PARAM_PARAMETERS, PartTestData.QUERY_VALUE_TRUE,
-                PartTestData.QUERY_PARAM_TAGS, PartTestData.QUERY_VALUE_TRUE,
-                PartTestData.QUERY_PARAM_CATEGORY_DETAIL, PartTestData.QUERY_VALUE_TRUE));
+        int partWithParamsPk = findPartWithParametersPk();
 
-        ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);
+        Response parametersResponse = partService.getPartByIdRaw(partWithParamsPk, Role.READER,
+            PartDetailParams.builder().parameters(true).tags(true).build());
 
-        assertEquals(response.jsonPath().getInt("pk"), PartTestData.KNOWN_PART_PK);
+        ResponseValidator.assertStatusAndContentType(parametersResponse, HttpStatus.SC_OK);
 
-        List<Map<String, Object>> parameters = response.jsonPath().getList(PartTestData.FIELD_PARAMETERS);
+        Part paramsPart = ResponseValidator.deserialize(parametersResponse, Part.class);
+        List<PartParameter> parameters = paramsPart.getParameters();
         assertNotNull(parameters, "parameters must be present with ?parameters=true");
         assertFalse(parameters.isEmpty(), "parameters must be non-empty");
 
-        Map<String, Object> templateDetail = response.jsonPath().getMap(
-            PartTestData.FIELD_PARAMETERS + "[0].template_detail");
-        assertNotNull(response.jsonPath().get(PartTestData.FIELD_PARAMETERS + "[0].pk"),
-            "parameter pk must not be null");
-        assertNotNull(response.jsonPath().get(PartTestData.FIELD_PARAMETERS + "[0].template"),
-            "parameter template must not be null");
-        assertNotNull(response.jsonPath().getString(PartTestData.FIELD_PARAMETERS + "[0].data"),
-            "parameter data must not be null");
-        assertNotNull(templateDetail, "parameter template_detail must not be null");
-        assertNotNull(templateDetail.get("pk"), "template_detail pk must not be null");
-        assertNotNull(templateDetail.get(PartTestData.FIELD_NAME), "template_detail name must not be null");
-        assertNotNull(templateDetail.get("units"), "template_detail units must not be null");
-        assertNotNull(templateDetail.get("description"), "template_detail description must not be null");
+        PartParameter firstParam = parameters.getFirst();
+        assertNotNull(firstParam.getPk(), "parameter pk must not be null");
+        assertNotNull(firstParam.getTemplate(), "parameter template must not be null");
+        assertNotNull(firstParam.getData(), "parameter data must not be null");
 
-        assertNotNull(response.jsonPath().getList(PartTestData.FIELD_TAGS),
-            "tags must be present with ?tags=true");
-        assertNull(response.jsonPath().get(PartTestData.FIELD_CATEGORY_DETAIL),
-            "category_detail must be null when part has no category");
+        PartParameterTemplate templateDetail = firstParam.getTemplateDetail();
+        assertNotNull(templateDetail, "parameter template_detail must not be null");
+        assertNotNull(templateDetail.getPk(), "template_detail pk must not be null");
+        assertNotNull(templateDetail.getName(), "template_detail name must not be null");
+        assertNotNull(templateDetail.getUnits(), "template_detail units must not be null");
+        assertNotNull(templateDetail.getDescription(), "template_detail description must not be null");
+
+        assertNotNull(paramsPart.getTags(), "tags must be present with ?tags=true");
+
+        String noCatName = PartTestData.testPartName("TC-APCRUD-003", "NoCat");
+        Part noCatPart = partService.createPart(PartTestData.minimalPart(noCatName), Role.ADMIN);
+        int noCatPk = noCatPart.getPk();
+        createdPartIds.add(noCatPk);
+
+        Response noCatResponse = partService.getPartByIdRaw(noCatPk, Role.READER,
+            PartDetailParams.builder().categoryDetail(true).build());
+        ResponseValidator.assertStatusAndContentType(noCatResponse, HttpStatus.SC_OK);
+        Part noCatResult = ResponseValidator.deserialize(noCatResponse, Part.class);
+        assertNull(noCatResult.getCategoryDetail(), "category_detail must be null when part has no category");
 
         int categorizedPartPk = findCategorizedPartPk();
 
-        Response pathDetailResponse = partService.getPartByIdRaw(categorizedPartPk, Role.READER,
-            Map.of(PartTestData.QUERY_PARAM_PATH_DETAIL, PartTestData.QUERY_VALUE_TRUE));
+        Response catDetailResponse = partService.getPartByIdRaw(categorizedPartPk, Role.READER,
+            PartDetailParams.builder().categoryDetail(true).build());
+        ResponseValidator.assertStatusAndContentType(catDetailResponse, HttpStatus.SC_OK);
+        Part catDetailPart = ResponseValidator.deserialize(catDetailResponse, Part.class);
+        CategoryDetail categoryDetail = catDetailPart.getCategoryDetail();
+        assertNotNull(categoryDetail, "category_detail must be non-null when part has a category");
+        assertNotNull(categoryDetail.getPk(), "category_detail pk must not be null");
+        assertNotNull(categoryDetail.getName(), "category_detail name must not be null");
 
+        Response pathDetailResponse = partService.getPartByIdRaw(categorizedPartPk, Role.READER,
+            PartDetailParams.builder().pathDetail(true).build());
         ResponseValidator.assertStatusAndContentType(pathDetailResponse, HttpStatus.SC_OK);
-        List<Map<String, Object>> categoryPath = pathDetailResponse.jsonPath().getList(PartTestData.FIELD_CATEGORY_PATH);
+        Part pathDetailPart = ResponseValidator.deserialize(pathDetailResponse, Part.class);
+        List<CategoryPathEntry> categoryPath = pathDetailPart.getCategoryPath();
         assertNotNull(categoryPath, "category_path must be present with ?path_detail=true for a categorized part");
         assertFalse(categoryPath.isEmpty(), "category_path must be non-empty for a categorized part");
-        assertNotNull(categoryPath.getFirst().get("pk"), "category_path entry must have pk");
-        assertNotNull(categoryPath.getFirst().get("name"), "category_path entry must have name");
+        assertNotNull(categoryPath.getFirst().getPk(), "category_path entry must have pk");
+        assertNotNull(categoryPath.getFirst().getName(), "category_path entry must have name");
     }
 
     @Test(groups = {"regression", "parts"})
@@ -323,7 +358,7 @@ public class PartCrudTest extends BaseTest {
             Map.of(PartTestData.QUERY_PARAM_PART, newPartPk), Role.ADMIN);
         assertEquals(stockItems.size(), 1, "exactly one stock item must exist");
         StockItem stockItem = stockItems.getFirst();
-        assertEquals(stockItem.getQuantity(), (double) PartTestData.INITIAL_STOCK_QUANTITY,
+        assertEquals(stockItem.getQuantity(), PartTestData.INITIAL_STOCK_QUANTITY,
             "stock quantity must equal " + PartTestData.INITIAL_STOCK_QUANTITY);
         assertEquals(stockItem.getLocation(), Integer.valueOf(locationPk),
             "stock location must match the supplied location pk");
@@ -366,9 +401,19 @@ public class PartCrudTest extends BaseTest {
         assertEquals(supplierPart.getSku(), PartTestData.SUPPLIER_SKU, "SKU must match");
     }
 
+    private int findPartWithParametersPk() {
+        PaginatedResponse<Part> listing = partService.listParts(
+            PartListParams.builder().limit(PartTestData.DEFAULT_PAGE_LIMIT).parameters(true).build(), Role.READER);
+        return listing.getResults().stream()
+            .filter(p -> p.getParameters() != null && !p.getParameters().isEmpty())
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("No part with parameters found"))
+            .getPk();
+    }
+
     private int findCategorizedPartPk() {
         PaginatedResponse<Part> listing = partService.listParts(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.READER);
+            PartListParams.builder().limit(PartTestData.DEFAULT_PAGE_LIMIT).build(), Role.READER);
         return listing.getResults().stream()
             .filter(p -> p.getCategory() != null)
             .findFirst()

@@ -69,7 +69,7 @@
 | Is Template               | `boolean-field-is_template`              | checkbox      | false                                               |
 | Testable                  | `boolean-field-testable`                 | checkbox      | false                                               |
 | Trackable                 | `boolean-field-trackable`                | checkbox      | false                                               |
-| Purchaseable              | `boolean-field-purchaseable`             | checkbox      | **true** (checked)                                  |
+| Purchaseable              | `boolean-field-purchasable`             | checkbox      | **true** (checked)                                  |
 | Salable                   | `boolean-field-salable`                  | checkbox      | false                                               |
 | Virtual                   | `boolean-field-virtual`                  | checkbox      | false                                               |
 | Locked                    | `boolean-field-locked`                   | checkbox      | false                                               |
@@ -188,7 +188,7 @@
 | ------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
 | `active` default: `true`              | Confirmed — checkbox default is checked                    | Matches                                               |
 | `component` default: not specified    | **true** — checkbox pre-checked                            | UI default is true; API docs say `false` — divergence |
-| `purchaseable` default: not specified | **true** — checkbox pre-checked                            | UI default is true                                    |
+| `purchasable` default: not specified | **true** — checkbox pre-checked                            | UI default is true                                    |
 | Boolean field `testable`              | Confirmed present in form                                  | Matches                                               |
 | `copy_bom` in duplicate               | Not seen in UI                                             | Docs mention it; may be server-only                   |
 | `copy_tests` in duplicate             | Not seen in UI                                             | Docs mention it; may be server-only                   |

@@ -39,7 +39,7 @@
     "active": true,
     "assembly": true,
     "component": true,
-    "purchaseable": true,
+    "purchasable": true,
     "salable": false,
     "is_template": false,
     "trackable": false,

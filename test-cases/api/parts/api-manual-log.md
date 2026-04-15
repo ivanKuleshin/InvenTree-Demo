@@ -24,7 +24,7 @@
 
 - Request: `{"name": "TC-AP-PC-001-MinimalPart"}`
 - Status: `201`; pk: `1454`
-- Defaults confirmed: `active=true`, `component=true`, `purchaseable=true`, other booleans `false`, relational fields `null`
+- Defaults confirmed: `active=true`, `component=true`, `purchasable=true`, other booleans `false`, relational fields `null`
 - Second identical POST → `400` `{"non_field_errors": ["The fields name, IPN, revision must make a unique set."]}`
 
 ### 4. POST /api/part/ — full optional fields payload
@@ -50,7 +50,7 @@
 ### 7. POST /api/part/ — initial_supplier write-only field
 
 - Supplier PK retrieved from `GET /api/company/?is_supplier=true&limit=5`; PK `1` (DigiKey)
-- Request: `{"name": "...", "purchaseable": true, "initial_supplier": {"supplier": 1, "SKU": "SKU-TC-AP-005"}}`
+- Request: `{"name": "...", "purchasable": true, "initial_supplier": {"supplier": 1, "SKU": "SKU-TC-AP-005"}}`
 - Part status: `201`; pk: `1502`; `initial_supplier` absent from response
 - `GET /api/company/part/?part=1502` → `{"count": 1, "results": [{"pk": 302, "supplier": 1, "SKU": "SKU-TC-AP-005"}]}`
 

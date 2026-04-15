@@ -78,7 +78,7 @@
 **Preconditions:**
 
 - [AUTH REQUIRED] Logged in as `admin` at `https://demo.inventree.org`
-- An inactive part exists: part pk=84 (`1551ACLR`), `active=false`, `component=true`, `purchaseable=true` — confirmed via API
+- An inactive part exists: part pk=84 (`1551ACLR`), `active=false`, `component=true`, `purchasable=true` — confirmed via API
 - An assembly part exists with an open BOM: part pk=77 (`Widget Assembly`), `assembly=true`, `locked=false` — confirmed via API
 - A purchase order in pending state exists: PO pk=19 (`PO0019`), status=10 (pending) — confirmed via API
 - A sales order in pending state exists: SO pk=13 (`SO0027`), status=30 — confirmed via API
@@ -105,7 +105,7 @@
 
 **Observed:**
 
-- Part 84 (`1551ACLR`): `active=false`, `component=true`, `purchaseable=true` — confirmed via `GET /api/part/84/`
+- Part 84 (`1551ACLR`): `active=false`, `component=true`, `purchasable=true` — confirmed via `GET /api/part/84/`
 - Part 77 (`Widget Assembly`): `assembly=true`, `locked=false`, BOM has 276 lines — confirmed via API
 - PO pk=19 (`PO0019`) status=10 (pending) — confirmed via `GET /api/order/po/?limit=2`
 - SO pk=13 (`SO0027`) status=30 — confirmed via `GET /api/order/so/?limit=2`
@@ -355,7 +355,7 @@
 
 **Observed:**
 
-- Part 43 (`R_100K_0402_1%`): `component=true`, `active=true`, `purchaseable=true` — confirmed via `GET /api/part/43/`
+- Part 43 (`R_100K_0402_1%`): `component=true`, `active=true`, `purchasable=true` — confirmed via `GET /api/part/43/`
 - Docs state: "A part that is not flagged as a Component cannot be added to any BOM."
 - Component checkbox default: `true` (confirmed from TC-UI-PC-001 defaults)
 - Matches docs: Yes
@@ -426,7 +426,7 @@
 
 - [AUTH REQUIRED] Logged in as `admin` at `https://demo.inventree.org`
 - Navigate to `https://demo.inventree.org/web/part/43/details`
-- Part pk=43 (`R_100K_0402_1%`) has `purchaseable=true` and 10 supplier parts linked — confirmed via API
+- Part pk=43 (`R_100K_0402_1%`) has `purchasable=true` and 10 supplier parts linked — confirmed via API
 
 **Steps:**
 
@@ -438,15 +438,15 @@
 | 4   | Verify the suppliers table lists at least one row                                                    | At least one supplier part row is visible (10 supplier parts confirmed via API, including SKU `RR05P100KDTR-ND`)                                   |
 | 5   | Verify that an "Add Supplier Part" button or equivalent is present in the toolbar                    | An "Add Supplier Part" button is visible and enabled                                                                                              |
 | 6   | Click `action-menu-part-actions` → "Edit" to open the Edit dialog                                   | Edit dialog opens                                                                                                                                 |
-| 7   | Verify the "Purchaseable" checkbox (aria-label: `boolean-field-purchaseable`) is **checked**         | Purchaseable checkbox is checked                                                                                                                  |
+| 7   | Verify the "Purchaseable" checkbox (aria-label: `boolean-field-purchasable`) is **checked**         | Purchaseable checkbox is checked                                                                                                                  |
 | 8   | Click "Cancel" to close without changes                                                              | Dialog closes                                                                                                                                     |
 | 9   | Navigate to `https://demo.inventree.org/web/part/43/suppliers`                                       | Suppliers tab loads directly; the supplier parts table is still visible with the same data                                                        |
 
 **Observed:**
 
-- Part 43 (`R_100K_0402_1%`): `purchaseable=true`, `active=true` — confirmed via `GET /api/part/43/`
+- Part 43 (`R_100K_0402_1%`): `purchasable=true`, `active=true` — confirmed via `GET /api/part/43/`
 - Supplier parts: 10 records — confirmed via `GET /api/company/part/?part=43`; SKUs: `RR05P100KDTR-ND`, `YAG1343TR-ND`, `P100KDCTR-ND` etc.
-- `boolean-field-purchaseable` aria-label confirmed from TC-UI-PC-004 Observed block
+- `boolean-field-purchasable` aria-label confirmed from TC-UI-PC-004 Observed block
 - Docs state: "Enabling Purchaseable allows supplier part records to be created and linked to this part."
 - Matches docs: Yes
 
@@ -573,7 +573,7 @@
 
 **Observed:**
 
-- All boolean checkbox aria-labels confirmed from TC-UI-PC-004: `boolean-field-assembly`, `boolean-field-is_template`, `boolean-field-trackable`, `boolean-field-testable`, `boolean-field-salable`, `boolean-field-virtual`, `boolean-field-locked`, `boolean-field-active`, `boolean-field-component`, `boolean-field-purchaseable`
+- All boolean checkbox aria-labels confirmed from TC-UI-PC-004: `boolean-field-assembly`, `boolean-field-is_template`, `boolean-field-trackable`, `boolean-field-testable`, `boolean-field-salable`, `boolean-field-virtual`, `boolean-field-locked`, `boolean-field-active`, `boolean-field-component`, `boolean-field-purchasable`
 - Part 1934 confirmed to have all attributes=true via `GET /api/part/1934/`, demonstrating this combination is valid
 - Docs state: "Multiple flags can be enabled simultaneously on the same part"
 - Matches docs: Yes
@@ -636,7 +636,7 @@
 **Preconditions:**
 
 - [AUTH REQUIRED] Logged in as `admin` at `https://demo.inventree.org`
-- A test part exists with `purchaseable=false`; create fresh via "Create Part" with "Purchaseable" unchecked
+- A test part exists with `purchasable=false`; create fresh via "Create Part" with "Purchaseable" unchecked
 - Part named `TC-UI-PA-015-NotPurchaseable` with all defaults except Purchaseable=unchecked
 
 **Steps:**
@@ -645,12 +645,12 @@
 | --- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | 1   | Create a new part via `action-menu-add-parts` → "Create Part"                                                       | "Add Part" dialog opens                                                                                         |
 | 2   | Type `TC-UI-PA-015-NotPurchaseable` in the "Name" field (aria-label: `text-field-name`)                             | Name field updated                                                                                              |
-| 3   | Click the "Purchaseable" checkbox (aria-label: `boolean-field-purchaseable`) to **uncheck** it                      | Purchaseable checkbox becomes unchecked                                                                         |
+| 3   | Click the "Purchaseable" checkbox (aria-label: `boolean-field-purchasable`) to **uncheck** it                      | Purchaseable checkbox becomes unchecked                                                                         |
 | 4   | Click "Submit"                                                                                                      | Dialog closes; navigates to new part detail page                                                                |
 | 5   | Observe the tab bar on the part detail page                                                                         | A "**Suppliers**" tab is **absent** from the tab bar                                                            |
 | 6   | Observe the tab bar for a "Purchase Orders" tab                                                                     | A "**Purchase Orders**" tab is also **absent** from the tab bar                                                 |
 | 7   | Click `action-menu-part-actions` → "Edit"                                                                           | Edit dialog opens                                                                                               |
-| 8   | Verify "Purchaseable" checkbox (aria-label: `boolean-field-purchaseable`) is **unchecked**                          | Purchaseable is unchecked                                                                                       |
+| 8   | Verify "Purchaseable" checkbox (aria-label: `boolean-field-purchasable`) is **unchecked**                          | Purchaseable is unchecked                                                                                       |
 | 9   | Check the "Purchaseable" checkbox to enable it and click "Submit"                                                   | Dialog closes; page reloads                                                                                     |
 | 10  | Verify the "Suppliers" tab now **appears** in the tab bar                                                           | Suppliers tab is now visible after enabling Purchaseable                                                        |
 
@@ -658,12 +658,12 @@
 
 - Purchaseable default = `true` in the Add Part dialog (confirmed from TC-UI-PC-001 Observed block) — must be manually unchecked
 - Docs state: "Without this flag, the part cannot appear on a purchase order." (implies Suppliers tab is also gated)
-- Matching behavior: part 108 (`Blue Chair`, `purchaseable=false`) — Suppliers tab should not be visible for it
+- Matching behavior: part 108 (`Blue Chair`, `purchasable=false`) — Suppliers tab should not be visible for it
 - Matches docs: Yes
 
 **Automation Hints:**
 
-- Uncheck purchaseable: `page.getByRole('checkbox', { name: 'boolean-field-purchaseable' }).uncheck()`
+- Uncheck purchasable: `page.getByRole('checkbox', { name: 'boolean-field-purchasable' }).uncheck()`
 - Assert Suppliers tab absent: `expect(page.getByRole('tab', { name: /suppliers/i })).not.toBeVisible()`
 - After re-enabling: `expect(page.getByRole('tab', { name: /suppliers/i })).toBeVisible()`
 

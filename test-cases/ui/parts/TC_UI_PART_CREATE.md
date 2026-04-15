@@ -55,7 +55,7 @@
 - Page title seen: "InvenTree Demo Server | Parts"
 - "Add Part" dialog confirmed present and opened via `action-menu-add-parts` → "Create Part"
 - Name field aria-label: `text-field-name`; type: text; required marker: red asterisk on label
-- Default checked booleans confirmed: `boolean-field-component` (true), `boolean-field-purchaseable` (true), `boolean-field-active` (true), `boolean-field-copy_category_parameters` (true)
+- Default checked booleans confirmed: `boolean-field-component` (true), `boolean-field-purchasable` (true), `boolean-field-active` (true), `boolean-field-copy_category_parameters` (true)
 - On submit with name only: redirected to `/web/part/1375/details`; toast "Success — Item Created" confirmed visible
 - Matches docs: Yes (name is the only user-required field)
 
@@ -188,7 +188,7 @@
 **Observed:**
 
 - All boolean checkboxes confirmed present in dialog via JS extraction
-- Confirmed defaults: component=true, purchaseable=true, active=true, copy_category_parameters=true; all others=false
+- Confirmed defaults: component=true, purchasable=true, active=true, copy_category_parameters=true; all others=false
 - Labels confirmed from `querySelectorAll('label')`: "Component", "Assembly", "Is Template", "Testable", "Trackable", "Purchaseable", "Salable", "Virtual", "Locked", "Active"
 - Part actions menu confirmed: "Duplicate", "Edit", "Delete" items with aria-labels `action-menu-part-actions-duplicate`, `action-menu-part-actions-edit`, `action-menu-part-actions-delete`
 - Matches docs: Yes

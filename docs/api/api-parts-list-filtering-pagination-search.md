@@ -208,7 +208,7 @@ All boolean parameters accept `true` or `false` (case-insensitive). Multiple boo
 | `component`      | Part can be used as a component in a BOM.                                                | —                                 |
 | `virtual`        | Part is virtual (no physical stock).                                                     | true: 32                          |
 | `trackable`      | Part uses serial number tracking.                                                        | true: 56                          |
-| `purchaseable`   | Part can be purchased from a supplier.                                                   | true: 1358                        |
+| `purchasable`   | Part can be purchased from a supplier.                                                   | true: 1358                        |
 | `salable`        | Part can be sold to a customer.                                                          | true: 72                          |
 | `is_template`    | Part is a template (parent of variants).                                                 | true: 71                          |
 | `is_variant`     | Part is a variant of a template.                                                         | —                                 |
@@ -354,7 +354,7 @@ Fields observed on each Part object in the default (no expansion) response:
 | `component`                  | boolean          | no       |                                                                       |
 | `is_template`                | boolean          | no       |                                                                       |
 | `locked`                     | boolean          | no       |                                                                       |
-| `purchaseable`               | boolean          | no       |                                                                       |
+| `purchasable`               | boolean          | no       |                                                                       |
 | `salable`                    | boolean          | no       |                                                                       |
 | `starred`                    | boolean          | no       | Whether the authenticated user has starred this part                  |
 | `testable`                   | boolean          | no       |                                                                       |

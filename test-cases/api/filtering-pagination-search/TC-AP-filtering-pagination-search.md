@@ -506,32 +506,32 @@
 
 ---
 
-## TC-APFLT-017: purchaseable=true&salable=true combines boolean filters with AND logic
+## TC-APFLT-017: purchasable=true&salable=true combines boolean filters with AND logic
 
 **Type:** API | **Priority:** P2
 
-**Preconditions:** Parts with `purchaseable=true` and `salable=true` both exist.
+**Preconditions:** Parts with `purchasable=true` and `salable=true` both exist.
 
 **Steps:**
 
-1. Send `GET /api/part/?purchaseable=true&limit=1` — record `count` as `PURCHASEABLE_COUNT`
+1. Send `GET /api/part/?purchasable=true&limit=1` — record `count` as `PURCHASEABLE_COUNT`
 2. Send `GET /api/part/?salable=true&limit=1` — record `count` as `SALABLE_COUNT`
-3. Send `GET /api/part/?purchaseable=true&salable=true&limit=5`
+3. Send `GET /api/part/?purchasable=true&salable=true&limit=5`
 4. Verify status `200`; verify `count > 0`
 5. Verify `count <= PURCHASEABLE_COUNT` and `count <= SALABLE_COUNT`
-6. Verify all results have `purchaseable: true` and `salable: true`
+6. Verify all results have `purchasable: true` and `salable: true`
 
 **Request (step 3):**
 
 - Method: `GET`
-- URL: `/api/part/?purchaseable=true&salable=true&limit=5`
+- URL: `/api/part/?purchasable=true&salable=true&limit=5`
 - Headers: `Authorization: Token <token>`
 
 **Expected Result:** Boolean filters combine as AND. Combined count ≤ each individual filter count. Every result satisfies both conditions.
 
 **Observed** (probed 2026-04-14):
 
-- Combined: count `38`, sample: `pk=1161 "Buy-Sell Part 1776151541544" purchaseable: true salable: true`
+- Combined: count `38`, sample: `pk=1161 "Buy-Sell Part 1776151541544" purchasable: true salable: true`
 - All results have both flags true
 - Matches spec: Yes
 

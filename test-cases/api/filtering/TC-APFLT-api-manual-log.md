@@ -76,11 +76,11 @@ GET /api/part/?trackable=true&limit=3&format=json
 → 200 count:58, results: [pk=1934 trackable:true, pk=2046 trackable:true, pk=1217 "AUTO_QA_TRACKABLE_PART" trackable:true]
 ```
 
-### Boolean filter — purchaseable=true&salable=true
+### Boolean filter — purchasable=true&salable=true
 
 ```
-GET /api/part/?purchaseable=true&salable=true&limit=3&format=json
-→ 200 count:38, results: [pk=1934 purchaseable:true salable:true, pk=2046 purchaseable:true salable:true, pk=1161 "Buy-Sell Part 1776151541544" purchaseable:true salable:true]
+GET /api/part/?purchasable=true&salable=true&limit=3&format=json
+→ 200 count:38, results: [pk=1934 purchasable:true salable:true, pk=2046 purchasable:true salable:true, pk=1161 "Buy-Sell Part 1776151541544" purchasable:true salable:true]
 ```
 
 ### Boolean filter — has_stock=true

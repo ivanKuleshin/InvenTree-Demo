@@ -44,7 +44,7 @@
 5. Verify response body contains `name` equal to `"TC-AP-PC-001-MinimalPart"`
 6. Verify response body contains `active` equal to `true`
 7. Verify response body contains `component` equal to `true`
-8. Verify response body contains `purchaseable` equal to `true`
+8. Verify response body contains `purchasable` equal to `true`
 9. Verify response body contains `assembly` equal to `false`
 10. Verify response body contains `is_template` equal to `false`
 11. Verify response body contains `virtual` equal to `false`
@@ -62,7 +62,7 @@
   { "name": "TC-AP-PC-001-MinimalPart" }
   ```
 
-**Expected Result:** Server creates the part and returns `201 Created` with a full part object. All unspecified optional fields use server defaults: `active=true`, `component=true`, `purchaseable=true`, all other booleans `false`, relational fields `null`.
+**Expected Result:** Server creates the part and returns `201 Created` with a full part object. All unspecified optional fields use server defaults: `active=true`, `component=true`, `purchasable=true`, all other booleans `false`, relational fields `null`.
 
 **Observed** (probed 2026-04-14):
 
@@ -74,7 +74,7 @@
     "name": "TC-AP-PC-001-MinimalPart",
     "active": true,
     "component": true,
-    "purchaseable": true,
+    "purchasable": true,
     "assembly": false,
     "is_template": false,
     "virtual": false,
@@ -131,7 +131,7 @@
     "keywords": "test qa automation",
     "assembly": true,
     "component": true,
-    "purchaseable": true,
+    "purchasable": true,
     "salable": false,
     "is_template": false,
     "trackable": false,
@@ -296,7 +296,7 @@
 **Steps:**
 
 1. Send `GET /api/company/?is_supplier=true&limit=5` to retrieve a valid supplier PK (record as `SUPPLIER_PK`)
-2. Send POST to `/api/part/` with body containing `name`, `purchaseable=true`, and `initial_supplier` object with `supplier=SUPPLIER_PK` and a SKU
+2. Send POST to `/api/part/` with body containing `name`, `purchasable=true`, and `initial_supplier` object with `supplier=SUPPLIER_PK` and a SKU
 3. Verify response status code is `201`; record new part PK as `NEW_PART_PK`
 4. Verify response body does NOT contain the key `initial_supplier` (write-only)
 5. Send `GET /api/company/part/?part=NEW_PART_PK` to retrieve supplier parts for the new part
@@ -313,7 +313,7 @@
   ```json
   {
     "name": "TC-AP-PC-005-InitialSupplierPart",
-    "purchaseable": true,
+    "purchasable": true,
     "initial_supplier": { "supplier": SUPPLIER_PK, "SKU": "SKU-TC-AP-005" }
   }
   ```
@@ -341,7 +341,7 @@
   ```
 - Matches spec: Yes
 
-**Notes:** The `purchaseable` flag must be `true` for a supplier part to be creatable. If `purchaseable=false`, the `initial_supplier` sub-object is likely ignored or returns a validation error — this boundary was not probed but is worth a separate edge-case test.
+**Notes:** The `purchasable` flag must be `true` for a supplier part to be creatable. If `purchasable=false`, the `initial_supplier` sub-object is likely ignored or returns a validation error — this boundary was not probed but is worth a separate edge-case test.
 
 ---
 

@@ -116,7 +116,7 @@ Response 201: pk=1085, pack_quantity="10 feet", pack_quantity_native=3.048
 
 ## Phase 3 — Confirmed Part Data
 
-| Role in TCs | pk | Name | units | purchaseable | supplier |
+| Role in TCs | pk | Name | units | purchasable | supplier |
 |---|---|---|---|---|---|
 | Wire part with metres unit | 896 | Silicon Wire 10AWG Black | 'm' | true | pk=42 (Wirey) |
 | Wire part with metres unit | 895 | Silicon Wire 10AWG Red | 'm' | true | - |

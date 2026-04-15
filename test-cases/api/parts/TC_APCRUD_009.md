@@ -13,7 +13,7 @@
 **Steps:**
 
 1. Send `GET /api/company/?is_supplier=true&limit=5` to retrieve a valid supplier PK (record as `SUPPLIER_PK`)
-2. Send POST to `/api/part/` with body containing `name`, `purchaseable=true`, and `initial_supplier` object with `supplier=SUPPLIER_PK` and a SKU
+2. Send POST to `/api/part/` with body containing `name`, `purchasable=true`, and `initial_supplier` object with `supplier=SUPPLIER_PK` and a SKU
 3. Verify response status code is `201`; record new part PK as `NEW_PART_PK`
 4. Verify response body does NOT contain the key `initial_supplier` (write-only)
 5. Send `GET /api/company/part/?part=NEW_PART_PK` to retrieve supplier parts for the new part
@@ -31,7 +31,7 @@
   ```json
   {
     "name": "TC-APCRUD-009-InitialSupplierPart",
-    "purchaseable": true,
+    "purchasable": true,
     "initial_supplier": { "supplier": SUPPLIER_PK, "SKU": "SKU-TC-APCRUD-009" }
   }
   ```
@@ -59,4 +59,4 @@
   ```
 - Matches spec: Yes
 
-**Notes:** The `purchaseable` flag must be `true` for a supplier part to be creatable. If `purchaseable=false`, the `initial_supplier` sub-object is likely ignored or returns a validation error.
+**Notes:** The `purchasable` flag must be `true` for a supplier part to be creatable. If `purchasable=false`, the `initial_supplier` sub-object is likely ignored or returns a validation error.

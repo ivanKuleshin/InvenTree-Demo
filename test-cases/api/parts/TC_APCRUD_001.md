@@ -17,7 +17,7 @@
 4. Verify response body contains field `results` as an array of exactly `5` items
 5. Verify response body contains field `next` as a non-null URI string (more pages available)
 6. Verify response body contains field `previous` as `null` (first page)
-7. Verify the first result contains all of the following fields: `pk`, `name`, `IPN`, `revision`, `description`, `category`, `active`, `assembly`, `component`, `is_template`, `trackable`, `virtual`, `purchaseable`, `salable`, `locked`, `full_name`, `thumbnail`, `creation_date`, `in_stock`, `total_in_stock`, `unallocated_stock`, `stock_item_count`, `pricing_min`, `pricing_max`
+7. Verify the first result contains all of the following fields: `pk`, `name`, `IPN`, `revision`, `description`, `category`, `active`, `assembly`, `component`, `is_template`, `trackable`, `virtual`, `purchasable`, `salable`, `locked`, `full_name`, `thumbnail`, `creation_date`, `in_stock`, `total_in_stock`, `unallocated_stock`, `stock_item_count`, `pricing_min`, `pricing_max`
 8. Verify that the `full_name` field for a part with no IPN and no revision equals just the `name` value
 
 **Request:**

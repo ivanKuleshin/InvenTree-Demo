@@ -20,7 +20,7 @@ fetched: 2026-04-13
   - [Component](#component)
   - [Testable](#testable)
   - [Trackable](#trackable)
-  - [Purchaseable](#purchaseable)
+  - [Purchaseable](#purchasable)
   - [Salable](#salable)
 - [Locked Parts](#locked-parts)
 - [Active Parts](#active-parts)

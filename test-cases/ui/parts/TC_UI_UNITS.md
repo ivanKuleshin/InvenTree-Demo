@@ -247,7 +247,7 @@
 
 - [AUTH REQUIRED] Logged in as `admin` at `https://demo.inventree.org`
 - Navigate to `https://demo.inventree.org/web/part/896/details`
-- Part pk=896 (`Silicon Wire 10AWG Black`) exists with `units='m'`, `purchaseable=true`
+- Part pk=896 (`Silicon Wire 10AWG Black`) exists with `units='m'`, `purchasable=true`
 
 **Steps:**
 
@@ -332,7 +332,7 @@
 
 - [AUTH REQUIRED] Logged in as `admin` at `https://demo.inventree.org`
 - Navigate to `https://demo.inventree.org/web/part/896/suppliers`
-- Part pk=896 (`Silicon Wire 10AWG Black`) has `units='m'` (length) and `purchaseable=true`
+- Part pk=896 (`Silicon Wire 10AWG Black`) has `units='m'` (length) and `purchasable=true`
 - Supplier pk=42 (`Wirey`) exists and is linked to part 896
 
 **Steps:**
@@ -383,7 +383,7 @@
 
 - [AUTH REQUIRED] Logged in as `admin` at `https://demo.inventree.org`
 - Navigate to `https://demo.inventree.org/web/part/896/suppliers`
-- Part pk=896 (`Silicon Wire 10AWG Black`) has `units='m'` and `purchaseable=true`
+- Part pk=896 (`Silicon Wire 10AWG Black`) has `units='m'` and `purchasable=true`
 - Supplier pk=3 (`Arrow`) exists
 
 **Steps:**

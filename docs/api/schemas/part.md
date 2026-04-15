@@ -40,7 +40,7 @@ Used when displaying all details of a single component.
 | `minimum_stock`             | number (double)       |                     | default: `0.0`                                                                                         |
 | `name`                      | string                | required            | Part name; max length: 100                                                                             |
 | `pk`                        | integer               | required, read-only |                                                                                                        |
-| `purchaseable`              | boolean               |                     | Can this part be purchased from external suppliers?                                                    |
+| `purchasable`              | boolean               |                     | Can this part be purchased from external suppliers?                                                    |
 | `revision`                  | string                | nullable            | max length: 100; default: ``                                                                           |
 | `revision_of`               | integer               | nullable            | Is this part a revision of another part?                                                               |
 | `revision_count`            | integer               | read-only, nullable |                                                                                                        |

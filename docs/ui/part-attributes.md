@@ -24,7 +24,7 @@ fetched: 2026-04-14
 7. [Component](#component)
 8. [Trackable](#trackable)
 9. [Testable](#testable)
-10. [Purchaseable](#purchaseable)
+10. [Purchaseable](#purchasable)
 11. [Salable](#salable)
 12. [Locked](#locked)
 13. [Attribute Dependencies and Interactions](#attribute-dependencies-and-interactions)
@@ -53,7 +53,7 @@ on the same part; some combinations introduce constraints described in the
 | Component     | `component`    | `false` | Part can be used as a sub-component in an assembly BOM     |
 | Trackable     | `trackable`    | `false` | Stock items must carry a batch or serial number            |
 | Testable      | `testable`     | `false` | Test templates and results can be recorded against the part|
-| Purchaseable  | `purchaseable` | `false` | Part can be linked to suppliers and placed on purchase orders|
+| Purchaseable  | `purchasable` | `false` | Part can be linked to suppliers and placed on purchase orders|
 | Salable       | `salable`      | `false` | Part can be added to sales orders                          |
 | Locked        | `locked`       | `false` | Part cannot be modified; BOM and parameters are read-only  |
 
@@ -267,7 +267,7 @@ assembly being built contains trackable component parts.
 
 ## Purchaseable
 
-**API field:** `purchaseable` (boolean, default: `false`)
+**API field:** `purchasable` (boolean, default: `false`)
 
 **Description from docs:**
 > Can this part be purchased from external suppliers?
@@ -282,7 +282,7 @@ assembly being built contains trackable component parts.
 
 **UI label:** Purchaseable (toggle)
 
-> **Note:** The API field name is `purchaseable` (with an 'e' after 'purchas'). The UI may display it as "Purchasable"
+> **Note:** The API field name is `purchasable` (with an 'e' after 'purchas'). The UI may display it as "Purchasable"
 > (without the extra 'e'). Both spellings refer to the same attribute.
 
 ---
@@ -368,9 +368,9 @@ completed.
 
 ### Purchaseable / Salable (Independent, Additive)
 
-`purchaseable` and `salable` are fully independent flags. A part can be:
-- Both purchaseable and salable (bought and re-sold, or sourced externally and sold as-is).
-- Only purchaseable (bought for internal use or builds).
+`purchasable` and `salable` are fully independent flags. A part can be:
+- Both purchasable and salable (bought and re-sold, or sourced externally and sold as-is).
+- Only purchasable (bought for internal use or builds).
 - Only salable (manufactured in-house and sold).
 - Neither (purely internal/virtual classification).
 
@@ -398,7 +398,7 @@ unless noted.
 | `component`    | boolean | `false` | Can this part be used to build other parts?                 |
 | `is_template`  | boolean | `false` | Is this part a template part?                               |
 | `locked`       | boolean | `false` | Locked parts cannot be edited                               |
-| `purchaseable` | boolean | `false` | Can this part be purchased from external suppliers?         |
+| `purchasable` | boolean | `false` | Can this part be purchased from external suppliers?         |
 | `salable`      | boolean | `false` | Can this part be sold to customers?                         |
 | `testable`     | boolean | `false` | Can this part have test results recorded against it?        |
 | `trackable`    | boolean | `false` | Does this part have tracking for unique items?              |

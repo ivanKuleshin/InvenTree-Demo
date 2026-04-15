@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
+
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -69,4 +73,14 @@ public class Part {
 
     @JsonProperty("creation_date")
     private String creationDate;
+
+    private List<PartParameter> parameters;
+
+    private List<Map<String, Object>> tags;
+
+    @JsonProperty("category_detail")
+    private CategoryDetail categoryDetail;
+
+    @JsonProperty("category_path")
+    private List<CategoryPathEntry> categoryPath;
 }

@@ -22,7 +22,7 @@
 | TC-APFLT-014 | virtual=true filters to virtual parts only | API | P2 |
 | TC-APFLT-015 | trackable=true filters to serial-tracked parts only | API | P2 |
 | TC-APFLT-016 | has_stock=true and has_stock=false partition all parts by stock presence | API | P1 |
-| TC-APFLT-017 | purchaseable=true&salable=true combines boolean filters with AND logic | API | P2 |
+| TC-APFLT-017 | purchasable=true&salable=true combines boolean filters with AND logic | API | P2 |
 | TC-APFLT-018 | IPN exact match returns the single matching part; non-existent IPN returns empty | API | P1 |
 | TC-APFLT-019 | IPN_regex=^RES matches all parts whose IPN starts with "RES" | API | P2 |
 | TC-APFLT-020 | name_regex=^R filters parts whose name starts with "R" | API | P2 |

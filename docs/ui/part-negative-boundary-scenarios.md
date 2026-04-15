@@ -266,7 +266,7 @@ demo UI (TC-UI-PC-001, TC-UI-PC-004):
 | UI Label                 | aria-label                                  | Default State |
 |--------------------------|---------------------------------------------|---------------|
 | Component                | `boolean-field-component`                   | CHECKED       |
-| Purchaseable             | `boolean-field-purchaseable`                | CHECKED       |
+| Purchaseable             | `boolean-field-purchasable`                | CHECKED       |
 | Active                   | `boolean-field-active`                      | CHECKED       |
 | Copy Category Parameters | `boolean-field-copy_category_parameters`    | CHECKED       |
 | Assembly                 | `boolean-field-assembly`                    | unchecked     |
@@ -277,7 +277,7 @@ demo UI (TC-UI-PC-001, TC-UI-PC-004):
 | Virtual                  | `boolean-field-virtual`                     | unchecked     |
 | Locked                   | `boolean-field-locked`                      | unchecked     |
 
-**Note:** The API schema shows `active` defaults to `true` and `component`/`purchaseable` default to `false`.
+**Note:** The API schema shows `active` defaults to `true` and `component`/`purchasable` default to `false`.
 The UI dialog pre-checks Component, Purchaseable, and Active as a UX convenience; these are the most commonly
 needed flags for a new physical part. The `copy_category_parameters` field is write-only (only present on
 Create, not on Edit).
@@ -543,7 +543,7 @@ They are relevant for negative testing because they may produce unexpected valid
 | `is_template: true` + Set Revision | Template parts cannot be set as a revision of another part                      | Server 400 when attempting to set `revision_of` on a template  |
 | `active: false` + Add to BOM       | Inactive parts are excluded from selection lists                                | Part does not appear in BOM part search combobox               |
 | `active: false` + Add to PO/SO     | Inactive parts cannot be placed on purchase or sales orders                     | Part does not appear in order line item selection              |
-| `purchaseable: false` + Suppliers tab | Suppliers tab is absent / hidden for non-purchaseable parts                  | Suppliers tab does not appear in part detail tab bar           |
+| `purchasable: false` + Suppliers tab | Suppliers tab is absent / hidden for non-purchasable parts                  | Suppliers tab does not appear in part detail tab bar           |
 | `salable: false` + Sales Orders tab | Sales Orders tab is absent for non-salable parts                              | Sales Orders tab does not appear in part detail tab bar        |
 | `is_template: false` + Variants tab | Variants tab is absent for non-template parts                                 | Variants tab does not appear in part detail tab bar            |
 | `component: false` + Add to BOM    | Non-component parts cannot be added to any assembly BOM                        | Part does not appear in BOM sub-part search combobox           |
