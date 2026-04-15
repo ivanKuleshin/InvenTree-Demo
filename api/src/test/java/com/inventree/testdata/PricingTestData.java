@@ -1,8 +1,12 @@
 package com.inventree.testdata;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class PricingTestData {
+
+    private static final AtomicInteger INTERNAL_QTY_COUNTER = new AtomicInteger(10000);
+    private static final AtomicInteger SALE_QTY_COUNTER = new AtomicInteger(20000);
 
     public static final int PRICING_PART_PK = 73;
     public static final int SALABLE_PART_PK = 113;
@@ -21,8 +25,6 @@ public final class PricingTestData {
     public static final String FIELD_OVERRIDE_MIN = "override_min";
     public static final String FIELD_OVERRIDE_MAX = "override_max";
     public static final String FIELD_OVERRIDE_MIN_CURRENCY = "override_min_currency";
-    public static final String FIELD_INTERNAL_COST_MIN = "internal_cost_min";
-    public static final String FIELD_OVERALL_MIN = "overall_min";
 
     public static final String CURRENCY_USD = "USD";
 
@@ -43,13 +45,16 @@ public final class PricingTestData {
     public static final int LIST_LIMIT = 5;
     public static final double PRICE_DELTA = 0.001;
 
+    public static final String OVERRIDE_MIN_BOUNDARY_VALUE = "0.01";
+    public static final double EXPECTED_OVERRIDE_MIN_BOUNDARY = 0.01;
+
     public static Map<String, Object> standardInternalPricePayload() {
-        return Map.of(FIELD_PART, PRICING_PART_PK, FIELD_QUANTITY, CREATE_QUANTITY,
+        return Map.of(FIELD_PART, PRICING_PART_PK, FIELD_QUANTITY, INTERNAL_QTY_COUNTER.getAndIncrement(),
                 FIELD_PRICE, CREATE_PRICE, FIELD_PRICE_CURRENCY, CURRENCY_USD);
     }
 
     public static Map<String, Object> standardSalePricePayload() {
-        return Map.of(FIELD_PART, SALABLE_PART_PK, FIELD_QUANTITY, SALE_CREATE_QUANTITY,
+        return Map.of(FIELD_PART, SALABLE_PART_PK, FIELD_QUANTITY, SALE_QTY_COUNTER.getAndIncrement(),
                 FIELD_PRICE, SALE_CREATE_PRICE, FIELD_PRICE_CURRENCY, CURRENCY_USD);
     }
 

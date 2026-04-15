@@ -6,6 +6,7 @@ import com.inventree.model.PaginatedResponse;
 import com.inventree.model.PartInternalPrice;
 import com.inventree.model.PartPricing;
 import com.inventree.model.PartSalePrice;
+import com.inventree.testdata.PricingDataProviders;
 import com.inventree.testdata.PricingTestData;
 import com.inventree.util.HttpStatus;
 import com.inventree.util.ResponseValidator;
@@ -115,7 +116,8 @@ public class PartPricingTest extends BaseTest {
     @Story("Create Internal Price")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APPRICE_003_createInternalPriceReturns201() {
-        Response response = pricingService.createInternalPriceRaw(PricingTestData.standardInternalPricePayload(), Role.ADMIN);
+        Map<String, Object> payload = PricingTestData.standardInternalPricePayload();
+        Response response = pricingService.createInternalPriceRaw(payload, Role.ADMIN);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_CREATED);
 
         int newPk = response.jsonPath().getInt(PricingTestData.FIELD_PK);
@@ -126,7 +128,7 @@ public class PartPricingTest extends BaseTest {
         softAssert.assertEquals(response.jsonPath().getInt(PricingTestData.FIELD_PART),
             PricingTestData.PRICING_PART_PK, "part must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_QUANTITY),
-            (double) PricingTestData.CREATE_QUANTITY, "quantity must match");
+            ((Number) payload.get(PricingTestData.FIELD_QUANTITY)).doubleValue(), "quantity must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_PRICE),
             PricingTestData.EXPECTED_PRICE_NUMERIC,
             PricingTestData.PRICE_DELTA, "price must equal " + PricingTestData.EXPECTED_PRICE_NUMERIC);
@@ -146,7 +148,7 @@ public class PartPricingTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(patched.getPrice(), PricingTestData.EXPECTED_PATCH_PRICE,
             PricingTestData.PRICE_DELTA, "price must equal " + PricingTestData.EXPECTED_PATCH_PRICE);
-        softAssert.assertEquals(patched.getQuantity(), (double) PricingTestData.CREATE_QUANTITY, "quantity must be unchanged");
+        softAssert.assertEquals(patched.getQuantity(), created.getQuantity(), "quantity must be unchanged");
         softAssert.assertEquals(patched.getPart(), Integer.valueOf(PricingTestData.PRICING_PART_PK), "part must be unchanged");
         softAssert.assertAll();
     }
@@ -211,7 +213,8 @@ public class PartPricingTest extends BaseTest {
     @Story("Create Sale Price")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APSPRICE_003_createSalePriceReturns201() {
-        Response response = pricingService.createSalePriceRaw(PricingTestData.standardSalePricePayload(), Role.ADMIN);
+        Map<String, Object> payload = PricingTestData.standardSalePricePayload();
+        Response response = pricingService.createSalePriceRaw(payload, Role.ADMIN);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_CREATED);
 
         int newPk = response.jsonPath().getInt(PricingTestData.FIELD_PK);
@@ -222,7 +225,7 @@ public class PartPricingTest extends BaseTest {
         softAssert.assertEquals(response.jsonPath().getInt(PricingTestData.FIELD_PART),
             PricingTestData.SALABLE_PART_PK, "part must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_QUANTITY),
-            (double) PricingTestData.SALE_CREATE_QUANTITY, "quantity must match");
+            ((Number) payload.get(PricingTestData.FIELD_QUANTITY)).doubleValue(), "quantity must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_PRICE),
             PricingTestData.EXPECTED_SALE_PRICE_NUMERIC,
             PricingTestData.PRICE_DELTA, "price must equal " + PricingTestData.EXPECTED_SALE_PRICE_NUMERIC);
@@ -258,12 +261,13 @@ public class PartPricingTest extends BaseTest {
         softAssert.assertAll();
     }
 
-    @Test(groups = {"regression", "pricing"})
+    @Test(groups = {"regression", "pricing"},
+        dataProvider = "overrideMinValues", dataProviderClass = PricingDataProviders.class)
     @Story("Patch Aggregate Pricing Sets Override Min")
     @Severity(SeverityLevel.CRITICAL)
-    public void tc_APAGPRICE_002_patchAggregatePricingSetsOverrideMin() {
+    public void tc_APAGPRICE_002_patchAggregatePricingSetsOverrideMin(String overrideMin, double expectedMin) {
         Map<String, Object> overridePayload = Map.of(
-            PricingTestData.FIELD_OVERRIDE_MIN, PricingTestData.OVERRIDE_MIN_VALUE,
+            PricingTestData.FIELD_OVERRIDE_MIN, overrideMin,
             PricingTestData.FIELD_OVERRIDE_MIN_CURRENCY, PricingTestData.CURRENCY_USD);
 
         PartPricing patched = pricingService.patchAggregatePricing(
@@ -272,8 +276,8 @@ public class PartPricingTest extends BaseTest {
 
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertNotNull(patched.getOverrideMin(), "override_min must not be null after setting");
-        softAssert.assertEquals(patched.getOverrideMin(), PricingTestData.EXPECTED_OVERRIDE_MIN,
-            "override_min must equal " + PricingTestData.EXPECTED_OVERRIDE_MIN);
+        softAssert.assertEquals(patched.getOverrideMin(), expectedMin,
+            "override_min must equal " + expectedMin);
         softAssert.assertNotNull(patched.getOverallMin(), "overall_min must not be null after setting override");
         softAssert.assertAll();
     }
@@ -318,24 +322,22 @@ public class PartPricingTest extends BaseTest {
         ResponseValidator.assertStatus(response, HttpStatus.SC_NOT_FOUND);
     }
 
-    @Test(groups = {"regression", "pricing"})
+    @Test(groups = {"regression", "pricing"},
+        dataProvider = "invalidInternalPricePayloads", dataProviderClass = PricingDataProviders.class)
     @Story("Create Internal Price With Non-Existent Part FK Returns 400")
     @Severity(SeverityLevel.NORMAL)
-    public void tc_APPRICE_NEG_002_createInternalPriceWithInvalidPartReturns400() {
-        Map<String, Object> payload = Map.of(
-            PricingTestData.FIELD_PART, PricingTestData.NON_EXISTENT_PK,
-            PricingTestData.FIELD_QUANTITY, PricingTestData.CREATE_QUANTITY,
-            PricingTestData.FIELD_PRICE, PricingTestData.CREATE_PRICE,
-            PricingTestData.FIELD_PRICE_CURRENCY, PricingTestData.CURRENCY_USD);
+    public void tc_APPRICE_NEG_002_createInternalPriceWithInvalidPartReturns400(
+        String tcId, Map<String, Object> payload, int expectedStatus) {
         Response response = pricingService.createInternalPriceRaw(payload, Role.ADMIN);
-        ResponseValidator.assertStatus(response, HttpStatus.SC_BAD_REQUEST);
+        ResponseValidator.assertStatus(response, expectedStatus);
     }
 
-    @Test(groups = {"regression", "pricing"})
+    @Test(groups = {"regression", "pricing"},
+        dataProvider = "forbiddenRolesForInternalPrice", dataProviderClass = PricingDataProviders.class)
     @Story("Create Internal Price With Reader Role Returns 403")
     @Severity(SeverityLevel.CRITICAL)
-    public void tc_APPRICE_NEG_003_createInternalPriceWithReaderRoleReturns403() {
-        Response response = pricingService.createInternalPriceRaw(PricingTestData.standardInternalPricePayload(), Role.READER);
+    public void tc_APPRICE_NEG_003_createInternalPriceWithReaderRoleReturns403(Role role) {
+        Response response = pricingService.createInternalPriceRaw(PricingTestData.standardInternalPricePayload(), role);
         ResponseValidator.assertStatus(response, HttpStatus.SC_FORBIDDEN);
     }
 
@@ -347,17 +349,14 @@ public class PartPricingTest extends BaseTest {
         ResponseValidator.assertStatus(response, HttpStatus.SC_NOT_FOUND);
     }
 
-    @Test(groups = {"regression", "pricing"})
+    @Test(groups = {"regression", "pricing"},
+        dataProvider = "invalidSalePricePayloads", dataProviderClass = PricingDataProviders.class)
     @Story("Create Sale Price With Non-Existent Part FK Returns 400")
     @Severity(SeverityLevel.NORMAL)
-    public void tc_APSPRICE_NEG_002_createSalePriceWithInvalidPartReturns400() {
-        Map<String, Object> payload = Map.of(
-            PricingTestData.FIELD_PART, PricingTestData.NON_EXISTENT_PK,
-            PricingTestData.FIELD_QUANTITY, PricingTestData.SALE_CREATE_QUANTITY,
-            PricingTestData.FIELD_PRICE, PricingTestData.SALE_CREATE_PRICE,
-            PricingTestData.FIELD_PRICE_CURRENCY, PricingTestData.CURRENCY_USD);
+    public void tc_APSPRICE_NEG_002_createSalePriceWithInvalidPartReturns400(
+        String tcId, Map<String, Object> payload, int expectedStatus) {
         Response response = pricingService.createSalePriceRaw(payload, Role.ADMIN);
-        ResponseValidator.assertStatus(response, HttpStatus.SC_BAD_REQUEST);
+        ResponseValidator.assertStatus(response, expectedStatus);
     }
 
     @Test(groups = {"regression", "pricing"})
@@ -373,7 +372,7 @@ public class PartPricingTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(patched.getPrice(), PricingTestData.EXPECTED_PATCH_SALE_PRICE,
             PricingTestData.PRICE_DELTA, "price must equal " + PricingTestData.EXPECTED_PATCH_SALE_PRICE);
-        softAssert.assertEquals(patched.getQuantity(), (double) PricingTestData.SALE_CREATE_QUANTITY,
+        softAssert.assertEquals(patched.getQuantity(), created.getQuantity(),
             "quantity must be unchanged");
         softAssert.assertEquals(patched.getPart(), Integer.valueOf(PricingTestData.SALABLE_PART_PK), "part must be unchanged");
         softAssert.assertAll();

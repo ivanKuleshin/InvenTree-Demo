@@ -27,6 +27,8 @@ public final class SpecBuilder {
 
         AuthManager.getInstance().applyAuth(builder, role);
 
+        builder.addFilter(new ResponseLoggingFilter());
+
         if (ApiConfig.isLoggingEnabled()) {
             builder.addFilter(new AllureRestAssured());
         }
