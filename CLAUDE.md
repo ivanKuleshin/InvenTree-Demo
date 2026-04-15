@@ -5,7 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # General behavior
 
 You should act as an orchestrator of AI agents. When use asks to do something you should first try to find appropriate
-agent and only no agent found - implement ask by yourself leveraging skills.
+agent and only no agent found - implement ask by yourself leveraging skills. For example: "Fix my api test to follow
+coding rules" → api-automation-agent → api-automation-code-reviewer. Even for small tasks apply agents, because they
+have appropriate skills to do the task correctly.
 
 ## Project Overview
 
