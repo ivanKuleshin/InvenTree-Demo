@@ -2,7 +2,7 @@
 name: rest-assured-api-testing
 user-invocable: false
 description: Use when writing, reviewing, fixing or debugging REST API tests with REST Assured in Java. Covers Given-When-Then DSL, specifications, authentication, JSON validation, POJO serialization, logging, filters, JSON Schema, and Allure integration.
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep]
+allowed-tools: [ Read, Write, Edit, Bash, Glob, Grep ]
 ---
 
 # REST Assured API Testing — Best Practices
@@ -18,7 +18,7 @@ Consult these references based on what you're doing:
 **When to use**: Creating new test files, writing test cases, implementing API test scenarios
 
 | Activity                                                    | Reference Files                                                   |
-| ----------------------------------------------------------- | ----------------------------------------------------------------- |
+|-------------------------------------------------------------|-------------------------------------------------------------------|
 | **Given-When-Then DSL (GET, POST, PUT, PATCH, DELETE)**     | [given-when-then.md](core/given-when-then.md)                     |
 | **Request / Response specifications and BaseTest**          | [specifications.md](core/specifications.md)                       |
 | **Authentication (Basic, Token, OAuth2, Form, SSL)**        | [authentication.md](core/authentication.md)                       |
@@ -29,41 +29,6 @@ Consult these references based on what you're doing:
 | **TestNG integration and data-driven tests**                | [testng-integration.md](integration/testng-integration.md)        |
 | **Allure reporting integration**                            | [allure-integration.md](integration/allure-integration.md)        |
 | **⚠️ No hardcoding — Config, Endpoints, TestData patterns** | [no-hardcoding.md](core/no-hardcoding.md)                         |
-
-## Installation and Setup
-
-### Maven Dependencies
-
-```xml
-
-<properties>
-    <rest-assured.version>5.5.0</rest-assured.version>
-</properties>
-
-<dependencies>
-<dependency>
-    <groupId>io.rest-assured</groupId>
-    <artifactId>rest-assured</artifactId>
-    <version>${rest-assured.version}</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>io.rest-assured</groupId>
-    <artifactId>json-schema-validator</artifactId>
-    <version>${rest-assured.version}</version>
-    <scope>test</scope>
-</dependency>
-</dependencies>
-```
-
-### Required Static Imports
-
-```java
-import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-```
 
 ## Quick Decision Tree
 
@@ -108,35 +73,16 @@ What are you doing?
 > In actual tests, **never hardcode** endpoints, status codes, credentials, field values, or thresholds.  
 > Always use `Config`, `Endpoints`, and `TestData` classes — see [no-hardcoding.md](core/no-hardcoding.md).
 
-### Given-When-Then
-
-```java
-// ❌ Illustration only — never write literals in real tests
+```
 given()
-    .
-
-contentType(ContentType.JSON)
-    .
-
-header("Authorization","Token "+Config.getApiToken())  // ✅ from Config
-    .
-
-body(payload)                                              // ✅ POJO from TestData
-.
-
-when()
-    .
-
-post(Endpoints.PARTS)                                      // ✅ named constant
-.
-
-then()
-    .
-
-statusCode(HttpStatus.SC_CREATED)                          // ✅ named constant
-    .
-
-body("name",equalTo(payload.getName()));                  // ✅ derived from input
+    .contentType(ContentType.JSON)
+    .header("Authorization", "Token " + Config.getApiToken())
+    .body(payload)
+.when()
+    .post(Endpoints.PARTS)
+.then()
+    .statusCode(HttpStatus.SC_CREATED)
+    .body("name", equalTo(payload.getName()));
 ```
 
 ### BaseTest Setup
@@ -145,11 +91,11 @@ See the full canonical example in [specifications.md → BaseTest Pattern](core/
 
 ### Response Extraction
 
-```java
+```
 int id = given().spec(requestSpec).when().get(Endpoints.PART_BY_ID, partId)
-    .then().statusCode(HttpStatus.SC_OK).extract().path("pk");  // ✅
+    .then().statusCode(HttpStatus.SC_OK).extract().path("pk");  // ✅ Possible, but not desired approach
 
-Part part = get(Endpoints.PARTS + "1").as(Part.class);          // ✅ POJO, no literals
+Part part = get(Endpoints.PARTS + "1").as(Part.class);          // ✅ POJO, no literals, desired approach
 List<Part> parts = from(json).getList("results", Part.class);
 ```
 
