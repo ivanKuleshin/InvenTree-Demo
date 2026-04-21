@@ -5,5 +5,8 @@
   "skillOverrides": {
     "api-manual-testing": "off",
     "ui-manual-testing": "off"
-  }
+  },
+  "enabledMcpjsonServers": [
+    "playwright"
+  ]
 }
