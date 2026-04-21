@@ -32,4 +32,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                             |
 | ----------- | ----------- | -------------------------------------------------- |
-| 200         | OK          | [PartRelation](../part-api-schema.md#partrelation) |
+| 200         | OK          | [PartRelation](../part-api/part-api-schema.md#partrelation) |

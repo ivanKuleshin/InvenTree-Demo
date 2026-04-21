@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "A plan file is written to a path under test-cases/ before any probing begins",
+      "passed": true,
+      "evidence": "test-cases/api/eval1-parts-list-get/api-manual-plan.md exists with date 2026-04-18 and coverage table."
+    },
+    {
+      "text": "The plan file contains a table mapping coverage areas to endpoints and TC IDs to produce",
+      "passed": true,
+      "evidence": "Plan has a 4-column table: Coverage Area | Endpoint | Methods | TC IDs, with 12 rows covering all probed scenarios."
+    },
+    {
+      "text": "The probe log file records at least one GET /api/part/ call with an observed HTTP status code",
+      "passed": true,
+      "evidence": "TC-APCRUD-api-manual-log.md records Probe 1 (GET /api/part/?limit=5 → 200 OK) through Probe 12, each with observed status code."
+    },
+    {
+      "text": "Each written TC-APCRUD-* test case contains an 'Observed' section with a real HTTP status code (not '[ASSUMED]')",
+      "passed": true,
+      "evidence": "All 12 TCs (TC-APCRUD-001 through TC-APCRUD-012) in parts-list-get-test-suite.md have '**Observed** (filled during probe):' sections with real HTTP status codes. No [ASSUMED] markers found."
+    },
+    {
+      "text": "At least one TC shows how query flags (parameters=true or category_detail=true) affect the response shape",
+      "passed": true,
+      "evidence": "TC-APCRUD-002 documents parameters=true (adds parameters array with template_detail). TC-APCRUD-003 documents category_detail=true (adds category_detail object). TC-APCRUD-004 documents path_detail=true."
+    },
+    {
+      "text": "No hardcoded credential values (passwords, tokens, base64 strings) appear in any written test case file",
+      "passed": true,
+      "evidence": "All Authorization headers use placeholder 'Authorization: Basic <base64>' — no actual base64-encoded credentials found in any TC or log file."
+    },
+    {
+      "text": "Phase 4 summary table is output to the conversation listing suite name, endpoints probed, and TC count",
+      "passed": true,
+      "evidence": "Agent output included Phase 4 summary table with columns Suite | Endpoints Probed | TCs Written | Diverged from Docs?, showing eval1-parts-list-get with 12 TCs and noting the pagination envelope divergence."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": { "Read": 8, "Write": 3, "Glob": 4, "Bash": 12, "mcp_playwright": 0 },
+    "total_tool_calls": 40,
+    "total_steps": 4,
+    "files_created": [
+      "test-cases/api/eval1-parts-list-get/api-manual-plan.md",
+      "test-cases/api/eval1-parts-list-get/TC-APCRUD-api-manual-log.md",
+      "test-cases/api/eval1-parts-list-get/parts-list-get-test-suite.md"
+    ],
+    "errors_encountered": 1,
+    "output_chars": 15000,
+    "transcript_chars": 3500
+  }
+}

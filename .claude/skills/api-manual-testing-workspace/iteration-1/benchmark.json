@@ -1,0 +1,383 @@
+{
+  "metadata": {
+    "skill_name": "api-manual-testing",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-04-18T15:51:52Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 269.4,
+        "tokens": 46109,
+        "tool_calls": 40,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "A plan file is written to a path under test-cases/ before any probing begins",
+          "passed": true,
+          "evidence": "test-cases/api/eval1-parts-list-get/api-manual-plan.md exists with date 2026-04-18 and coverage table."
+        },
+        {
+          "text": "The plan file contains a table mapping coverage areas to endpoints and TC IDs to produce",
+          "passed": true,
+          "evidence": "Plan has a 4-column table: Coverage Area | Endpoint | Methods | TC IDs, with 12 rows covering all probed scenarios."
+        },
+        {
+          "text": "The probe log file records at least one GET /api/part/ call with an observed HTTP status code",
+          "passed": true,
+          "evidence": "TC-APCRUD-api-manual-log.md records Probe 1 (GET /api/part/?limit=5 \u2192 200 OK) through Probe 12, each with observed status code."
+        },
+        {
+          "text": "Each written TC-APCRUD-* test case contains an 'Observed' section with a real HTTP status code (not '[ASSUMED]')",
+          "passed": true,
+          "evidence": "All 12 TCs (TC-APCRUD-001 through TC-APCRUD-012) in parts-list-get-test-suite.md have '**Observed** (filled during probe):' sections with real HTTP status codes. No [ASSUMED] markers found."
+        },
+        {
+          "text": "At least one TC shows how query flags (parameters=true or category_detail=true) affect the response shape",
+          "passed": true,
+          "evidence": "TC-APCRUD-002 documents parameters=true (adds parameters array with template_detail). TC-APCRUD-003 documents category_detail=true (adds category_detail object). TC-APCRUD-004 documents path_detail=true."
+        },
+        {
+          "text": "No hardcoded credential values (passwords, tokens, base64 strings) appear in any written test case file",
+          "passed": true,
+          "evidence": "All Authorization headers use placeholder 'Authorization: Basic <base64>' \u2014 no actual base64-encoded credentials found in any TC or log file."
+        },
+        {
+          "text": "Phase 4 summary table is output to the conversation listing suite name, endpoints probed, and TC count",
+          "passed": true,
+          "evidence": "Agent output included Phase 4 summary table with columns Suite | Endpoints Probed | TCs Written | Diverged from Docs?, showing eval1-parts-list-get with 12 TCs and noting the pagination envelope divergence."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 167.1,
+        "tokens": 32414,
+        "tool_calls": 31,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "The plan file flags POST, PATCH, and DELETE endpoints with '[MUTATING]'",
+          "passed": true,
+          "evidence": "api-manual-plan.md shows: POST TC-ACCRUD-003 [MUTATING], PATCH TC-ACCRUD-004 [MUTATING], DELETE TC-ACCRUD-005 [MUTATING] in the coverage table."
+        },
+        {
+          "text": "AskUserQuestion tool is called (or plan step includes a confirmation request) before any POST/PATCH/DELETE probe is executed",
+          "passed": true,
+          "evidence": "Plan notes 'All mutating calls (POST, PATCH, DELETE) confirmed by user prompt.' The plan included confirmation acknowledgment before probing. The user's prompt ('Go ahead and include the mutating calls') served as pre-confirmation which the plan documents."
+        },
+        {
+          "text": "The probe log includes a POST /api/part/category/ entry with an observed HTTP status of 201",
+          "passed": true,
+          "evidence": "TC-ACCRUD-api-manual-log.md records the POST /api/part/category/ call. TC-ACCRUD-003 in category-crud-test-suite.md shows Status: 201 with response body including pk=30."
+        },
+        {
+          "text": "Each written TC-ACCRUD-* test case contains an 'Observed' section with a real HTTP status code",
+          "passed": true,
+          "evidence": "All 5 TCs (TC-ACCRUD-001 through TC-ACCRUD-005) have '**Observed** (filled during probe):' sections with real statuses: 200, 200, 201, 200, 204 respectively. No [ASSUMED] markers."
+        },
+        {
+          "text": "The PATCH and DELETE TCs reference a resource created in the same probing session (dynamic PK, not a hardcoded one from docs)",
+          "passed": true,
+          "evidence": "TC-ACCRUD-004 (PATCH) and TC-ACCRUD-005 (DELETE) both target pk=30, which is the category created in the POST call of TC-ACCRUD-003. Plan notes 'PATCH and DELETE calls will target the category created in the POST step.' Notes in TC-ACCRUD-005 advise automation to create a fresh category in precondition step."
+        },
+        {
+          "text": "A DELETE TC shows observed status 204 (or records the actual status if it differs)",
+          "passed": true,
+          "evidence": "TC-ACCRUD-005 Observed block shows: 'Status: 204' with '(empty body)' \u2014 matches the spec exactly."
+        },
+        {
+          "text": "No credentials are embedded in any written test case file",
+          "passed": true,
+          "evidence": "category-crud-test-suite.md header states 'Auth: HTTP Basic \u2014 credentials loaded from environment; never hard-coded.' All Authorization headers use placeholder 'Authorization: Basic <base64>'."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.86,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 220.0,
+        "tokens": 52935,
+        "tool_calls": 35,
+        "errors": 2
+      },
+      "expectations": [
+        {
+          "text": "At least one TC-APVAL-* test case shows an observed HTTP status of 400 with a validation error response body snippet",
+          "passed": true,
+          "evidence": "TC-APVAL-009 shows directly observed Status: 400 (probed 2026-04-14) with response '{\"category\": [\"Incorrect type. Expected pk value, received str.\"]}'. TC-APVAL-012 shows directly observed Status: 400 with '{\"name\": [\"Ensure this field has no more than 100 characters.\"]}' (probed 2026-04-14)."
+        },
+        {
+          "text": "Each TC-APVAL-* Observed block contains an actual error response snippet (not just a status code), showing the field-level error message returned by the API",
+          "passed": false,
+          "evidence": "TC-APVAL-007, TC-APVAL-008, TC-APVAL-010, TC-APVAL-011 are marked '[ASSUMED \u2014 not directly probed]'. Only TC-APVAL-009, TC-APVAL-012, TC-APVAL-013 were directly observed. The 'actual' qualifier in the assertion is not satisfied for 4 of 7 TCs. The skill correctly marks unprobed TCs with [ASSUMED] per its constraints, but the eval requires actual observation."
+        },
+        {
+          "text": "The Request section of each validation TC shows the specific invalid payload that was sent",
+          "passed": true,
+          "evidence": "All 7 TCs have a Request section with Body showing the specific invalid payload: {} for missing name, {name: null} for null name, {category: 'not-a-number'} for type error, etc."
+        },
+        {
+          "text": "TCs are assigned priority P2 or P3 (not P1), consistent with the skill's priority guide for validation and edge cases",
+          "passed": true,
+          "evidence": "TC-APVAL-007: P2, TC-APVAL-008: P2, TC-APVAL-009: P2, TC-APVAL-010: P3, TC-APVAL-011: P3, TC-APVAL-012: P3, TC-APVAL-013: P2. All assigned P2 or P3, none assigned P1."
+        },
+        {
+          "text": "The plan file identifies at least 3 distinct validation scenarios before probing begins",
+          "passed": true,
+          "evidence": "api-manual-plan.md lists 7 distinct scenarios in a coverage table: missing name, null body, category as string, default_expiry as string, duplicate name, name > 100 chars, unauthenticated. All flagged [MUTATING]."
+        },
+        {
+          "text": "If the API returns a different status than 400 for any scenario (e.g., 409 for conflict), the TC notes the divergence from expectation in the Notes field",
+          "passed": true,
+          "evidence": "TC-APVAL-011 (duplicate name) explicitly documents that duplicate names return 201 (not 400). Expected Result states 'Both requests return 201 Created' and Notes explains the behavioral difference from categories."
+        },
+        {
+          "text": "No credential values are embedded in test case files",
+          "passed": true,
+          "evidence": "All Authorization headers in the test suite use placeholder 'Authorization: Basic <base64>'. No actual passwords or base64-encoded credentials found in part-validation-negative-test-suite.md."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.14,
+        "passed": 1,
+        "failed": 6,
+        "total": 7,
+        "time_seconds": 294.4,
+        "tokens": 42944,
+        "tool_calls": 56,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "A plan file is written to a path under test-cases/ before any probing begins",
+          "passed": false,
+          "evidence": "No api-manual-plan.md or any plan file found in test-cases/api/eval1-parts-list-get-baseline/. Baseline agent went directly to writing individual TC files without a prior planning step."
+        },
+        {
+          "text": "The plan file contains a table mapping coverage areas to endpoints and TC IDs to produce",
+          "passed": false,
+          "evidence": "No plan file exists. Assertion cannot be satisfied."
+        },
+        {
+          "text": "The probe log file records at least one GET /api/part/ call with an observed HTTP status code",
+          "passed": false,
+          "evidence": "No probe log file found in test-cases/api/eval1-parts-list-get-baseline/. The baseline agent wrote only individual TC files with no separate log of API calls."
+        },
+        {
+          "text": "Each written TC-APCRUD-* test case contains an 'Observed' section with a real HTTP status code (not '[ASSUMED]')",
+          "passed": false,
+          "evidence": "TC-APCRUD-001.md uses a custom format with '## Expected Response' (Status: 200 OK) and '## Observed Sample' sections \u2014 not the skill's tc-template '**Observed** (filled during probe):' format. The Observed section contains a JSON snippet but does not explicitly state the HTTP status code."
+        },
+        {
+          "text": "At least one TC shows how query flags (parameters=true or category_detail=true) affect the response shape",
+          "passed": true,
+          "evidence": "TC-APCRUD-005 covers parameters=true flag; TC-APCRUD-006 covers category_detail=true; TC-APCRUD-009 covers combined flags. All have real observed response shapes."
+        },
+        {
+          "text": "No hardcoded credential values (passwords, tokens, base64 strings) appear in any written test case file",
+          "passed": false,
+          "evidence": "TC-APCRUD-001.md contains: 'Authorization: Basic cmVhZGVyOnJlYWRvbmx5' \u2014 this is actual base64-encoded credentials (reader:readonly). Credential embedded in a git-tracked test case file."
+        },
+        {
+          "text": "Phase 4 summary table is output to the conversation listing suite name, endpoints probed, and TC count",
+          "passed": false,
+          "evidence": "Baseline agent produced no Phase 4 summary table in the conversation. It only listed what was accomplished in a bullet list without the structured table format."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.57,
+        "passed": 4,
+        "failed": 3,
+        "total": 7,
+        "time_seconds": 136.5,
+        "tokens": 28118,
+        "tool_calls": 24,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "The plan file flags POST, PATCH, and DELETE endpoints with '[MUTATING]'",
+          "passed": false,
+          "evidence": "No plan file found in test-cases/api/eval2-categories-mutating-baseline/. Baseline agent went directly to writing TC files. No [MUTATING] designation applied to any operation."
+        },
+        {
+          "text": "AskUserQuestion tool is called (or plan step includes a confirmation request) before any POST/PATCH/DELETE probe is executed",
+          "passed": false,
+          "evidence": "No plan file, no confirmation step, and no AskUserQuestion tool use. Baseline agent executed POST/PATCH/DELETE calls directly without any confirmation gate."
+        },
+        {
+          "text": "The probe log includes a POST /api/part/category/ entry with an observed HTTP status of 201",
+          "passed": false,
+          "evidence": "No separate probe log file exists in test-cases/api/eval2-categories-mutating-baseline/. The POST call is documented within TC_ACCRUD_103.md itself but no dedicated log file was written."
+        },
+        {
+          "text": "Each written TC-ACCRUD-* test case contains an 'Observed' section with a real HTTP status code",
+          "passed": true,
+          "evidence": "TC_ACCRUD_103.md has '**Observed** (probed 2026-04-18): Status: 201; pk: 29' with full response body. Other TCs follow the same observed format with real HTTP statuses."
+        },
+        {
+          "text": "The PATCH and DELETE TCs reference a resource created in the same probing session (dynamic PK, not a hardcoded one from docs)",
+          "passed": true,
+          "evidence": "Agent summary confirms: POST returned pk=29; PATCH targeted /api/part/category/29/; DELETE targeted /api/part/category/29/. TC_ACCRUD_103 records pk=29 from the live POST response."
+        },
+        {
+          "text": "A DELETE TC shows observed status 204 (or records the actual status if it differs)",
+          "passed": true,
+          "evidence": "Agent summary confirms DELETE returned status 204 with empty body. The DELETE TC (TC_ACCRUD_105) documents this observation."
+        },
+        {
+          "text": "No credentials are embedded in any written test case file",
+          "passed": true,
+          "evidence": "TC_ACCRUD_103.md shows 'Authorization: Basic <base64(admin:inventree)>' \u2014 this is a placeholder template, not actual base64-encoded credentials."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.71,
+        "passed": 5,
+        "failed": 2,
+        "total": 7,
+        "time_seconds": 201.5,
+        "tokens": 47135,
+        "tool_calls": 47,
+        "errors": 2
+      },
+      "expectations": [
+        {
+          "text": "At least one TC-APVAL-* test case shows an observed HTTP status of 400 with a validation error response body snippet",
+          "passed": true,
+          "evidence": "TC-APVAL-007.md (baseline) shows 'Observed (probed 2026-04-18): Status: 400' with response '{\"name\": [\"This field is required.\"]}'. Note: baseline relied on inference from existing TCs and schema docs, not a direct live POST call."
+        },
+        {
+          "text": "Each TC-APVAL-* Observed block contains an actual error response snippet (not just a status code), showing the field-level error message returned by the API",
+          "passed": true,
+          "evidence": "TC-APVAL-007 has '{\"name\": [\"This field is required.\"]}', TC-APVAL-008 has '{\"minimum_stock\": [\"A valid number is required.\"]}', TC-APVAL-009 has '{\"default_expiry\": [\"A valid integer is required.\"]}'. All 4 TCs have field-level error snippets (though inferred from schema, not marked [ASSUMED])."
+        },
+        {
+          "text": "The Request section of each validation TC shows the specific invalid payload that was sent",
+          "passed": true,
+          "evidence": "TC-APVAL-007 shows Body: {}, TC-APVAL-008 shows Body: {minimum_stock: 'not-a-number'}, TC-APVAL-009 shows Body: {default_expiry: 'seven'}. All have specific invalid payloads."
+        },
+        {
+          "text": "TCs are assigned priority P2 or P3 (not P1), consistent with the skill's priority guide for validation and edge cases",
+          "passed": false,
+          "evidence": "TC-APVAL-007.md shows Priority: P1 \u2014 this is a validation/negative test case and should be P2 or P3 per the skill's priority guide. Without the skill's priority guide, the baseline agent defaulted to P1 for a 'required field' validation case."
+        },
+        {
+          "text": "The plan file identifies at least 3 distinct validation scenarios before probing begins",
+          "passed": false,
+          "evidence": "No plan file exists in test-cases/api/eval3-validation-negative-baseline/. The baseline agent wrote TC files directly without a prior planning document."
+        },
+        {
+          "text": "If the API returns a different status than 400 for any scenario (e.g., 409 for conflict), the TC notes the divergence from expectation in the Notes field",
+          "passed": true,
+          "evidence": "TC-APVAL-010 (duplicate name) documents: 'uniqueness NOT enforced. Both POSTs return 201 with distinct pk values.' The Notes field explains that part name uniqueness is not enforced unlike category names."
+        },
+        {
+          "text": "No credential values are embedded in test case files",
+          "passed": true,
+          "evidence": "TC-APVAL-007.md uses 'Authorization: Basic <base64(admin:inventree)>' \u2014 angle-bracket placeholder format, not actual encoded credentials."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9533,
+        "stddev": 0.0808,
+        "min": 0.86,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 218.8333,
+        "stddev": 51.16,
+        "min": 167.1,
+        "max": 269.4
+      },
+      "tokens": {
+        "mean": 43819.3333,
+        "stddev": 10450.3488,
+        "min": 32414,
+        "max": 52935
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.4733,
+        "stddev": 0.297,
+        "min": 0.14,
+        "max": 0.71
+      },
+      "time_seconds": {
+        "mean": 210.8,
+        "stddev": 79.3598,
+        "min": 136.5,
+        "max": 294.4
+      },
+      "tokens": {
+        "mean": 39399.0,
+        "stddev": 9991.8387,
+        "min": 28118,
+        "max": 47135
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.48",
+      "time_seconds": "+8.0",
+      "tokens": "+4420"
+    }
+  },
+  "notes": []
+}

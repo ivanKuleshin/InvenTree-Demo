@@ -44,4 +44,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                               |
 | ----------- | ----------- | -------------------------------------------------------------------- |
-| 200         | OK          | [PaginatedCategoryList](../part-api-schema.md#paginatedcategorylist) |
+| 200         | OK          | [PaginatedCategoryList](../part-api/part-api-schema.md#paginatedcategorylist) |

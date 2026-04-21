@@ -36,12 +36,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                             |
 | ----------------------------------- | ------------------------------------------------------------------ |
-| `application/json`                  | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
-| `application/x-www-form-urlencoded` | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
-| `multipart/form-data`               | [PatchedPartStocktake](../part-api-schema.md#patchedpartstocktake) |
+| `application/json`                  | [PatchedPartStocktake](../part-api/part-api-schema.md#patchedpartstocktake) |
+| `application/x-www-form-urlencoded` | [PatchedPartStocktake](../part-api/part-api-schema.md#patchedpartstocktake) |
+| `multipart/form-data`               | [PatchedPartStocktake](../part-api/part-api-schema.md#patchedpartstocktake) |
 
 ## Responses
 
 | Status Code | Description | Schema                                               |
 | ----------- | ----------- | ---------------------------------------------------- |
-| 200         | OK          | [PartStocktake](../part-api-schema.md#partstocktake) |
+| 200         | OK          | [PartStocktake](../part-api/part-api-schema.md#partstocktake) |

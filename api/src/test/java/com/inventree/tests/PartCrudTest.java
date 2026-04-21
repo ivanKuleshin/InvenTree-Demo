@@ -13,7 +13,7 @@ import com.inventree.model.PartParameter;
 import com.inventree.model.PartParameterTemplate;
 import com.inventree.model.PartRequest;
 import com.inventree.model.StockItem;
-import com.inventree.model.StockLocation;
+import com.inventree.model.StockLocationDetail;
 import com.inventree.model.SupplierPart;
 import com.inventree.testdata.PartTestData;
 import com.inventree.util.HttpStatus;
@@ -333,7 +333,7 @@ public class PartCrudTest extends BaseTest {
     @Story("Create Part with Initial Stock")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
-        PaginatedResponse<StockLocation> locations = stockService.listStockLocations(
+        PaginatedResponse<StockLocationDetail> locations = stockService.listStockLocations(
             Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
         assertFalse(locations.getResults().isEmpty(), "stock locations must be non-empty");
         int locationPk = locations.getResults().getFirst().getPk();

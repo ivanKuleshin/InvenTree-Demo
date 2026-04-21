@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                                   |
 | ----------------------------------- | ------------------------------------------------------------------------ |
-| `application/json`                  | [PatchedPartTestTemplate](../part-api-schema.md#patchedparttesttemplate) |
-| `application/x-www-form-urlencoded` | [PatchedPartTestTemplate](../part-api-schema.md#patchedparttesttemplate) |
-| `multipart/form-data`               | [PatchedPartTestTemplate](../part-api-schema.md#patchedparttesttemplate) |
+| `application/json`                  | [PatchedPartTestTemplate](../part-api/part-api-schema.md#patchedparttesttemplate) |
+| `application/x-www-form-urlencoded` | [PatchedPartTestTemplate](../part-api/part-api-schema.md#patchedparttesttemplate) |
+| `multipart/form-data`               | [PatchedPartTestTemplate](../part-api/part-api-schema.md#patchedparttesttemplate) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                     |
 | ----------- | ----------- | ---------------------------------------------------------- |
-| 200         | OK          | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| 200         | OK          | [PartTestTemplate](../part-api/part-api-schema.md#parttesttemplate) |

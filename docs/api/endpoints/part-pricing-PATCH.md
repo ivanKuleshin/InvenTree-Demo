@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                         |
 | ----------------------------------- | -------------------------------------------------------------- |
-| `application/json`                  | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
-| `application/x-www-form-urlencoded` | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
-| `multipart/form-data`               | [PatchedPartPricing](../part-api-schema.md#patchedpartpricing) |
+| `application/json`                  | [PatchedPartPricing](../part-api/part-api-schema.md#patchedpartpricing) |
+| `application/x-www-form-urlencoded` | [PatchedPartPricing](../part-api/part-api-schema.md#patchedpartpricing) |
+| `multipart/form-data`               | [PatchedPartPricing](../part-api/part-api-schema.md#patchedpartpricing) |
 
 ## Responses
 
 | Status Code | Description | Schema                                           |
 | ----------- | ----------- | ------------------------------------------------ |
-| 200         | OK          | [PartPricing](../part-api-schema.md#partpricing) |
+| 200         | OK          | [PartPricing](../part-api/part-api-schema.md#partpricing) |

@@ -145,6 +145,131 @@
 | TC-APCATPARAM-004 | PATCH /api/part/category/parameters/{id}/ updates the default_value          | API / Functional | P2       |
 | TC-APCATPARAM-005 | DELETE /api/part/category/parameters/{id}/ removes a category parameter      | API / Functional | P2       |
 
+### Companies CRUD (api-companies-crud)
+
+| TC ID         | Title                                                                              | Type             | Priority |
+| ------------- | ---------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-ACCMP-001  | GET /api/company/ returns paginated company list with full field set               | API / Functional | P1       |
+| TC-ACCMP-002  | GET /api/company/{id}/ retrieves a single company by primary key                   | API / Functional | P1       |
+| TC-ACCMP-003  | POST /api/company/ creates a company with required fields only                     | API / Functional | P1       |
+| TC-ACCMP-004  | POST /api/company/ creates a company with all optional fields populated            | API / Functional | P2       |
+| TC-ACCMP-005  | PUT /api/company/{id}/ replaces all writable fields on an existing company         | API / Functional | P2       |
+| TC-ACCMP-006  | PATCH /api/company/{id}/ partially updates selected fields on an existing company  | API / Functional | P2       |
+| TC-ACCMP-007  | DELETE /api/company/{id}/ removes a company                                        | API / Functional | P2       |
+| TC-ACCMP-008  | GET /api/company/ filters by is_supplier, is_manufacturer, is_customer             | API / Functional | P2       |
+| TC-ACCMP-009  | GET /api/company/ search and ordering query parameters                             | API / Functional | P2       |
+| TC-ACCMP-010  | PATCH /api/company/{id}/ sets active=false to deactivate a company                 | API / Functional | P2       |
+| TC-ACCMP-011  | POST /api/company/ without required name field returns 400                         | API / Negative   | P1       |
+| TC-ACCMP-012  | POST /api/company/ with name exceeding 100 characters returns 400                  | API / Negative   | P3       |
+| TC-ACCMP-013  | POST /api/company/ with invalid email or URL format returns 400                    | API / Negative   | P3       |
+| TC-ACCMP-014  | GET /api/company/{id}/ with non-existent id returns 404                            | API / Negative   | P2       |
+| TC-ACCMP-015  | POST /api/company/ without authentication returns 403                              | API / Security   | P1       |
+| TC-ACCMP-016  | GET /api/company/address/ returns paginated address list                           | API / Functional | P1       |
+| TC-ACCMP-017  | POST /api/company/address/ creates an address linked to a company                  | API / Functional | P1       |
+| TC-ACCMP-018  | GET /api/company/address/{id}/ retrieves a single address by primary key           | API / Functional | P1       |
+| TC-ACCMP-019  | PUT /api/company/address/{id}/ replaces all writable address fields                | API / Functional | P2       |
+| TC-ACCMP-020  | PATCH /api/company/address/{id}/ partially updates an address                      | API / Functional | P2       |
+| TC-ACCMP-021  | DELETE /api/company/address/{id}/ removes an address                               | API / Functional | P2       |
+| TC-ACCMP-022  | POST /api/company/address/ with missing required fields returns 400                | API / Negative   | P2       |
+| TC-ACCMP-023  | POST /api/company/address/ with non-existent company FK returns 400                | API / Negative   | P2       |
+| TC-ACCMP-024  | GET /api/company/address/ filters addresses by company FK                          | API / Functional | P2       |
+
+## Stock Module API Test Suites
+
+### Stock Items CRUD (api-stock-items-crud)
+
+| TC ID          | Title                                                                                          | Type             | Priority |
+| -------------- | ---------------------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-ASCRUD-001  | GET /api/stock/ returns paginated stock item list with full field set                          | API / Functional | P1       |
+| TC-ASCRUD-002  | GET /api/stock/{id}/ retrieves a single stock item by primary key                             | API / Functional | P1       |
+| TC-ASCRUD-003  | POST /api/stock/ creates a stock item with required fields only                                | API / Functional | P1       |
+| TC-ASCRUD-004  | POST /api/stock/ creates a serialized stock item using serial_numbers write-only field         | API / Functional | P1       |
+| TC-ASCRUD-005  | POST /api/stock/ creates a stock item with a batch code                                        | API / Functional | P2       |
+| TC-ASCRUD-006  | GET /api/stock/ filters by part PK                                                             | API / Functional | P1       |
+| TC-ASCRUD-007  | GET /api/stock/ filters by location PK                                                         | API / Functional | P2       |
+| TC-ASCRUD-008  | GET /api/stock/ filters by status code                                                         | API / Functional | P2       |
+| TC-ASCRUD-009  | GET /api/stock/ filters unlocated items using location=null                                    | API / Functional | P2       |
+| TC-ASCRUD-010  | GET /api/stock/ filters serialized items                                                        | API / Functional | P2       |
+| TC-ASCRUD-011  | PUT /api/stock/{id}/ replaces all writable fields                                              | API / Functional | P2       |
+| TC-ASCRUD-012  | PATCH /api/stock/{id}/ partially updates quantity                                              | API / Functional | P2       |
+| TC-ASCRUD-013  | PATCH /api/stock/{id}/ partially updates location                                              | API / Functional | P2       |
+| TC-ASCRUD-014  | PATCH /api/stock/{id}/ updates status, batch, notes, packaging, and expiry_date               | API / Functional | P2       |
+| TC-ASCRUD-015  | DELETE /api/stock/{id}/ removes a stock item                                                   | API / Functional | P2       |
+| TC-ASCRUD-016  | POST /api/stock/ with non-existent part FK returns 400                                         | API / Negative   | P1       |
+| TC-ASCRUD-017  | POST /api/stock/ with non-existent location FK returns 400                                     | API / Negative   | P2       |
+| TC-ASCRUD-018  | POST /api/stock/ with a structural location returns 400                                        | API / Negative   | P2       |
+| TC-ASCRUD-019  | POST /api/stock/ with missing required fields returns 400                                      | API / Negative   | P1       |
+| TC-ASCRUD-020  | POST /api/stock/ without authentication returns 401 or 403                                     | API / Security   | P1       |
+| TC-ASCRUD-021  | DELETE /api/stock/{id}/ on a non-existent PK returns 404                                       | API / Negative   | P3       |
+| TC-ASCRUD-022  | POST /api/stock/ with negative quantity returns 400                                            | API / Negative   | P2       |
+| TC-ASCRUD-023  | POST /api/stock/ with serial_numbers pattern collision returns 400                              | API / Negative   | P2       |
+
+### Stock Locations CRUD (api-stock-locations-crud)
+
+| TC ID          | Title                                                                                          | Type             | Priority |
+| -------------- | ---------------------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-ALCRUD-001  | GET /api/stock/location/ returns paginated location list with full field set                   | API / Functional | P1       |
+| TC-ALCRUD-002  | GET /api/stock/location/{id}/ retrieves a single location by primary key                       | API / Functional | P1       |
+| TC-ALCRUD-003  | GET /api/stock/location/tree/ returns all locations as lightweight tree nodes                  | API / Functional | P2       |
+| TC-ALCRUD-004  | GET /api/stock/location/ filters top-level locations                                           | API / Functional | P2       |
+| TC-ALCRUD-005  | GET /api/stock/location/ filters structural locations                                          | API / Functional | P2       |
+| TC-ALCRUD-006  | GET /api/stock/location/ filters external locations                                            | API / Functional | P2       |
+| TC-ALCRUD-007  | POST /api/stock/location/ creates a root-level location with required fields only              | API / Functional | P1       |
+| TC-ALCRUD-008  | POST /api/stock/location/ creates a nested child location                                      | API / Functional | P1       |
+| TC-ALCRUD-009  | POST /api/stock/location/ creates a structural location                                        | API / Functional | P2       |
+| TC-ALCRUD-010  | POST /api/stock/location/ creates an external location                                         | API / Functional | P2       |
+| TC-ALCRUD-011  | POST /api/stock/location/ creates a location with a location_type assigned                     | API / Functional | P2       |
+| TC-ALCRUD-012  | PUT /api/stock/location/{id}/ renames a location and updates pathstring                        | API / Functional | P2       |
+| TC-ALCRUD-013  | PATCH /api/stock/location/{id}/ toggles structural flag                                        | API / Functional | P2       |
+| TC-ALCRUD-014  | PATCH /api/stock/location/{id}/ toggles external flag                                          | API / Functional | P2       |
+| TC-ALCRUD-015  | PATCH /api/stock/location/{id}/ reparents a location to a new parent                           | API / Functional | P2       |
+| TC-ALCRUD-016  | PATCH /api/stock/location/{id}/ changes location_type                                          | API / Functional | P2       |
+| TC-ALCRUD-017  | DELETE /api/stock/location/{id}/ removes an empty location                                     | API / Functional | P2       |
+| TC-ALCRUD-018  | DELETE /api/stock/location/{id}/ on a location with stock items returns 400                    | API / Negative   | P2       |
+| TC-ALCRUD-019  | DELETE /api/stock/location/{id}/ on a location with child locations returns 400                | API / Negative   | P2       |
+| TC-ALCRUD-020  | POST /api/stock/location/ with missing required name field returns 400                         | API / Negative   | P1       |
+| TC-ALCRUD-021  | POST /api/stock/location/ with non-existent parent FK returns 400                              | API / Negative   | P2       |
+| TC-ALCRUD-022  | PATCH /api/stock/location/{id}/ with a cyclic parent reference returns 400                     | API / Negative   | P3       |
+| TC-ALCRUD-023  | POST /api/stock/location/ without authentication returns 401 or 403                            | API / Security   | P1       |
+| TC-ALCRUD-024  | GET /api/stock/location/ search filter matches name and pathstring                             | API / Functional | P2       |
+
+### Stock Location Types CRUD (api-stock-location-types-crud)
+
+| TC ID           | Title                                                                                         | Type             | Priority |
+| --------------- | --------------------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-ALTCRUD-001  | GET /api/stock/location-type/ returns a list of location types                                | API / Functional | P1       |
+| TC-ALTCRUD-002  | GET /api/stock/location-type/{id}/ retrieves a single location type                           | API / Functional | P1       |
+| TC-ALTCRUD-003  | POST /api/stock/location-type/ creates a location type with required fields only              | API / Functional | P1       |
+| TC-ALTCRUD-004  | POST /api/stock/location-type/ creates a location type with all fields                        | API / Functional | P2       |
+| TC-ALTCRUD-005  | PUT /api/stock/location-type/{id}/ replaces all writable fields                               | API / Functional | P2       |
+| TC-ALTCRUD-006  | PATCH /api/stock/location-type/{id}/ partially updates description                            | API / Functional | P2       |
+| TC-ALTCRUD-007  | PATCH /api/stock/location-type/{id}/ updates icon                                             | API / Functional | P2       |
+| TC-ALTCRUD-008  | DELETE /api/stock/location-type/{id}/ removes a location type not referenced by any location  | API / Functional | P2       |
+| TC-ALTCRUD-009  | DELETE /api/stock/location-type/{id}/ on a type referenced by locations returns 400           | API / Negative   | P2       |
+| TC-ALTCRUD-010  | POST /api/stock/location-type/ with missing required name returns 400                         | API / Negative   | P1       |
+| TC-ALTCRUD-011  | POST /api/stock/location-type/ with name exceeding 100 characters returns 400                 | API / Negative   | P3       |
+| TC-ALTCRUD-012  | GET /api/stock/location-type/{id}/ with non-existent PK returns 404                           | API / Negative   | P2       |
+| TC-ALTCRUD-013  | POST /api/stock/location-type/ without authentication returns 401 or 403                      | API / Security   | P1       |
+
+### Stock Adjustments (api-stock-adjustments)
+
+| TC ID         | Title                                                                                          | Type             | Priority |
+| ------------- | ---------------------------------------------------------------------------------------------- | ---------------- | -------- |
+| TC-ASADJ-001  | POST /api/stock/add/ increases quantity on a stock item                                        | API / Functional | P1       |
+| TC-ASADJ-002  | POST /api/stock/remove/ decreases quantity on a stock item                                     | API / Functional | P1       |
+| TC-ASADJ-003  | POST /api/stock/count/ sets the absolute quantity (stocktake)                                  | API / Functional | P1       |
+| TC-ASADJ-004  | POST /api/stock/transfer/ moves a stock item to a new location                                 | API / Functional | P1       |
+| TC-ASADJ-005  | POST /api/stock/change_status/ sets a new status code on multiple items                        | API / Functional | P1       |
+| TC-ASADJ-006  | POST /api/stock/assign/ assigns stock items to a customer                                      | API / Functional | P1       |
+| TC-ASADJ-007  | POST /api/stock/merge/ merges two same-part stock items into one                               | API / Functional | P1       |
+| TC-ASADJ-008  | POST /api/stock/return/ returns customer-assigned items into stock                             | API / Functional | P1       |
+| TC-ASADJ-009  | POST /api/stock/merge/ with items from different parts returns 400                             | API / Negative   | P2       |
+| TC-ASADJ-010  | POST /api/stock/transfer/ to a structural location returns 400                                 | API / Negative   | P2       |
+| TC-ASADJ-011  | POST /api/stock/change_status/ with an invalid status code returns 400                         | API / Negative   | P2       |
+| TC-ASADJ-012  | POST /api/stock/add/ with empty items array returns 400                                        | API / Negative   | P3       |
+| TC-ASADJ-013  | POST /api/stock/assign/ with a non-customer company returns 400                                | API / Negative   | P2       |
+| TC-ASADJ-014  | POST /api/stock/remove/ without authentication returns 401 or 403                              | API / Security   | P1       |
+
 ## UI Test Suites
 
 ### Part Creation (ui-parts-creation)
@@ -283,11 +408,21 @@ The following test cases have been archived and replaced with the standardized T
 | TC-AP-PC-008  | TC-APEDGE-001 | Moved to edge cases suite                             |
 | TC-AP-PC-009  | (Future)      | Import session API test (to be implemented)           |
 
+## Future UI Coverage
+
+The following Stock module areas would benefit from UI smoke tests in a future sprint:
+
+- Stock item creation modal (select part, enter quantity, serial/batch, location, status).
+- Stock location tree view — expand/collapse, structural badge, external icon.
+- Stock adjustments via the "Stock Options" dropdown: Add, Remove, Count, Transfer dialogs.
+- Stocktake date and expiry date columns in the stock items table.
+- Stock tracking history tab on a Stock Item detail page.
+
 ## Summary Statistics
 
-- **Total Test Cases:** 150
-- **API Test Cases:** 80
+- **Total Test Cases:** 248
+- **API Test Cases:** 178
 - **UI Test Cases:** 70
-- **P1 Priority:** 65
-- **P2 Priority:** 72
-- **P3 Priority:** 13
+- **P1 Priority:** 109
+- **P2 Priority:** 123
+- **P3 Priority:** 16

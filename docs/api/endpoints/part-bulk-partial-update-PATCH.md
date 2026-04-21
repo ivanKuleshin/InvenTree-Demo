@@ -30,12 +30,12 @@ Note that the typical DRF list endpoint does not support PATCH, so this method i
 
 | Content-Type                        | Schema                                           |
 | ----------------------------------- | ------------------------------------------------ |
-| `application/json`                  | [PatchedPart](../part-api-schema.md#patchedpart) |
-| `application/x-www-form-urlencoded` | [PatchedPart](../part-api-schema.md#patchedpart) |
-| `multipart/form-data`               | [PatchedPart](../part-api-schema.md#patchedpart) |
+| `application/json`                  | [PatchedPart](../part-api/part-api-schema.md#patchedpart) |
+| `application/x-www-form-urlencoded` | [PatchedPart](../part-api/part-api-schema.md#patchedpart) |
+| `multipart/form-data`               | [PatchedPart](../part-api/part-api-schema.md#patchedpart) |
 
 ## Responses
 
 | Status Code | Description | Schema                             |
 | ----------- | ----------- | ---------------------------------- |
-| 200         | OK          | [Part](../part-api-schema.md#part) |
+| 200         | OK          | [Part](../part-api/part-api-schema.md#part) |

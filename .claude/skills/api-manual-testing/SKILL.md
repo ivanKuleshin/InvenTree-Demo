@@ -1,6 +1,6 @@
 ---
 name: api-manual-testing.md
-description: Manually probes the InvenTree REST API, records real observed responses, and writes grounded TC-AP* test cases to test-cases/. Invoke when exploring API behavior, discovering edge cases, or producing evidence-based test cases from live calls.
+description: Use to explore InvenTree REST API behavior via live calls and produce test cases grounded in real observed responses. Invoke when the goal is: understanding what an endpoint actually returns (fields, status codes, error shapes), generating TC-* test cases for any InvenTree module (Parts, Categories, Stock, Pricing, etc.), verifying 4xx/5xx error scenarios, or covering a functional area with structured API test cases backed by live evidence rather than documentation assumptions. Triggers on "probe", "explore", "what happens when", "cover with tests", "check the API", or any request to document real API behavior and produce test cases from it.
 tools: [Read, Glob, WebFetch, Write, AskUserQuestion, playwright-mcp]
 ---
 
@@ -63,4 +63,4 @@ Output a table to the conversation:
 - **Always probe GET before POST/PATCH/DELETE on any resource.** Why: the demo is shared; reading first confirms the resource state before mutating it, reducing data corruption for concurrent users.
 - **Record observed HTTP status AND a representative response body snippet in every TC.** Why: downstream automation agents copy assertions directly from these TCs — vague "should return success" leads to useless smoke tests.
 - **Never embed credentials in test case files.** Why: `test-cases/` is git-tracked; credentials committed to repo history cannot be fully revoked.
-- **Mark unprobed TCs with `[ASSUMED]`.** Why: if WebFetch fails or an endpoint is unavailable, the TC must be flagged so automation agents know it was not verified against live behavior.
+- **Mark unprobed TCs with `[ASSUMED]` and never present inferred responses as observed.** Why: if Bash, WebFetch, or playwright-mcp fails for write calls, use `[ASSUMED]` on both the status AND the response snippet — do not copy a response from docs or another TC and present it as a live observation. Automation agents copying assertions from these TCs must know which assertions are verified vs. theoretical.

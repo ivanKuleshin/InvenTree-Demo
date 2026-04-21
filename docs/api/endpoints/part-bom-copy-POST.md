@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                           |
 | ----------------------------------- | ------------------------------------------------ |
-| `application/json`                  | [PartCopyBOM](../part-api-schema.md#partcopybom) |
-| `application/x-www-form-urlencoded` | [PartCopyBOM](../part-api-schema.md#partcopybom) |
-| `multipart/form-data`               | [PartCopyBOM](../part-api-schema.md#partcopybom) |
+| `application/json`                  | [PartCopyBOM](../part-api/part-api-schema.md#partcopybom) |
+| `application/x-www-form-urlencoded` | [PartCopyBOM](../part-api/part-api-schema.md#partcopybom) |
+| `multipart/form-data`               | [PartCopyBOM](../part-api/part-api-schema.md#partcopybom) |
 
 ## Responses
 
 | Status Code | Description | Schema                                           |
 | ----------- | ----------- | ------------------------------------------------ |
-| 201         | Created     | [PartCopyBOM](../part-api-schema.md#partcopybom) |
+| 201         | Created     | [PartCopyBOM](../part-api/part-api-schema.md#partcopybom) |

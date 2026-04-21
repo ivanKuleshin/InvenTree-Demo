@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                                     |
 | ----------------------------------- | -------------------------------------------------------------------------- |
-| `application/json`                  | [PatchedPartInternalPrice](../part-api-schema.md#patchedpartinternalprice) |
-| `application/x-www-form-urlencoded` | [PatchedPartInternalPrice](../part-api-schema.md#patchedpartinternalprice) |
-| `multipart/form-data`               | [PatchedPartInternalPrice](../part-api-schema.md#patchedpartinternalprice) |
+| `application/json`                  | [PatchedPartInternalPrice](../part-api/part-api-schema.md#patchedpartinternalprice) |
+| `application/x-www-form-urlencoded` | [PatchedPartInternalPrice](../part-api/part-api-schema.md#patchedpartinternalprice) |
+| `multipart/form-data`               | [PatchedPartInternalPrice](../part-api/part-api-schema.md#patchedpartinternalprice) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                       |
 | ----------- | ----------- | ------------------------------------------------------------ |
-| 200         | OK          | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
+| 200         | OK          | [PartInternalPrice](../part-api/part-api-schema.md#partinternalprice) |

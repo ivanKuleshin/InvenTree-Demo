@@ -34,4 +34,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                               |
 | ----------- | ----------- | ---------------------------------------------------- |
-| 200         | OK          | [PartStocktake](../part-api-schema.md#partstocktake) |
+| 200         | OK          | [PartStocktake](../part-api/part-api-schema.md#partstocktake) |

@@ -41,4 +41,4 @@ As this data is somewhat complex to calculate, it is not included in the default
 
 | Status Code | Description | Schema                                                     |
 | ----------- | ----------- | ---------------------------------------------------------- |
-| 200         | OK          | [PartRequirements](../part-api-schema.md#partrequirements) |
+| 200         | OK          | [PartRequirements](../part-api/part-api-schema.md#partrequirements) |

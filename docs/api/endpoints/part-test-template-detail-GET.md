@@ -32,4 +32,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                     |
 | ----------- | ----------- | ---------------------------------------------------------- |
-| 200         | OK          | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| 200         | OK          | [PartTestTemplate](../part-api/part-api-schema.md#parttesttemplate) |

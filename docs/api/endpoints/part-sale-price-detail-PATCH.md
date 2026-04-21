@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                             |
 | ----------------------------------- | ------------------------------------------------------------------ |
-| `application/json`                  | [PatchedPartSalePrice](../part-api-schema.md#patchedpartsaleprice) |
-| `application/x-www-form-urlencoded` | [PatchedPartSalePrice](../part-api-schema.md#patchedpartsaleprice) |
-| `multipart/form-data`               | [PatchedPartSalePrice](../part-api-schema.md#patchedpartsaleprice) |
+| `application/json`                  | [PatchedPartSalePrice](../part-api/part-api-schema.md#patchedpartsaleprice) |
+| `application/x-www-form-urlencoded` | [PatchedPartSalePrice](../part-api/part-api-schema.md#patchedpartsaleprice) |
+| `multipart/form-data`               | [PatchedPartSalePrice](../part-api/part-api-schema.md#patchedpartsaleprice) |
 
 ## Responses
 
 | Status Code | Description | Schema                                               |
 | ----------- | ----------- | ---------------------------------------------------- |
-| 200         | OK          | [PartSalePrice](../part-api-schema.md#partsaleprice) |
+| 200         | OK          | [PartSalePrice](../part-api/part-api-schema.md#partsaleprice) |

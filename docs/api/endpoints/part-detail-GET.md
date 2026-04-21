@@ -43,4 +43,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                             |
 | ----------- | ----------- | ---------------------------------- |
-| 200         | OK          | [Part](../part-api-schema.md#part) |
+| 200         | OK          | [Part](../part-api/part-api-schema.md#part) |

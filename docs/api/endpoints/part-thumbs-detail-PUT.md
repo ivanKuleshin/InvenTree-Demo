@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                                       |
 | ----------------------------------- | ---------------------------------------------------------------------------- |
-| `application/json`                  | [PartThumbSerializerUpdate](../part-api-schema.md#partthumbserializerupdate) |
-| `application/x-www-form-urlencoded` | [PartThumbSerializerUpdate](../part-api-schema.md#partthumbserializerupdate) |
-| `multipart/form-data`               | [PartThumbSerializerUpdate](../part-api-schema.md#partthumbserializerupdate) |
+| `application/json`                  | [PartThumbSerializerUpdate](../part-api/part-api-schema.md#partthumbserializerupdate) |
+| `application/x-www-form-urlencoded` | [PartThumbSerializerUpdate](../part-api/part-api-schema.md#partthumbserializerupdate) |
+| `multipart/form-data`               | [PartThumbSerializerUpdate](../part-api/part-api-schema.md#partthumbserializerupdate) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                                       |
 | ----------- | ----------- | ---------------------------------------------------------------------------- |
-| 200         | OK          | [PartThumbSerializerUpdate](../part-api-schema.md#partthumbserializerupdate) |
+| 200         | OK          | [PartThumbSerializerUpdate](../part-api/part-api-schema.md#partthumbserializerupdate) |

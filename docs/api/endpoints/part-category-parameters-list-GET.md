@@ -33,4 +33,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                                                 |
 | ----------- | ----------- | ------------------------------------------------------------------------------------------------------ |
-| 200         | OK          | [PaginatedCategoryParameterTemplateList](../part-api-schema.md#paginatedcategoryparametertemplatelist) |
+| 200         | OK          | [PaginatedCategoryParameterTemplateList](../part-api/part-api-schema.md#paginatedcategoryparametertemplatelist) |

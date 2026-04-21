@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                           |
 | ----------------------------------- | ---------------------------------------------------------------- |
-| `application/json`                  | [PatchedPartRelation](../part-api-schema.md#patchedpartrelation) |
-| `application/x-www-form-urlencoded` | [PatchedPartRelation](../part-api-schema.md#patchedpartrelation) |
-| `multipart/form-data`               | [PatchedPartRelation](../part-api-schema.md#patchedpartrelation) |
+| `application/json`                  | [PatchedPartRelation](../part-api/part-api-schema.md#patchedpartrelation) |
+| `application/x-www-form-urlencoded` | [PatchedPartRelation](../part-api/part-api-schema.md#patchedpartrelation) |
+| `multipart/form-data`               | [PatchedPartRelation](../part-api/part-api-schema.md#patchedpartrelation) |
 
 ## Responses
 
 | Status Code | Description | Schema                                             |
 | ----------- | ----------- | -------------------------------------------------- |
-| 200         | OK          | [PartRelation](../part-api-schema.md#partrelation) |
+| 200         | OK          | [PartRelation](../part-api/part-api-schema.md#partrelation) |

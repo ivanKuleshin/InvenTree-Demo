@@ -30,9 +30,9 @@ Note that the typical DRF list endpoint does not support DELETE, so this method 
 
 | Content-Type                        | Schema                                           |
 | ----------------------------------- | ------------------------------------------------ |
-| `application/json`                  | [BulkRequest](../part-api-schema.md#bulkrequest) |
-| `application/x-www-form-urlencoded` | [BulkRequest](../part-api-schema.md#bulkrequest) |
-| `multipart/form-data`               | [BulkRequest](../part-api-schema.md#bulkrequest) |
+| `application/json`                  | [BulkRequest](../part-api/part-api-schema.md#bulkrequest) |
+| `application/x-www-form-urlencoded` | [BulkRequest](../part-api/part-api-schema.md#bulkrequest) |
+| `multipart/form-data`               | [BulkRequest](../part-api/part-api-schema.md#bulkrequest) |
 
 ## Responses
 

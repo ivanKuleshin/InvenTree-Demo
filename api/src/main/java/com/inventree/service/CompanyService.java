@@ -22,6 +22,10 @@ public class CompanyService extends BaseClient {
         return ResponseValidator.deserialize(response, new TypeReference<PaginatedResponse<Company>>() {});
     }
 
+    public PaginatedResponse<Company> listCompanies(Role role) {
+        return listCompanies(null, role);
+    }
+
     public List<SupplierPart> listSupplierParts(Map<String, Object> queryParams, Role role) {
         Response response = executeGet(ApiConstants.SUPPLIER_PART_ENDPOINT, role, queryParams);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_OK);

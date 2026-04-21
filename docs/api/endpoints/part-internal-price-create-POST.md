@@ -28,12 +28,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                       |
 | ----------------------------------- | ------------------------------------------------------------ |
-| `application/json`                  | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
-| `application/x-www-form-urlencoded` | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
-| `multipart/form-data`               | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
+| `application/json`                  | [PartInternalPrice](../part-api/part-api-schema.md#partinternalprice) |
+| `application/x-www-form-urlencoded` | [PartInternalPrice](../part-api/part-api-schema.md#partinternalprice) |
+| `multipart/form-data`               | [PartInternalPrice](../part-api/part-api-schema.md#partinternalprice) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                       |
 | ----------- | ----------- | ------------------------------------------------------------ |
-| 201         | Created     | [PartInternalPrice](../part-api-schema.md#partinternalprice) |
+| 201         | Created     | [PartInternalPrice](../part-api/part-api-schema.md#partinternalprice) |

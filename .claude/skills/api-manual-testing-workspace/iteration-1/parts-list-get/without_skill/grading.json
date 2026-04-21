@@ -1,0 +1,64 @@
+{
+  "expectations": [
+    {
+      "text": "A plan file is written to a path under test-cases/ before any probing begins",
+      "passed": false,
+      "evidence": "No api-manual-plan.md or any plan file found in test-cases/api/eval1-parts-list-get-baseline/. Baseline agent went directly to writing individual TC files without a prior planning step."
+    },
+    {
+      "text": "The plan file contains a table mapping coverage areas to endpoints and TC IDs to produce",
+      "passed": false,
+      "evidence": "No plan file exists. Assertion cannot be satisfied."
+    },
+    {
+      "text": "The probe log file records at least one GET /api/part/ call with an observed HTTP status code",
+      "passed": false,
+      "evidence": "No probe log file found in test-cases/api/eval1-parts-list-get-baseline/. The baseline agent wrote only individual TC files with no separate log of API calls."
+    },
+    {
+      "text": "Each written TC-APCRUD-* test case contains an 'Observed' section with a real HTTP status code (not '[ASSUMED]')",
+      "passed": false,
+      "evidence": "TC-APCRUD-001.md uses a custom format with '## Expected Response' (Status: 200 OK) and '## Observed Sample' sections — not the skill's tc-template '**Observed** (filled during probe):' format. The Observed section contains a JSON snippet but does not explicitly state the HTTP status code."
+    },
+    {
+      "text": "At least one TC shows how query flags (parameters=true or category_detail=true) affect the response shape",
+      "passed": true,
+      "evidence": "TC-APCRUD-005 covers parameters=true flag; TC-APCRUD-006 covers category_detail=true; TC-APCRUD-009 covers combined flags. All have real observed response shapes."
+    },
+    {
+      "text": "No hardcoded credential values (passwords, tokens, base64 strings) appear in any written test case file",
+      "passed": false,
+      "evidence": "TC-APCRUD-001.md contains: 'Authorization: Basic cmVhZGVyOnJlYWRvbmx5' — this is actual base64-encoded credentials (reader:readonly). Credential embedded in a git-tracked test case file."
+    },
+    {
+      "text": "Phase 4 summary table is output to the conversation listing suite name, endpoints probed, and TC count",
+      "passed": false,
+      "evidence": "Baseline agent produced no Phase 4 summary table in the conversation. It only listed what was accomplished in a bullet list without the structured table format."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 6,
+    "total": 7,
+    "pass_rate": 0.14
+  },
+  "execution_metrics": {
+    "tool_calls": { "Read": 5, "Write": 9, "Glob": 2, "Bash": 30, "mcp_playwright": 0 },
+    "total_tool_calls": 56,
+    "total_steps": 3,
+    "files_created": [
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-001.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-002.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-003.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-004.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-005.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-006.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-007.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-008.md",
+      "test-cases/api/eval1-parts-list-get-baseline/TC-APCRUD-009.md"
+    ],
+    "errors_encountered": 1,
+    "output_chars": 11000,
+    "transcript_chars": 2800
+  }
+}

@@ -32,4 +32,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                               |
 | ----------- | ----------- | ---------------------------------------------------- |
-| 200         | OK          | [PartSalePrice](../part-api-schema.md#partsaleprice) |
+| 200         | OK          | [PartSalePrice](../part-api/part-api-schema.md#partsaleprice) |

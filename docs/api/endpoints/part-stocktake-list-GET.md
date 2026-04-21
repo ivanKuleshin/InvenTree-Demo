@@ -35,4 +35,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                         |
 | ----------- | ----------- | ------------------------------------------------------------------------------ |
-| 200         | OK          | [PaginatedPartStocktakeList](../part-api-schema.md#paginatedpartstocktakelist) |
+| 200         | OK          | [PaginatedPartStocktakeList](../part-api/part-api-schema.md#paginatedpartstocktakelist) |

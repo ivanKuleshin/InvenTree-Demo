@@ -34,4 +34,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                       |
 | ----------- | ----------- | ---------------------------------------------------------------------------- |
-| 200         | OK          | [PaginatedCategoryTreeList](../part-api-schema.md#paginatedcategorytreelist) |
+| 200         | OK          | [PaginatedCategoryTreeList](../part-api/part-api-schema.md#paginatedcategorytreelist) |

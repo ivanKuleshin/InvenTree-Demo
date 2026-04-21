@@ -30,12 +30,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                                       |
 | ----------------------------------- | ---------------------------------------------------------------------------- |
-| `application/json`                  | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
-| `application/x-www-form-urlencoded` | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
-| `multipart/form-data`               | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
+| `application/json`                  | [CategoryParameterTemplate](../part-api/part-api-schema.md#categoryparametertemplate) |
+| `application/x-www-form-urlencoded` | [CategoryParameterTemplate](../part-api/part-api-schema.md#categoryparametertemplate) |
+| `multipart/form-data`               | [CategoryParameterTemplate](../part-api/part-api-schema.md#categoryparametertemplate) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                                       |
 | ----------- | ----------- | ---------------------------------------------------------------------------- |
-| 201         | Created     | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
+| 201         | Created     | [CategoryParameterTemplate](../part-api/part-api-schema.md#categoryparametertemplate) |

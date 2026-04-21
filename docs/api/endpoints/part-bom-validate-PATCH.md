@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                                 |
 | ----------------------------------- | ---------------------------------------------------------------------- |
-| `application/json`                  | [PatchedPartBomValidate](../part-api-schema.md#patchedpartbomvalidate) |
-| `application/x-www-form-urlencoded` | [PatchedPartBomValidate](../part-api-schema.md#patchedpartbomvalidate) |
-| `multipart/form-data`               | [PatchedPartBomValidate](../part-api-schema.md#patchedpartbomvalidate) |
+| `application/json`                  | [PatchedPartBomValidate](../part-api/part-api-schema.md#patchedpartbomvalidate) |
+| `application/x-www-form-urlencoded` | [PatchedPartBomValidate](../part-api/part-api-schema.md#patchedpartbomvalidate) |
+| `multipart/form-data`               | [PatchedPartBomValidate](../part-api/part-api-schema.md#patchedpartbomvalidate) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                   |
 | ----------- | ----------- | -------------------------------------------------------- |
-| 200         | OK          | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
+| 200         | OK          | [PartBomValidate](../part-api/part-api-schema.md#partbomvalidate) |

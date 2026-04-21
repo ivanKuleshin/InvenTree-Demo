@@ -36,4 +36,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                                 |
 | ----------- | ----------- | -------------------------------------------------------------------------------------- |
-| 200         | OK          | [PaginatedPartInternalPriceList](../part-api-schema.md#paginatedpartinternalpricelist) |
+| 200         | OK          | [PaginatedPartInternalPriceList](../part-api/part-api-schema.md#paginatedpartinternalpricelist) |

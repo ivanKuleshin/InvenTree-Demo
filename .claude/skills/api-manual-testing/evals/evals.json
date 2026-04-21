@@ -1,0 +1,50 @@
+{
+  "skill_name": "api-manual-testing.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need manual test cases for the InvenTree Parts API — just read-only for now. Please probe GET /api/part/ (list) and GET /api/part/{id}/ (single part detail). I want to see how query flags like ?parameters=true and ?category_detail=true affect the response shape. Produce TC-APCRUD-NNN test cases. Only read-only calls please, no writes.",
+      "expected_output": "A probe plan file is written first, confirming read-only scope. The skill probes both endpoints live, logs observed HTTP status codes and response shapes. A test suite file is written with at least 2 TC-APCRUD-* test cases, each with a filled Observed block (real status code, response snippet, 'Matches spec' verdict). A log file records the probing steps. No credentials appear anywhere in the output files.",
+      "files": [],
+      "assertions": [
+        "A plan file is written to a path under test-cases/ before any probing begins",
+        "The plan file contains a table mapping coverage areas to endpoints and TC IDs to produce",
+        "The probe log file records at least one GET /api/part/ call with an observed HTTP status code",
+        "Each written TC-APCRUD-* test case contains an 'Observed' section with a real HTTP status code (not '[ASSUMED]')",
+        "At least one TC shows how query flags (parameters=true or category_detail=true) affect the response shape",
+        "No hardcoded credential values (passwords, tokens, base64 strings) appear in any written test case file",
+        "Phase 4 summary table is output to the conversation listing suite name, endpoints probed, and TC count"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Please probe the Part Categories API at /api/part/category/. I want full CRUD coverage: GET list, GET single, POST create a new category, PATCH rename it, DELETE remove it. Write TC-ACCRUD-NNN test cases covering the happy path for each operation. Go ahead and include the mutating calls.",
+      "expected_output": "The plan file marks POST/PATCH/DELETE endpoints as [MUTATING]. The skill asks the user for confirmation before executing any write calls. After confirmation, it probes all five operations in order (GET list first, then single, then POST, then PATCH using the created resource's PK, then DELETE the same resource). Each TC has an Observed block with real status codes (200 for GETs, 201 for POST, 200 for PATCH, 204 for DELETE). A data-preparation step is visible for the write TCs (creates before updating/deleting). The test suite file uses TC-ACCRUD-NNN IDs.",
+      "files": [],
+      "assertions": [
+        "The plan file flags POST, PATCH, and DELETE endpoints with '[MUTATING]'",
+        "AskUserQuestion tool is called (or plan step includes a confirmation request) before any POST/PATCH/DELETE probe is executed",
+        "The probe log includes a POST /api/part/category/ entry with an observed HTTP status of 201",
+        "Each written TC-ACCRUD-* test case contains an 'Observed' section with a real HTTP status code",
+        "The PATCH and DELETE TCs reference a resource created in the same probing session (dynamic PK, not a hardcoded one from docs)",
+        "A DELETE TC shows observed status 204 (or records the actual status if it differs)",
+        "No credentials are embedded in any written test case file"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I need negative / validation test cases for POST /api/part/. Specifically: what happens when required fields are missing, when you pass an invalid data type for a numeric field, and when you try to create a part with a name that already exists (if the API enforces uniqueness). Probe the endpoint with bad payloads and write TC-APVAL-NNN test cases showing the real 4xx error responses.",
+      "expected_output": "The skill probes POST /api/part/ multiple times with intentionally bad request bodies. At least 3 negative scenarios are probed: missing required field (e.g., no 'name'), wrong type (e.g., category as a string instead of integer), and a boundary/duplicate case. Each TC-APVAL-* test case has an Observed block showing a 4xx HTTP status and the actual error response body (field-level error messages). TCs are tagged P2 or P3 priority per the template guide. The skill correctly distinguishes between 400 Bad Request (validation error) and 401 Unauthorized.",
+      "files": [],
+      "assertions": [
+        "At least one TC-APVAL-* test case shows an observed HTTP status of 400 with a validation error response body snippet (directly probed or explicitly marked [ASSUMED])",
+        "Each TC-APVAL-* Observed block contains a response snippet showing the field-level error message; any TC not directly probed must be marked [ASSUMED] rather than presenting inferred data as observed",
+        "The Request section of each validation TC shows the specific invalid payload that was sent",
+        "TCs are assigned priority P2 or P3 (not P1), consistent with the skill's priority guide for validation and edge cases",
+        "The plan file identifies at least 3 distinct validation scenarios before probing begins",
+        "If the API returns a different status than 400 for any scenario (e.g., 409 for conflict), the TC notes the divergence from expectation in the Notes field",
+        "No credential values are embedded in test case files"
+      ]
+    }
+  ]
+}

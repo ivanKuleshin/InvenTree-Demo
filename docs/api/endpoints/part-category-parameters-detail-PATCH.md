@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                                                     |
 | ----------------------------------- | ------------------------------------------------------------------------------------------ |
-| `application/json`                  | [PatchedCategoryParameterTemplate](../part-api-schema.md#patchedcategoryparametertemplate) |
-| `application/x-www-form-urlencoded` | [PatchedCategoryParameterTemplate](../part-api-schema.md#patchedcategoryparametertemplate) |
-| `multipart/form-data`               | [PatchedCategoryParameterTemplate](../part-api-schema.md#patchedcategoryparametertemplate) |
+| `application/json`                  | [PatchedCategoryParameterTemplate](../part-api/part-api-schema.md#patchedcategoryparametertemplate) |
+| `application/x-www-form-urlencoded` | [PatchedCategoryParameterTemplate](../part-api/part-api-schema.md#patchedcategoryparametertemplate) |
+| `multipart/form-data`               | [PatchedCategoryParameterTemplate](../part-api/part-api-schema.md#patchedcategoryparametertemplate) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                                       |
 | ----------- | ----------- | ---------------------------------------------------------------------------- |
-| 200         | OK          | [CategoryParameterTemplate](../part-api-schema.md#categoryparametertemplate) |
+| 200         | OK          | [CategoryParameterTemplate](../part-api/part-api-schema.md#categoryparametertemplate) |

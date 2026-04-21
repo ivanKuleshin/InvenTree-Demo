@@ -38,4 +38,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                     |
 | ----------- | ----------- | ------------------------------------------ |
-| 200         | OK          | [Category](../part-api-schema.md#category) |
+| 200         | OK          | [Category](../part-api/part-api-schema.md#category) |

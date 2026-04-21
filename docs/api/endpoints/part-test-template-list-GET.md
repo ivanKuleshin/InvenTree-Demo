@@ -42,4 +42,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                               |
 | ----------- | ----------- | ------------------------------------------------------------------------------------ |
-| 200         | OK          | [PaginatedPartTestTemplateList](../part-api-schema.md#paginatedparttesttemplatelist) |
+| 200         | OK          | [PaginatedPartTestTemplateList](../part-api/part-api-schema.md#paginatedparttesttemplatelist) |

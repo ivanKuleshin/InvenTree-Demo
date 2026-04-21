@@ -36,4 +36,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                         |
 | ----------- | ----------- | ------------------------------------------------------------------------------ |
-| 200         | OK          | [PaginatedPartSalePriceList](../part-api-schema.md#paginatedpartsalepricelist) |
+| 200         | OK          | [PaginatedPartSalePriceList](../part-api/part-api-schema.md#paginatedpartsalepricelist) |

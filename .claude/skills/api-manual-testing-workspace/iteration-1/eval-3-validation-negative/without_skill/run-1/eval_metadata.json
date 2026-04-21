@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "validation-negative",
+  "prompt": "I need negative / validation test cases for POST /api/part/. Specifically: what happens when required fields are missing, when you pass an invalid data type for a numeric field, and when you try to create a part with a name that already exists (if the API enforces uniqueness). Probe the endpoint with bad payloads and write TC-APVAL-NNN test cases showing the real 4xx error responses.",
+  "assertions": [
+    "At least one TC-APVAL-* test case shows an observed HTTP status of 400 with a validation error response body snippet",
+    "Each TC-APVAL-* Observed block contains an actual error response snippet (not just a status code), showing the field-level error message returned by the API",
+    "The Request section of each validation TC shows the specific invalid payload that was sent",
+    "TCs are assigned priority P2 or P3 (not P1), consistent with the skill's priority guide for validation and edge cases",
+    "The plan file identifies at least 3 distinct validation scenarios before probing begins",
+    "If the API returns a different status than 400 for any scenario (e.g., 409 for conflict), the TC notes the divergence from expectation in the Notes field",
+    "No credential values are embedded in test case files"
+  ]
+}

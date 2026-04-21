@@ -34,4 +34,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                                 |
 | ----------- | ----------- | ---------------------------------------------------------------------- |
-| 200         | OK          | [PaginatedPartThumbList](../part-api-schema.md#paginatedpartthumblist) |
+| 200         | OK          | [PaginatedPartThumbList](../part-api/part-api-schema.md#paginatedpartthumblist) |

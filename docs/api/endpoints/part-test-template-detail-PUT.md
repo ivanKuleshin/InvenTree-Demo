@@ -34,12 +34,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                                     |
 | ----------------------------------- | ---------------------------------------------------------- |
-| `application/json`                  | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
-| `application/x-www-form-urlencoded` | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
-| `multipart/form-data`               | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| `application/json`                  | [PartTestTemplate](../part-api/part-api-schema.md#parttesttemplate) |
+| `application/x-www-form-urlencoded` | [PartTestTemplate](../part-api/part-api-schema.md#parttesttemplate) |
+| `multipart/form-data`               | [PartTestTemplate](../part-api/part-api-schema.md#parttesttemplate) |
 
 ## Responses
 
 | Status Code | Description | Schema                                                     |
 | ----------- | ----------- | ---------------------------------------------------------- |
-| 200         | OK          | [PartTestTemplate](../part-api-schema.md#parttesttemplate) |
+| 200         | OK          | [PartTestTemplate](../part-api/part-api-schema.md#parttesttemplate) |

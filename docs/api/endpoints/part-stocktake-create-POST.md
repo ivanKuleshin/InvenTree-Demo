@@ -28,12 +28,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                                               |
 | ----------------------------------- | ---------------------------------------------------- |
-| `application/json`                  | [PartStocktake](../part-api-schema.md#partstocktake) |
-| `application/x-www-form-urlencoded` | [PartStocktake](../part-api-schema.md#partstocktake) |
-| `multipart/form-data`               | [PartStocktake](../part-api-schema.md#partstocktake) |
+| `application/json`                  | [PartStocktake](../part-api/part-api-schema.md#partstocktake) |
+| `application/x-www-form-urlencoded` | [PartStocktake](../part-api/part-api-schema.md#partstocktake) |
+| `multipart/form-data`               | [PartStocktake](../part-api/part-api-schema.md#partstocktake) |
 
 ## Responses
 
 | Status Code | Description | Schema                                               |
 | ----------- | ----------- | ---------------------------------------------------- |
-| 201         | Created     | [PartStocktake](../part-api-schema.md#partstocktake) |
+| 201         | Created     | [PartStocktake](../part-api/part-api-schema.md#partstocktake) |

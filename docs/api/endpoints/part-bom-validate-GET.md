@@ -32,4 +32,4 @@ fetched: 2026-04-13
 
 | Status Code | Description | Schema                                                   |
 | ----------- | ----------- | -------------------------------------------------------- |
-| 200         | OK          | [PartBomValidate](../part-api-schema.md#partbomvalidate) |
+| 200         | OK          | [PartBomValidate](../part-api/part-api-schema.md#partbomvalidate) |

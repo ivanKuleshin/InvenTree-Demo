@@ -28,12 +28,12 @@ fetched: 2026-04-13
 
 | Content-Type                        | Schema                             |
 | ----------------------------------- | ---------------------------------- |
-| `application/json`                  | [Part](../part-api-schema.md#part) |
-| `application/x-www-form-urlencoded` | [Part](../part-api-schema.md#part) |
-| `multipart/form-data`               | [Part](../part-api-schema.md#part) |
+| `application/json`                  | [Part](../part-api/part-api-schema.md#part) |
+| `application/x-www-form-urlencoded` | [Part](../part-api/part-api-schema.md#part) |
+| `multipart/form-data`               | [Part](../part-api/part-api-schema.md#part) |
 
 ## Responses
 
 | Status Code | Description | Schema                             |
 | ----------- | ----------- | ---------------------------------- |
-| 200         | OK          | [Part](../part-api-schema.md#part) |
+| 200         | OK          | [Part](../part-api/part-api-schema.md#part) |
