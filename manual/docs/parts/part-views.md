@@ -39,7 +39,7 @@ The Part detail view page provides a detailed view of a single part in the syste
 
 ### Category Breadcrumb List
 
-The categories of each part is displayed on the top navigation bar as shown in the above screenshot. [Click here](./part-overview.md#part-category) for more information about categories.
+The categories of each part is displayed on the top navigation bar as shown in the above screenshot. [Click here](part-overview.md#part-category) for more information about categories.
 
 ## Part Details
 
@@ -73,7 +73,7 @@ The Part view page organizes part data into sections, displayed as tabs. Each ta
 
 If a part is a _Template Part_ then the _Variants_ tab will be visible.
 
-[Read about Part templates and variants](./part-template.md).
+[Read about Part templates and variants](part-template.md).
 
 ### Stock
 
@@ -137,7 +137,7 @@ The _Stock History_ tab provides historical stock level information. Refer to th
 
 ### Test Templates
 
-If a part is marked as _testable_, the user can define tests which must be performed on any stock items which are instances of this part. [Read more about testing](./part-test-templates.md).
+If a part is marked as _testable_, the user can define tests which must be performed on any stock items which are instances of this part. [Read more about testing](part-test-templates.md).
 
 ### Related Parts
 

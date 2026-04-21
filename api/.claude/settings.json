@@ -1,0 +1,9 @@
+{
+  "claudeMdExcludes": [
+    "/Users/Ivan_Kuleshin/IdeaProjects/InvenTree-Demo/.claude/CLAUDE.md"
+  ],
+  "skillOverrides": {
+    "api-manual-testing": "off",
+    "ui-manual-testing": "off"
+  }
+}

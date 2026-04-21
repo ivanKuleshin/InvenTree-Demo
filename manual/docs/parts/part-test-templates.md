@@ -26,7 +26,7 @@ fetched: 2026-04-13
 
 ## Part Test Templates
 
-Parts which are designated as [testable](./part-overview.md#testable) can define templates for tests which are to be performed against individual stock items corresponding to the part.
+Parts which are designated as [testable](part-overview.md#testable) can define templates for tests which are to be performed against individual stock items corresponding to the part.
 
 A test template defines the parameters of the test; the individual stock items can then have associated test results which correspond to a test template.
 

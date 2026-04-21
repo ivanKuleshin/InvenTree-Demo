@@ -139,16 +139,16 @@
 
     <build>
         <!-- Source roots live under api/ subdirectory -->
-        <sourceDirectory>api/src/main/java</sourceDirectory>
-        <testSourceDirectory>api/src/test/java</testSourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
             <resource>
-                <directory>api/src/main/resources</directory>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
         <testResources>
             <testResource>
-                <directory>api/src/test/resources</directory>
+                <directory>src/test/resources</directory>
             </testResource>
         </testResources>
 

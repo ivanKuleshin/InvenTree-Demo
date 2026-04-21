@@ -51,7 +51,7 @@ The category part list provides an overview of each part:
 
 The list of parts underneath a given category can be filtered by multiple user-configurable filters, which is especially useful when a large number of parts exist under a certain category.
 
-Clicking on the part name links to the [_Part Detail_](./part-views.md) view.
+Clicking on the part name links to the [_Part Detail_](part-views.md) view.
 
 ## Part Attributes
 
@@ -59,11 +59,11 @@ Each _Part_ defined in the database provides a number of different attributes wh
 
 ### Virtual
 
-A _Virtual_ part is one which does not physically exist but should still be tracked in the system. This could be a process step, machine time, software license, etc. Refer to the [virtual parts documentation](./part-virtual.md) for more information.
+A _Virtual_ part is one which does not physically exist but should still be tracked in the system. This could be a process step, machine time, software license, etc. Refer to the [virtual parts documentation](part-virtual.md) for more information.
 
 ### Template
 
-A _Template_ part is one which can have _variants_ which exist underneath it. [Read further information about template parts here](./part-template.md).
+A _Template_ part is one which can have _variants_ which exist underneath it. [Read further information about template parts here](part-template.md).
 
 ### Assembly
 
@@ -75,13 +75,13 @@ If a part is designated as a _Component_ it can be used as a sub-component of an
 
 ### Testable
 
-Testable parts can have test templates defined against the part, allowing test results to be recorded against any stock items for that part. For more information on testing, refer to the [testing documentation](./part-test-templates.md).
+Testable parts can have test templates defined against the part, allowing test results to be recorded against any stock items for that part. For more information on testing, refer to the [testing documentation](part-test-templates.md).
 
 ### Trackable
 
 Trackable parts can be assigned batch numbers or serial numbers which uniquely identify a particular stock item. Trackable parts also provide other features (and restrictions) in the InvenTree ecosystem.
 
-[Read further information about trackable parts here](./part-trackable.md).
+[Read further information about trackable parts here](part-trackable.md).
 
 ### Purchaseable
 
@@ -151,7 +151,7 @@ Thumbnail images are also used throughout the interface, particularly in table v
 
 #### Web Interface
 
-In the web interface, part images can be uploaded directly from the [part view](./part-views.md). Hover the mouse cursor over the Part image to reveal multiple options:
+In the web interface, part images can be uploaded directly from the [part view](part-views.md). Hover the mouse cursor over the Part image to reveal multiple options:
 
 > **[IMAGE DESCRIPTION]**: Screenshot showing the part image upload hover interaction in InvenTree (image: part/part_image_upload.png, alt: "Part image upload"). When hovering over the part image in the part detail view, a set of overlay icons or buttons appears, providing options to upload a new image, select from existing images, or delete the current image.
 

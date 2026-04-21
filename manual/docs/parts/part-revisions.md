@@ -55,7 +55,7 @@ When creating a new revision of a part, there are some restrictions which must b
 
 - **Circular References**: A part cannot be a revision of itself. This would create a circular reference which is not allowed.
 - **Unique Revisions**: A part cannot have two revisions with the same revision number. Each revision (of a given part) must have a unique revision code.
-- **Template Revisions**: A part which is a [template part](./part-template.md) cannot have revisions. This is because the template part is used to create variants, and allowing revisions of templates would create disallowed relationship states in the database. However, variant parts are allowed to have revisions.
+- **Template Revisions**: A part which is a [template part](part-template.md) cannot have revisions. This is because the template part is used to create variants, and allowing revisions of templates would create disallowed relationship states in the database. However, variant parts are allowed to have revisions.
 - **Template References**: A part which is a revision of a variant part must point to the same template as the original part. This is to ensure that the revision is correctly linked to the original part.
 
 ---
