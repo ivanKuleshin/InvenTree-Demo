@@ -218,4 +218,4 @@ Total: 26 distinct paths.
 - [stock-locations.md](stock-locations.md) — StockLocation hierarchy, StockLocationType, external/structural flags.
 - [stock-adjustments.md](stock-adjustments.md) — The seven stock-mutating actions (add, remove, count, transfer, change_status, assign, merge) plus return.
 - [../parts/part-overview.md](../parts/part-overview.md) — Part domain.
-- [../api/inventree-modules.md](../api/inventree-modules.md) — Top-level module coverage map.
+- [../api/inventree-modules.md](../inventree-modules.md) — Top-level module coverage map.
