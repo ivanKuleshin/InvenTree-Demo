@@ -1,10 +1,11 @@
 ---
 name: test-automation
 description: |
+  Use this agent when user asks to interact with test cases, test methods or any other test files. 
+  This is the main agent to interact with testing code base.
   Use this agent AFTER requirement-researcher has returned a structured requirements block.
   Implements test cases based on those requirements. Also invoked by code-reviewer when
-  human-approved fixes need to be applied. Do NOT invoke this agent directly without
-  requirements input — always run requirement-researcher first.
+  human-approved fixes need to be applied.
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: sonnet
 color: green

@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.inventree.testdata.PartTestData.DEFAULT_PAGE_LIMIT;
+import static com.inventree.testdata.PartTestData.PAGE_LIMIT_FOR_SEARCH;
 import static org.hamcrest.Matchers.nullValue;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -80,13 +82,13 @@ public class PartCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APCRUD_001_getPartListReturnsPaginatedResultWithFullFieldSet() {
         PaginatedResponse<Part> response = partService.listParts(
-            PartListParams.builder().limit(PartTestData.DEFAULT_PAGE_LIMIT).build(), Role.READER);
+            PartListParams.builder().limit(DEFAULT_PAGE_LIMIT).build(), Role.READER);
 
         assertNotNull(response.getCount(), "count must not be null");
         assertTrue(response.getCount() > 0, "count must be greater than 0");
         assertNotNull(response.getResults(), "results must not be null");
-        assertEquals(response.getResults().size(), PartTestData.DEFAULT_PAGE_LIMIT,
-            "results must contain exactly " + PartTestData.DEFAULT_PAGE_LIMIT + " items");
+        assertEquals(response.getResults().size(), DEFAULT_PAGE_LIMIT,
+            "results must contain exactly " + DEFAULT_PAGE_LIMIT + " items");
         assertNull(response.getPrevious(), "previous must be null on first page");
         assertNotNull(response.getNext(), "next must be non-null when more pages exist");
         assertTrue(response.getNext().startsWith(PartTestData.URI_PREFIX), "next must be a URI string");
@@ -334,7 +336,7 @@ public class PartCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
         PaginatedResponse<StockLocationDetail> locations = stockService.listStockLocations(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
+            Map.of(PartTestData.QUERY_PARAM_LIMIT, DEFAULT_PAGE_LIMIT), Role.ADMIN);
         assertFalse(locations.getResults().isEmpty(), "stock locations must be non-empty");
         int locationPk = locations.getResults().getFirst().getPk();
 
@@ -372,7 +374,7 @@ public class PartCrudTest extends BaseTest {
     public void tc_APCRUD_009_postPartWithInitialSupplierCreatesSupplierPartRecord() {
         PaginatedResponse<Company> companies = companyService.listCompanies(
             Map.of(PartTestData.QUERY_PARAM_IS_SUPPLIER, PartTestData.QUERY_VALUE_TRUE,
-                PartTestData.QUERY_PARAM_LIMIT, PartTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
+                PartTestData.QUERY_PARAM_LIMIT, DEFAULT_PAGE_LIMIT), Role.ADMIN);
         assertFalse(companies.getResults().isEmpty(), "supplier companies must be non-empty");
         int supplierPk = companies.getResults().getFirst().getPk();
 
@@ -402,35 +404,18 @@ public class PartCrudTest extends BaseTest {
     }
 
     private int findPartWithParametersPk() {
-        int offset = 0;
-        while (true) {
-            PaginatedResponse<Part> listing = partService.listParts(
-                PartListParams.builder()
-                    .limit(PartTestData.SEARCH_PAGE_SIZE)
-                    .offset(offset)
-                    .parameters(true)
-                    .build(),
-                Role.READER);
-            Part found = listing.getResults().stream()
-                .filter(p -> p.getParameters() != null && !p.getParameters().isEmpty())
-                .findFirst()
-                .orElse(null);
-            if (found != null) {
-                return found.getPk();
-            }
-            if (listing.getNext() == null) {
-                throw new AssertionError("No part with parameters found across all pages");
-            }
-            offset += PartTestData.SEARCH_PAGE_SIZE;
-            if (listing.getCount() != null && offset >= listing.getCount()) {
-                throw new AssertionError("Exceeded total part count while searching for a part with parameters");
-            }
-        }
+        return partService.listParts(
+                PartListParams.builder().limit(PAGE_LIMIT_FOR_SEARCH).parameters(true).build(), Role.READER)
+            .getResults().stream()
+            .filter(p -> p.getParameters() != null && !p.getParameters().isEmpty())
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("No part with parameters found in first 100 results"))
+            .getPk();
     }
 
     private int findCategorizedPartPk() {
         PaginatedResponse<Part> listing = partService.listParts(
-            PartListParams.builder().limit(PartTestData.DEFAULT_PAGE_LIMIT).build(), Role.READER);
+            PartListParams.builder().limit(DEFAULT_PAGE_LIMIT).build(), Role.READER);
         return listing.getResults().stream()
             .filter(p -> p.getCategory() != null)
             .findFirst()
