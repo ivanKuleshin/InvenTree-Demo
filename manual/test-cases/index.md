@@ -75,12 +75,12 @@
 
 | TC ID       | Title                                                                              | Type             | Priority | Automated | Test Class |
 | ----------- | ---------------------------------------------------------------------------------- | ---------------- | -------- | --------- | ---------- |
-| TC-APTT-001 | GET /api/part/test-template/ returns paginated test template list                  | API / Functional | P1       | No        | -          |
-| TC-APTT-002 | GET /api/part/test-template/{id}/ retrieves a single test template                 | API / Functional | P1       | No        | -          |
-| TC-APTT-003 | POST /api/part/test-template/ creates a new test template                          | API / Functional | P1       | No        | -          |
-| TC-APTT-004 | PATCH /api/part/test-template/{id}/ updates description and boolean flags          | API / Functional | P2       | No        | -          |
-| TC-APTT-005 | DELETE /api/part/test-template/{id}/ removes a test template                       | API / Functional | P2       | No        | -          |
-| TC-APTT-006 | GET /api/part/test-template/?part={id} filters templates by part                   | API / Functional | P2       | No        | -          |
+| TC-APTT-001 | GET /api/part/test-template/ returns paginated test template list                  | API / Functional | P1       | Yes       | PartTestTemplateCrudTest |
+| TC-APTT-002 | GET /api/part/test-template/{id}/ retrieves a single test template                 | API / Functional | P1       | Yes       | PartTestTemplateCrudTest |
+| TC-APTT-003 | POST /api/part/test-template/ creates a new test template                          | API / Functional | P1       | Yes       | PartTestTemplateCrudTest |
+| TC-APTT-004 | PATCH /api/part/test-template/{id}/ updates description and boolean flags          | API / Functional | P2       | Yes       | PartTestTemplateCrudTest |
+| TC-APTT-005 | DELETE /api/part/test-template/{id}/ removes a test template                       | API / Functional | P2       | Yes       | PartTestTemplateCrudTest |
+| TC-APTT-006 | GET /api/part/test-template/?part={id} filters templates by part                   | API / Functional | P2       | Yes       | PartTestTemplateCrudTest |
 
 ### Part Internal Pricing (api-internal-pricing)
 
@@ -429,10 +429,10 @@ The following Stock module areas would benefit from UI smoke tests in a future s
 
 ### Automation Coverage
 
-- **Automated (API):** 113 / 178 (63%)
-- **Not Automated (API):** 65 / 178 (37%)
+- **Automated (API):** 119 / 178 (67%)
+- **Not Automated (API):** 59 / 178 (33%)
 - **Automated (UI):** 0 / 70 (0%)
-- **Overall Automated:** 113 / 248 (46%)
+- **Overall Automated:** 119 / 248 (48%)
 
 #### Covered API Suites (100%)
 - Parts CRUD — `PartCrudTest` (9/9)
@@ -445,12 +445,12 @@ The following Stock module areas would benefit from UI smoke tests in a future s
 - Stock Locations CRUD — `StockLocationsCrudTest` (24/24)
 - Stock Location Types CRUD — `StockLocationTypesCrudTest` (13/13)
 - Stock Adjustments — `StockAdjustmentsTest` (14/14)
+- Part Test Templates — `PartTestTemplateCrudTest` (6/6)
 
 #### Not Covered API Suites (0%)
 - Field Validation (0/6)
 - Relational Integrity (0/4)
 - Edge Cases (0/7)
-- Part Test Templates (0/6)
 - Part Stocktake (0/5)
 - Part Related Parts CRUD (0/6)
 - Category Parameters CRUD (0/5)

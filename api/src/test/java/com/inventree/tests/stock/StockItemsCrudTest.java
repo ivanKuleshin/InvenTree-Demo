@@ -1,4 +1,4 @@
-package com.inventree.tests;
+package com.inventree.tests.stock;
 
 import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;

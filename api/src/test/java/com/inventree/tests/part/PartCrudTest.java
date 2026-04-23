@@ -1,4 +1,4 @@
-package com.inventree.tests;
+package com.inventree.tests.part;
 
 import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
@@ -402,13 +402,30 @@ public class PartCrudTest extends BaseTest {
     }
 
     private int findPartWithParametersPk() {
-        PaginatedResponse<Part> listing = partService.listParts(
-            PartListParams.builder().limit(PartTestData.DEFAULT_PAGE_LIMIT).parameters(true).build(), Role.READER);
-        return listing.getResults().stream()
-            .filter(p -> p.getParameters() != null && !p.getParameters().isEmpty())
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("No part with parameters found"))
-            .getPk();
+        int offset = 0;
+        while (true) {
+            PaginatedResponse<Part> listing = partService.listParts(
+                PartListParams.builder()
+                    .limit(PartTestData.SEARCH_PAGE_SIZE)
+                    .offset(offset)
+                    .parameters(true)
+                    .build(),
+                Role.READER);
+            Part found = listing.getResults().stream()
+                .filter(p -> p.getParameters() != null && !p.getParameters().isEmpty())
+                .findFirst()
+                .orElse(null);
+            if (found != null) {
+                return found.getPk();
+            }
+            if (listing.getNext() == null) {
+                throw new AssertionError("No part with parameters found across all pages");
+            }
+            offset += PartTestData.SEARCH_PAGE_SIZE;
+            if (listing.getCount() != null && offset >= listing.getCount()) {
+                throw new AssertionError("Exceeded total part count while searching for a part with parameters");
+            }
+        }
     }
 
     private int findCategorizedPartPk() {

@@ -19,7 +19,7 @@ Serializer for the PartTestTemplate class. Used in PATCH requests where all fiel
 | `key`                 | string  | read-only |                                                                     |
 | `part`                | integer |           |                                                                     |
 | `test_name`           | string  |           | Enter a name for the test; max length: 100                          |
-| `description`         | string  | nullable  | Enter description for this test; max length: 100                    |
+| `description`         | string  |           | Enter description for this test; max length: 100; cannot be blank if provided |
 | `enabled`             | boolean |           | Is this test enabled?                                               |
 | `required`            | boolean |           | Is this test required to pass?                                      |
 | `requires_value`      | boolean |           | Does this test require a value when adding a test result?           |

@@ -6,6 +6,7 @@ import com.inventree.config.ApiConfig;
 import com.inventree.service.CompanyService;
 import com.inventree.service.PartCategoryService;
 import com.inventree.service.PartService;
+import com.inventree.service.PartTestTemplateService;
 import com.inventree.service.PricingService;
 import com.inventree.service.StockService;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +25,7 @@ public abstract class BaseTest {
 
     protected static PartService partService;
     protected static PartCategoryService partCategoryService;
+    protected static PartTestTemplateService partTestTemplateService;
     protected static StockService stockService;
     protected static CompanyService companyService;
     protected static PricingService pricingService;
@@ -36,6 +38,7 @@ public abstract class BaseTest {
 
         partService = new PartService();
         partCategoryService = new PartCategoryService();
+        partTestTemplateService = new PartTestTemplateService();
         stockService = new StockService();
         companyService = new CompanyService();
         pricingService = new PricingService();

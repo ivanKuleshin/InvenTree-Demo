@@ -20,6 +20,7 @@ public final class ApiConstants {
     public static final String STOCK_TRACK_ENDPOINT          = "/api/stock/track/";
     public static final String COMPANY_ENDPOINT              = "/api/company/";
     public static final String SUPPLIER_PART_ENDPOINT        = "/api/company/part/";
+    public static final String PART_TEST_TEMPLATE_ENDPOINT   = "/api/part/test-template/";
     public static final String INTERNAL_PRICE_ENDPOINT       = "/api/part/internal-price/";
     public static final String SALE_PRICE_ENDPOINT           = "/api/part/sale-price/";
 

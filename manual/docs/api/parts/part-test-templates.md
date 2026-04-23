@@ -59,7 +59,7 @@ Some examples of generated test key values are provided below:
 
 #### Test Description
 
-This field is a simple description for providing information back to the user. The description is not used by the InvenTree testing framework.
+This field is a simple description for providing information back to the user. The description is not used by the InvenTree testing framework. **This field is required and cannot be blank** — the API returns a 400 error if it is omitted or set to an empty value.
 
 #### Required
 

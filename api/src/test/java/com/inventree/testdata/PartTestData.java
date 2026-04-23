@@ -7,6 +7,7 @@ public final class PartTestData {
     public static final String RUN_ID = String.valueOf(System.currentTimeMillis() % 100000);
 
     public static final int DEFAULT_PAGE_LIMIT = 5;
+    public static final int SEARCH_PAGE_SIZE = 100;
     public static final int DEFAULT_CATEGORY_PK = 17;
 
     public static final String QUERY_VALUE_TRUE = "true";

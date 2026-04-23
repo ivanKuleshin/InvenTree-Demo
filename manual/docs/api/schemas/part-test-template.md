@@ -19,7 +19,7 @@ Serializer for the PartTestTemplate class.
 | `key`                 | string  | required, read-only |                                                                     |
 | `part`                | integer | required            |                                                                     |
 | `test_name`           | string  | required            | Enter a name for the test; max length: 100                          |
-| `description`         | string  | nullable            | Enter description for this test; max length: 100                    |
+| `description`         | string  | required            | Enter description for this test; max length: 100; cannot be blank   |
 | `enabled`             | boolean |                     | Is this test enabled?                                               |
 | `required`            | boolean |                     | Is this test required to pass?                                      |
 | `requires_value`      | boolean |                     | Does this test require a value when adding a test result?           |
