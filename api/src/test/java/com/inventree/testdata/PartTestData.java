@@ -10,6 +10,8 @@ public final class PartTestData {
     public static final int PAGE_LIMIT_FOR_SEARCH = 50;
 
     public static final String QUERY_VALUE_TRUE = "true";
+    public static final String QUERY_VALUE_FALSE = "false";
+    public static final String QUERY_PARAM_STRUCTURAL = "structural";
     public static final String QUERY_PARAM_PARAMETERS = "parameters";
     public static final String QUERY_PARAM_TAGS = "tags";
     public static final String QUERY_PARAM_CATEGORY_DETAIL = "category_detail";

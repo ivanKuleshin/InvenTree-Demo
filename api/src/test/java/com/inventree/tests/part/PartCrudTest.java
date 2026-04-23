@@ -345,9 +345,13 @@ public class PartCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
         PaginatedResponse<StockLocationDetail> locations = stockLocationService.listStockLocations(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, DEFAULT_PAGE_LIMIT), Role.ADMIN);
-        assertFalse(locations.getResults().isEmpty(), "stock locations must be non-empty");
-        int locationPk = locations.getResults().getFirst().getPk();
+            Map.of(PartTestData.QUERY_PARAM_LIMIT, DEFAULT_PAGE_LIMIT,
+                PartTestData.QUERY_PARAM_STRUCTURAL, PartTestData.QUERY_VALUE_FALSE), Role.ADMIN);
+        int locationPk = locations.getResults().stream()
+            .filter(l -> !Boolean.TRUE.equals(l.getStructural()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("No non-structural stock location found"))
+            .getPk();
 
         String newName = PartTestData.testPartName("TC-APCRUD-008", PartTestData.INITIAL_STOCK_PART_NAME_SUFFIX);
         Map<String, Object> payload = Map.of(
