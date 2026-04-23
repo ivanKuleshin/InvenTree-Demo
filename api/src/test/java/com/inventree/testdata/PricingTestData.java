@@ -8,10 +8,6 @@ public final class PricingTestData {
     private static final AtomicInteger INTERNAL_QTY_COUNTER = new AtomicInteger(10000);
     private static final AtomicInteger SALE_QTY_COUNTER = new AtomicInteger(20000);
 
-    public static final int PRICING_PART_PK = 73;
-    public static final int SALABLE_PART_PK = 113;
-    public static final int KNOWN_INTERNAL_PRICE_PK = 1;
-    public static final int KNOWN_SALE_PRICE_PK = 1;
     public static final int NON_EXISTENT_PK = 999999;
 
     public static final String FIELD_PART = "part";
@@ -48,13 +44,13 @@ public final class PricingTestData {
     public static final String OVERRIDE_MIN_BOUNDARY_VALUE = "0.01";
     public static final double EXPECTED_OVERRIDE_MIN_BOUNDARY = 0.01;
 
-    public static Map<String, Object> standardInternalPricePayload() {
-        return Map.of(FIELD_PART, PRICING_PART_PK, FIELD_QUANTITY, INTERNAL_QTY_COUNTER.getAndIncrement(),
+    public static Map<String, Object> standardInternalPricePayload(int partPk) {
+        return Map.of(FIELD_PART, partPk, FIELD_QUANTITY, INTERNAL_QTY_COUNTER.getAndIncrement(),
                 FIELD_PRICE, CREATE_PRICE, FIELD_PRICE_CURRENCY, CURRENCY_USD);
     }
 
-    public static Map<String, Object> standardSalePricePayload() {
-        return Map.of(FIELD_PART, SALABLE_PART_PK, FIELD_QUANTITY, SALE_QTY_COUNTER.getAndIncrement(),
+    public static Map<String, Object> standardSalePricePayload(int partPk) {
+        return Map.of(FIELD_PART, partPk, FIELD_QUANTITY, SALE_QTY_COUNTER.getAndIncrement(),
                 FIELD_PRICE, SALE_CREATE_PRICE, FIELD_PRICE_CURRENCY, CURRENCY_USD);
     }
 

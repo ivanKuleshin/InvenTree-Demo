@@ -46,7 +46,7 @@ public class StockAdjustmentsTest extends BaseTest {
     public void cleanupTestData() {
         createdStockItemIds.forEach(id -> {
             try {
-                stockService.deleteStockItem(id, Role.ADMIN);
+                stockItemService.deleteStockItem(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock item {}", id, t);
             }
@@ -55,7 +55,7 @@ public class StockAdjustmentsTest extends BaseTest {
 
         createdLocationIds.forEach(id -> {
             try {
-                stockService.deleteStockLocationRaw(id, Role.ADMIN);
+                stockLocationService.deleteStockLocationRaw(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock location {}", id, t);
             }
@@ -80,7 +80,7 @@ public class StockAdjustmentsTest extends BaseTest {
         int itemPk = createStockItem("ASADJ-001", 20.0);
         double original = fetchQuantity(itemPk);
 
-        Response response = stockService.stockAdd(
+        Response response = stockAdjustmentService.stockAdd(
             StockTestData.addPayload(itemPk, StockTestData.ADD_QUANTITY,
                 "TC-ASADJ-001: add quantity test"),
             Role.ADMIN);
@@ -100,7 +100,7 @@ public class StockAdjustmentsTest extends BaseTest {
         int itemPk = createStockItem("ASADJ-002", 20.0);
         double original = fetchQuantity(itemPk);
 
-        Response response = stockService.stockRemove(
+        Response response = stockAdjustmentService.stockRemove(
             StockTestData.removePayload(itemPk, StockTestData.REMOVE_QUANTITY,
                 "TC-ASADJ-002: remove quantity test"),
             Role.ADMIN);
@@ -119,13 +119,13 @@ public class StockAdjustmentsTest extends BaseTest {
     public void tc_ASADJ_003_postStockCountSetsAbsoluteQuantity() {
         int itemPk = createStockItem("ASADJ-003", 20.0);
 
-        Response response = stockService.stockCount(
+        Response response = stockAdjustmentService.stockCount(
             StockTestData.countPayload(itemPk, StockTestData.COUNT_QUANTITY,
                 "TC-ASADJ-003: Q2 stocktake"),
             Role.ADMIN);
         assertSuccess(response);
 
-        StockItemDetail updated = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail updated = stockItemService.getStockItemById(itemPk, Role.READER);
         assertEquals(updated.getQuantity(), StockTestData.COUNT_QUANTITY, DELTA,
             "quantity must equal the absolute count value");
         assertNotNull(updated.getStocktakeDate(), "stocktake_date must be set");
@@ -146,13 +146,13 @@ public class StockAdjustmentsTest extends BaseTest {
         int itemPk = createStockItemAndTrack(
             StockTestData.stockItemWithLocation(partPk, 10.0, sourceLoc));
 
-        Response response = stockService.stockTransfer(
+        Response response = stockAdjustmentService.stockTransfer(
             StockTestData.transferPayload(itemPk, 10.0, destLoc,
                 "TC-ASADJ-004: transfer to new shelf"),
             Role.ADMIN);
         assertSuccess(response);
 
-        StockItemDetail moved = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail moved = stockItemService.getStockItemById(itemPk, Role.READER);
         assertEquals(moved.getLocation(), Integer.valueOf(destLoc),
             "location must match destination");
 
@@ -166,7 +166,7 @@ public class StockAdjustmentsTest extends BaseTest {
         int item1 = createStockItem("ASADJ-005a", 5.0);
         int item2 = createStockItem("ASADJ-005b", 5.0);
 
-        Response response = stockService.stockChangeStatus(
+        Response response = stockAdjustmentService.stockChangeStatus(
             StockTestData.changeStatusPayload(List.of(item1, item2),
                 StockTestData.STOCK_STATUS_DAMAGED,
                 "TC-ASADJ-005: marked damaged after drop"),
@@ -174,7 +174,7 @@ public class StockAdjustmentsTest extends BaseTest {
         assertSuccess(response);
 
         for (int pk : List.of(item1, item2)) {
-            StockItemDetail state = stockService.getStockItemById(pk, Role.READER);
+            StockItemDetail state = stockItemService.getStockItemById(pk, Role.READER);
             assertEquals(state.getStatus(), Integer.valueOf(StockTestData.STOCK_STATUS_DAMAGED),
                 "status must be 55 (Damaged)");
             assertEquals(state.getStatusText(), "Damaged",
@@ -190,17 +190,17 @@ public class StockAdjustmentsTest extends BaseTest {
         int customerPk = findCustomerPk();
         int itemPk = createSalableStockItem("ASADJ-006", 10.0);
 
-        StockItemDetail before = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail before = stockItemService.getStockItemById(itemPk, Role.READER);
         assertTrue(before.getInStock(),
             "item must be in_stock=true before assign");
 
-        Response response = stockService.stockAssign(
+        Response response = stockAdjustmentService.stockAssign(
             StockTestData.assignPayload(itemPk, customerPk,
                 "TC-ASADJ-006: assigned for direct shipment"),
             Role.ADMIN);
         assertSuccess(response);
 
-        StockItemDetail after = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail after = stockItemService.getStockItemById(itemPk, Role.READER);
         assertEquals(after.getCustomer(), Integer.valueOf(customerPk),
             "customer must be the supplied customer PK");
         assertNotEquals(after.getInStock(), Boolean.TRUE, "in_stock must be false after assign");
@@ -220,13 +220,13 @@ public class StockAdjustmentsTest extends BaseTest {
         int item2Pk = createStockItemAndTrack(
             StockTestData.stockItemWithLocation(partPk, 20.0, destLoc));
 
-        Response response = stockService.stockMerge(
+        Response response = stockAdjustmentService.stockMerge(
             StockTestData.mergePayload(item1Pk, item2Pk, destLoc,
                 false, false, "TC-ASADJ-007: consolidate after reorg"),
             Role.ADMIN);
         assertSuccess(response);
 
-        PaginatedResponse<StockItemDetail> listing = stockService.listStockItemsPaginated(
+        PaginatedResponse<StockItemDetail> listing = stockItemService.listStockItemsPaginated(
             Map.of(StockTestData.QUERY_PARAM_PART, partPk,
                 StockTestData.QUERY_PARAM_LOCATION, destLoc,
                 StockTestData.QUERY_PARAM_LIMIT, 10),
@@ -253,22 +253,22 @@ public class StockAdjustmentsTest extends BaseTest {
         int returnLoc = createLocation("ASADJ-008", "Return");
         int itemPk = createSalableStockItem("ASADJ-008", 10.0);
 
-        Response assignResponse = stockService.stockAssign(
+        Response assignResponse = stockAdjustmentService.stockAssign(
             StockTestData.assignPayload(itemPk, customerPk, "setup for return"),
             Role.ADMIN);
         assertSuccess(assignResponse);
 
-        StockItemDetail assigned = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail assigned = stockItemService.getStockItemById(itemPk, Role.READER);
         assertEquals(assigned.getCustomer(), Integer.valueOf(customerPk),
             "precondition: item must be assigned to customer");
 
-        Response response = stockService.stockReturn(
+        Response response = stockAdjustmentService.stockReturn(
             StockTestData.returnPayload(itemPk, 10.0, returnLoc, false,
                 "TC-ASADJ-008: customer return RMA-001"),
             Role.ADMIN);
         assertSuccess(response);
 
-        StockItemDetail returned = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail returned = stockItemService.getStockItemById(itemPk, Role.READER);
         assertTrue(returned.getInStock(), "in_stock must be true after return");
         assertTrue(returned.getCustomer() == null || returned.getCustomer() != customerPk,
             "customer must be cleared or differ after return");
@@ -289,7 +289,7 @@ public class StockAdjustmentsTest extends BaseTest {
         int itemBPk = createStockItemAndTrack(
             StockTestData.stockItemWithLocation(partB, 5.0, destLoc));
 
-        Response response = stockService.stockMerge(
+        Response response = stockAdjustmentService.stockMerge(
             StockTestData.mergePayload(itemAPk, itemBPk, destLoc,
                 false, false, "TC-ASADJ-009: incompatible parts merge"),
             Role.ADMIN);
@@ -302,13 +302,13 @@ public class StockAdjustmentsTest extends BaseTest {
     public void tc_ASADJ_010_postStockTransferToStructuralLocationReturns400() {
         int itemPk = createStockItem("ASADJ-010", 5.0);
 
-        StockLocationDetail structural = stockService.createStockLocation(
+        StockLocationDetail structural = stockLocationService.createStockLocation(
             StockTestData.structuralLocation(
                 StockTestData.testLocationName("TC-ASADJ-010", "Structural")),
             Role.ADMIN);
         createdLocationIds.add(structural.getPk());
 
-        Response response = stockService.stockTransfer(
+        Response response = stockAdjustmentService.stockTransfer(
             StockTestData.transferPayload(itemPk, 1.0, structural.getPk(),
                 "TC-ASADJ-010: transfer to structural location"),
             Role.ADMIN);
@@ -321,7 +321,7 @@ public class StockAdjustmentsTest extends BaseTest {
     public void tc_ASADJ_011_postStockChangeStatusWithInvalidCodeReturns400() {
         int itemPk = createStockItem("ASADJ-011", 5.0);
 
-        Response response = stockService.stockChangeStatus(
+        Response response = stockAdjustmentService.stockChangeStatus(
             StockTestData.changeStatusPayload(List.of(itemPk),
                 StockTestData.STOCK_STATUS_INVALID,
                 "TC-ASADJ-011: invalid status"),
@@ -333,7 +333,7 @@ public class StockAdjustmentsTest extends BaseTest {
     @Story("Add with Empty Items Array - Negative")
     @Severity(SeverityLevel.MINOR)
     public void tc_ASADJ_012_postStockAddWithEmptyItemsReturns400() {
-        Response response = stockService.stockAdd(
+        Response response = stockAdjustmentService.stockAdd(
             Map.of("items", List.of(), "notes", "TC-ASADJ-012: empty items"),
             Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
@@ -346,7 +346,7 @@ public class StockAdjustmentsTest extends BaseTest {
         int nonCustomerPk = findNonCustomerPk();
         int itemPk = createSalableStockItem("ASADJ-013", 5.0);
 
-        Response response = stockService.stockAssign(
+        Response response = stockAdjustmentService.stockAssign(
             StockTestData.assignPayload(itemPk, nonCustomerPk,
                 "TC-ASADJ-013: assign to non-customer"),
             Role.ADMIN);
@@ -357,7 +357,7 @@ public class StockAdjustmentsTest extends BaseTest {
     @Story("Remove without Authentication - Security")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASADJ_014_postStockRemoveWithoutAuthenticationReturns401Or403() {
-        Response response = stockService.stockRemoveUnauthenticated(
+        Response response = stockAdjustmentService.stockRemoveUnauthenticated(
             Map.of("items", List.of(Map.of("pk", 1, "quantity", "1.000"))));
         int status = response.statusCode();
         assertTrue(status == HttpStatus.SC_UNAUTHORIZED || status == HttpStatus.SC_FORBIDDEN,
@@ -403,7 +403,7 @@ public class StockAdjustmentsTest extends BaseTest {
     }
 
     private int createStockItemAndTrack(StockItemRequest request) {
-        Response response = stockService.createStockItemRaw(request, Role.ADMIN);
+        Response response = stockItemService.createStockItemRaw(request, Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_CREATED);
         int pk = extractPk(response);
         createdStockItemIds.add(pk);
@@ -419,7 +419,7 @@ public class StockAdjustmentsTest extends BaseTest {
     }
 
     private int createLocation(String tcTag, String suffix) {
-        StockLocationDetail loc = stockService.createStockLocation(
+        StockLocationDetail loc = stockLocationService.createStockLocation(
             StockTestData.minimalLocation(
                 StockTestData.testLocationName("TC-" + tcTag, suffix)),
             Role.ADMIN);
@@ -461,7 +461,7 @@ public class StockAdjustmentsTest extends BaseTest {
     }
 
     private double fetchQuantity(int itemPk) {
-        StockItemDetail state = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail state = stockItemService.getStockItemById(itemPk, Role.READER);
         assertNotNull(state.getQuantity(), "quantity must be present");
         return state.getQuantity();
     }
@@ -474,7 +474,7 @@ public class StockAdjustmentsTest extends BaseTest {
     }
 
     private void assertTrackingEntryExists(int itemPk) {
-        Response tracking = stockService.getStockTrackingRaw(
+        Response tracking = stockItemService.getStockTrackingRaw(
             Map.of("item", itemPk,
                 StockTestData.QUERY_PARAM_LIMIT, 1,
                 StockTestData.QUERY_PARAM_ORDERING,

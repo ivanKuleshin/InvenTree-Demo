@@ -3,9 +3,13 @@ package com.inventree.tests.part;
 import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
 import com.inventree.model.PaginatedResponse;
+import com.inventree.model.Part;
 import com.inventree.model.PartInternalPrice;
+import com.inventree.model.PartListParams;
 import com.inventree.model.PartPricing;
+import com.inventree.model.PartRequest;
 import com.inventree.model.PartSalePrice;
+import com.inventree.testdata.PartTestData;
 import com.inventree.testdata.PricingDataProviders;
 import com.inventree.testdata.PricingTestData;
 import com.inventree.util.HttpStatus;
@@ -17,7 +21,9 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -37,7 +43,50 @@ public class PartPricingTest extends BaseTest {
 
     private final List<Integer> createdInternalPriceIds = new ArrayList<>();
     private final List<Integer> createdSalePriceIds = new ArrayList<>();
+    private final List<Integer> setupCreatedPartIds = new ArrayList<>();
     private boolean aggregateOverrideSet = false;
+
+    private int pricingPartPk;
+    private int salablePartPk;
+    private int createdInternalPricePk;
+    private int createdSalePricePk;
+
+    @BeforeClass(alwaysRun = true)
+    public void setupPricingTestData() {
+        pricingPartPk = findOrCreatePricingPart();
+        salablePartPk = findOrCreateSalablePart();
+
+        PartInternalPrice internalPrice = pricingService.createInternalPrice(
+                PricingTestData.standardInternalPricePayload(pricingPartPk), Role.ADMIN);
+        createdInternalPricePk = internalPrice.getPk();
+
+        PartSalePrice salePrice = pricingService.createSalePrice(
+                PricingTestData.standardSalePricePayload(salablePartPk), Role.ADMIN);
+        createdSalePricePk = salePrice.getPk();
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void teardownPricingTestData() {
+        try {
+            pricingService.deleteInternalPriceRaw(createdInternalPricePk, Role.ADMIN);
+        } catch (Exception e) {
+            log.warn("Failed to delete setup internal price id={}: {}", createdInternalPricePk, e.getMessage());
+        }
+        try {
+            pricingService.deleteSalePriceRaw(createdSalePricePk, Role.ADMIN);
+        } catch (Exception e) {
+            log.warn("Failed to delete setup sale price id={}: {}", createdSalePricePk, e.getMessage());
+        }
+        setupCreatedPartIds.forEach(id -> {
+            try {
+                partService.patchPart(id, PartTestData.patchActiveOnly(false), Role.ADMIN);
+                partService.deletePart(id, Role.ADMIN);
+            } catch (Exception e) {
+                log.warn("Failed to delete setup part id={}: {}", id, e.getMessage());
+            }
+        });
+        setupCreatedPartIds.clear();
+    }
 
     @AfterMethod(alwaysRun = true)
     public void cleanupTestData() {
@@ -64,7 +113,7 @@ public class PartPricingTest extends BaseTest {
             clearPayload.put(PricingTestData.FIELD_OVERRIDE_MIN, null);
             clearPayload.put(PricingTestData.FIELD_OVERRIDE_MAX, null);
             try {
-                pricingService.patchAggregatePricing(PricingTestData.PRICING_PART_PK, clearPayload, Role.ADMIN);
+                pricingService.patchAggregatePricing(pricingPartPk, clearPayload, Role.ADMIN);
             } catch (Exception e) {
                 log.warn("Failed to clear aggregate pricing override: {}", e.getMessage());
             }
@@ -76,7 +125,8 @@ public class PartPricingTest extends BaseTest {
     @Story("List Internal Prices")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APPRICE_001_getInternalPriceListReturnsResult() {
-        PartInternalPrice created = createAndTrackInternalPrice(PricingTestData.standardInternalPricePayload());
+        PartInternalPrice created = createAndTrackInternalPrice(
+                PricingTestData.standardInternalPricePayload(pricingPartPk));
         assertNotNull(created.getPk(), "created pk must not be null");
 
         PaginatedResponse<PartInternalPrice> response = pricingService.listInternalPrices(
@@ -102,9 +152,9 @@ public class PartPricingTest extends BaseTest {
     @Story("Get Internal Price by ID")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APPRICE_002_getInternalPriceByIdReturnsSingleRecord() {
-        PartInternalPrice price = pricingService.getInternalPriceById(PricingTestData.KNOWN_INTERNAL_PRICE_PK, Role.READER);
+        PartInternalPrice price = pricingService.getInternalPriceById(createdInternalPricePk, Role.READER);
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(price.getPk(), Integer.valueOf(PricingTestData.KNOWN_INTERNAL_PRICE_PK));
+        softAssert.assertEquals(price.getPk(), Integer.valueOf(createdInternalPricePk));
         softAssert.assertNotNull(price.getPart(), "part must not be null");
         softAssert.assertNotNull(price.getQuantity(), "quantity must not be null");
         softAssert.assertNotNull(price.getPrice(), "price must not be null");
@@ -116,7 +166,7 @@ public class PartPricingTest extends BaseTest {
     @Story("Create Internal Price")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APPRICE_003_createInternalPriceReturns201() {
-        Map<String, Object> payload = PricingTestData.standardInternalPricePayload();
+        Map<String, Object> payload = PricingTestData.standardInternalPricePayload(pricingPartPk);
         Response response = pricingService.createInternalPriceRaw(payload, Role.ADMIN);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_CREATED);
 
@@ -126,7 +176,7 @@ public class PartPricingTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(newPk > 0, "pk must be a positive integer");
         softAssert.assertEquals(response.jsonPath().getInt(PricingTestData.FIELD_PART),
-            PricingTestData.PRICING_PART_PK, "part must match");
+            pricingPartPk, "part must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_QUANTITY),
             ((Number) payload.get(PricingTestData.FIELD_QUANTITY)).doubleValue(), "quantity must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_PRICE),
@@ -139,7 +189,8 @@ public class PartPricingTest extends BaseTest {
     @Story("Patch Internal Price")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APPRICE_004_patchInternalPriceUpdatesPrice() {
-        PartInternalPrice created = createAndTrackInternalPrice(PricingTestData.standardInternalPricePayload());
+        PartInternalPrice created = createAndTrackInternalPrice(
+                PricingTestData.standardInternalPricePayload(pricingPartPk));
         int newPk = created.getPk();
 
         PartInternalPrice patched = pricingService.patchInternalPrice(
@@ -149,7 +200,7 @@ public class PartPricingTest extends BaseTest {
         softAssert.assertEquals(patched.getPrice(), PricingTestData.EXPECTED_PATCH_PRICE,
             PricingTestData.PRICE_DELTA, "price must equal " + PricingTestData.EXPECTED_PATCH_PRICE);
         softAssert.assertEquals(patched.getQuantity(), created.getQuantity(), "quantity must be unchanged");
-        softAssert.assertEquals(patched.getPart(), Integer.valueOf(PricingTestData.PRICING_PART_PK), "part must be unchanged");
+        softAssert.assertEquals(patched.getPart(), Integer.valueOf(pricingPartPk), "part must be unchanged");
         softAssert.assertAll();
     }
 
@@ -158,7 +209,8 @@ public class PartPricingTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APPRICE_005_deleteInternalPriceReturns204() {
         PartInternalPrice created =
-            pricingService.createInternalPrice(PricingTestData.standardInternalPricePayload(), Role.ADMIN);
+            pricingService.createInternalPrice(
+                    PricingTestData.standardInternalPricePayload(pricingPartPk), Role.ADMIN);
         int newPk = created.getPk();
         createdInternalPriceIds.add(newPk);
 
@@ -174,7 +226,8 @@ public class PartPricingTest extends BaseTest {
     @Story("List Sale Prices")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APSPRICE_001_getSalePriceListReturnsResult() {
-        PartSalePrice created = createAndTrackSalePrice(PricingTestData.standardSalePricePayload());
+        PartSalePrice created = createAndTrackSalePrice(
+                PricingTestData.standardSalePricePayload(salablePartPk));
         assertNotNull(created.getPk(), "created pk must not be null");
 
         PaginatedResponse<PartSalePrice> response = pricingService.listSalePrices(
@@ -199,9 +252,9 @@ public class PartPricingTest extends BaseTest {
     @Story("Get Sale Price by ID")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APSPRICE_002_getSalePriceByIdReturnsSingleRecord() {
-        PartSalePrice price = pricingService.getSalePriceById(PricingTestData.KNOWN_SALE_PRICE_PK, Role.READER);
+        PartSalePrice price = pricingService.getSalePriceById(createdSalePricePk, Role.READER);
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(price.getPk(), Integer.valueOf(PricingTestData.KNOWN_SALE_PRICE_PK));
+        softAssert.assertEquals(price.getPk(), Integer.valueOf(createdSalePricePk));
         softAssert.assertNotNull(price.getPart(), "part must not be null");
         softAssert.assertNotNull(price.getQuantity(), "quantity must not be null");
         softAssert.assertNotNull(price.getPrice(), "price must not be null");
@@ -213,7 +266,7 @@ public class PartPricingTest extends BaseTest {
     @Story("Create Sale Price")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APSPRICE_003_createSalePriceReturns201() {
-        Map<String, Object> payload = PricingTestData.standardSalePricePayload();
+        Map<String, Object> payload = PricingTestData.standardSalePricePayload(salablePartPk);
         Response response = pricingService.createSalePriceRaw(payload, Role.ADMIN);
         ResponseValidator.assertStatusAndContentType(response, HttpStatus.SC_CREATED);
 
@@ -223,7 +276,7 @@ public class PartPricingTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(newPk > 0, "pk must be a positive integer");
         softAssert.assertEquals(response.jsonPath().getInt(PricingTestData.FIELD_PART),
-            PricingTestData.SALABLE_PART_PK, "part must match");
+            salablePartPk, "part must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_QUANTITY),
             ((Number) payload.get(PricingTestData.FIELD_QUANTITY)).doubleValue(), "quantity must match");
         softAssert.assertEquals(response.jsonPath().getDouble(PricingTestData.FIELD_PRICE),
@@ -236,7 +289,8 @@ public class PartPricingTest extends BaseTest {
     @Story("Delete Sale Price")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APSPRICE_004_deleteSalePriceReturns204() {
-        PartSalePrice created = pricingService.createSalePrice(PricingTestData.standardSalePricePayload(), Role.ADMIN);
+        PartSalePrice created = pricingService.createSalePrice(
+                PricingTestData.standardSalePricePayload(salablePartPk), Role.ADMIN);
         int newPk = created.getPk();
         createdSalePriceIds.add(newPk);
 
@@ -252,7 +306,7 @@ public class PartPricingTest extends BaseTest {
     @Story("Get Aggregate Pricing")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APAGPRICE_001_getAggregatePricingReturnsSummary() {
-        PartPricing pricing = pricingService.getAggregatePricing(PricingTestData.PRICING_PART_PK, Role.READER);
+        PartPricing pricing = pricingService.getAggregatePricing(pricingPartPk, Role.READER);
 
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertNotNull(pricing.getCurrency(), "currency must not be null");
@@ -271,7 +325,7 @@ public class PartPricingTest extends BaseTest {
             PricingTestData.FIELD_OVERRIDE_MIN_CURRENCY, PricingTestData.CURRENCY_USD);
 
         PartPricing patched = pricingService.patchAggregatePricing(
-            PricingTestData.PRICING_PART_PK, overridePayload, Role.ADMIN);
+            pricingPartPk, overridePayload, Role.ADMIN);
         aggregateOverrideSet = true;
 
         SoftAssert softAssert = new SoftAssert();
@@ -289,23 +343,23 @@ public class PartPricingTest extends BaseTest {
         Map<String, Object> ensureClean = new HashMap<>();
         ensureClean.put(PricingTestData.FIELD_OVERRIDE_MIN, null);
         ensureClean.put(PricingTestData.FIELD_OVERRIDE_MAX, null);
-        pricingService.patchAggregatePricing(PricingTestData.PRICING_PART_PK, ensureClean, Role.ADMIN);
+        pricingService.patchAggregatePricing(pricingPartPk, ensureClean, Role.ADMIN);
 
         Map<String, Object> setPayload = Map.of(
             PricingTestData.FIELD_OVERRIDE_MIN, PricingTestData.OVERRIDE_MIN_VALUE,
             PricingTestData.FIELD_OVERRIDE_MIN_CURRENCY, PricingTestData.CURRENCY_USD);
-        pricingService.patchAggregatePricing(PricingTestData.PRICING_PART_PK, setPayload, Role.ADMIN);
+        pricingService.patchAggregatePricing(pricingPartPk, setPayload, Role.ADMIN);
         aggregateOverrideSet = true;
 
         Map<String, Object> clearPayload = new HashMap<>();
         clearPayload.put(PricingTestData.FIELD_OVERRIDE_MIN, null);
         clearPayload.put(PricingTestData.FIELD_OVERRIDE_MAX, null);
         PartPricing cleared = pricingService.patchAggregatePricing(
-            PricingTestData.PRICING_PART_PK, clearPayload, Role.ADMIN);
+            pricingPartPk, clearPayload, Role.ADMIN);
 
         assertNull(cleared.getOverrideMin(), "override_min must be null after clearing");
 
-        PartPricing current = pricingService.getAggregatePricing(PricingTestData.PRICING_PART_PK, Role.READER);
+        PartPricing current = pricingService.getAggregatePricing(pricingPartPk, Role.READER);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertNotNull(current.getInternalCostMin(), "internal_cost_min must not be null");
         softAssert.assertNotNull(current.getOverallMin(), "overall_min must not be null after clearing override");
@@ -337,7 +391,8 @@ public class PartPricingTest extends BaseTest {
     @Story("Create Internal Price With Reader Role Returns 403")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_APPRICE_NEG_003_createInternalPriceWithReaderRoleReturns403(Role role) {
-        Response response = pricingService.createInternalPriceRaw(PricingTestData.standardInternalPricePayload(), role);
+        Response response = pricingService.createInternalPriceRaw(
+                PricingTestData.standardInternalPricePayload(pricingPartPk), role);
         ResponseValidator.assertStatus(response, HttpStatus.SC_FORBIDDEN);
     }
 
@@ -363,7 +418,8 @@ public class PartPricingTest extends BaseTest {
     @Story("Patch Sale Price")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APSPRICE_005_patchSalePriceUpdatesPrice() {
-        PartSalePrice created = createAndTrackSalePrice(PricingTestData.standardSalePricePayload());
+        PartSalePrice created = createAndTrackSalePrice(
+                PricingTestData.standardSalePricePayload(salablePartPk));
         int newPk = created.getPk();
 
         PartSalePrice patched = pricingService.patchSalePrice(
@@ -374,7 +430,7 @@ public class PartPricingTest extends BaseTest {
             PricingTestData.PRICE_DELTA, "price must equal " + PricingTestData.EXPECTED_PATCH_SALE_PRICE);
         softAssert.assertEquals(patched.getQuantity(), created.getQuantity(),
             "quantity must be unchanged");
-        softAssert.assertEquals(patched.getPart(), Integer.valueOf(PricingTestData.SALABLE_PART_PK), "part must be unchanged");
+        softAssert.assertEquals(patched.getPart(), Integer.valueOf(salablePartPk), "part must be unchanged");
         softAssert.assertAll();
     }
 
@@ -395,11 +451,11 @@ public class PartPricingTest extends BaseTest {
             PricingTestData.FIELD_OVERRIDE_MIN, PricingTestData.OVERRIDE_MIN_VALUE,
             PricingTestData.FIELD_OVERRIDE_MIN_CURRENCY, PricingTestData.CURRENCY_USD);
         Response response = pricingService.patchAggregatePricingRaw(
-            PricingTestData.PRICING_PART_PK, payload, Role.READER);
+            pricingPartPk, payload, Role.READER);
         ResponseValidator.assertStatus(response, HttpStatus.SC_FORBIDDEN);
     }
 
-    @Step("Create internal price break for part {partId} and track for cleanup")
+    @Step("Create internal price break for part and track for cleanup")
     private PartInternalPrice createAndTrackInternalPrice(Map<String, Object> payload) {
         PartInternalPrice created = pricingService.createInternalPrice(payload, Role.ADMIN);
         createdInternalPriceIds.add(created.getPk());
@@ -411,5 +467,34 @@ public class PartPricingTest extends BaseTest {
         PartSalePrice created = pricingService.createSalePrice(payload, Role.ADMIN);
         createdSalePriceIds.add(created.getPk());
         return created;
+    }
+
+    private int findOrCreatePricingPart() {
+        PaginatedResponse<Part> listing = partService.listParts(
+                PartListParams.builder().active(true).salable(false).limit(1).build(), Role.ADMIN);
+        if (!listing.getResults().isEmpty()) {
+            return listing.getResults().getFirst().getPk();
+        }
+        PartRequest request = PartTestData.minimalPart(
+                PartTestData.testPartName("PRICING-SETUP", "internal"));
+        Part created = partService.createPart(request, Role.ADMIN);
+        setupCreatedPartIds.add(created.getPk());
+        return created.getPk();
+    }
+
+    private int findOrCreateSalablePart() {
+        PaginatedResponse<Part> listing = partService.listParts(
+                PartListParams.builder().active(true).salable(true).limit(1).build(), Role.ADMIN);
+        if (!listing.getResults().isEmpty()) {
+            return listing.getResults().getFirst().getPk();
+        }
+        PartRequest request = PartRequest.builder()
+                .name(PartTestData.testPartName("PRICING-SETUP", "salable"))
+                .purchaseable(true)
+                .salable(true)
+                .build();
+        Part created = partService.createPart(request, Role.ADMIN);
+        setupCreatedPartIds.add(created.getPk());
+        return created.getPk();
     }
 }

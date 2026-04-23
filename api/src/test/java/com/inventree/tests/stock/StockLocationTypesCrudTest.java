@@ -36,7 +36,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     public void cleanupTestData() {
         createdLocationIds.forEach(id -> {
             try {
-                stockService.deleteStockLocationRaw(id, Role.ADMIN);
+                stockLocationService.deleteStockLocationRaw(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock location {}", id, t);
             }
@@ -45,7 +45,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
 
         createdLocationTypeIds.forEach(id -> {
             try {
-                stockService.deleteStockLocationTypeRaw(id, Role.ADMIN);
+                stockLocationService.deleteStockLocationTypeRaw(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock location type {}", id, t);
             }
@@ -57,13 +57,13 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("List Location Types")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALTCRUD_001_getStockLocationTypeListReturnsArray() {
-        StockLocationType seed = stockService.createStockLocationType(
+        StockLocationType seed = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALTCRUD-001", "Seed")),
                 Role.ADMIN);
         createdLocationTypeIds.add(seed.getPk());
 
-        List<StockLocationType> types = stockService.listStockLocationTypes(Role.READER);
+        List<StockLocationType> types = stockLocationService.listStockLocationTypes(Role.READER);
         assertNotNull(types, "list response must not be null");
         assertFalse(types.isEmpty(), "list must contain at least the seeded type");
 
@@ -78,14 +78,14 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Get Location Type by ID")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALTCRUD_002_getStockLocationTypeByIdReturnsSingleType() {
-        StockLocationType created = stockService.createStockLocationType(
+        StockLocationType created = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALTCRUD-002", "GetById")),
                 Role.ADMIN);
         int typePk = created.getPk();
         createdLocationTypeIds.add(typePk);
 
-        StockLocationType fetched = stockService.getStockLocationTypeById(typePk, Role.READER);
+        StockLocationType fetched = stockLocationService.getStockLocationTypeById(typePk, Role.READER);
         assertEquals(fetched.getPk(), Integer.valueOf(typePk));
         assertNotNull(fetched.getName(), "name must not be null");
         assertFalse(fetched.getName().isEmpty(), "name must not be empty");
@@ -97,7 +97,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALTCRUD_003_postStockLocationTypeCreatesWithRequiredFieldsOnly() {
         String name = StockTestData.testLocationTypeName("TC-ALTCRUD-003", "Minimal");
-        Response response = stockService.createStockLocationTypeRaw(
+        Response response = stockLocationService.createStockLocationTypeRaw(
                 StockTestData.minimalLocationType(name), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_CREATED);
 
@@ -120,7 +120,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
         String name = StockTestData.testLocationTypeName("TC-ALTCRUD-004", "Full");
         String description = "Large storage bin for bulk components";
 
-        StockLocationType created = stockService.createStockLocationType(
+        StockLocationType created = stockLocationService.createStockLocationType(
                 StockTestData.fullLocationType(name, description, StockTestData.ICON_BOX_OUTLINE),
                 Role.ADMIN);
         createdLocationTypeIds.add(created.getPk());
@@ -134,7 +134,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Full Update Location Type")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALTCRUD_005_putStockLocationTypeReplacesAllWritableFields() {
-        StockLocationType created = stockService.createStockLocationType(
+        StockLocationType created = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALTCRUD-005", "Original")),
                 Role.ADMIN);
@@ -148,7 +148,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
                 .icon(StockTestData.ICON_BOOKMARK_FILLED)
                 .build();
 
-        StockLocationType updated = stockService.updateStockLocationType(typePk, update, Role.ADMIN);
+        StockLocationType updated = stockLocationService.updateStockLocationType(typePk, update, Role.ADMIN);
 
         assertEquals(updated.getName(), newName);
         assertEquals(updated.getDescription(), "Updated description");
@@ -160,14 +160,14 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALTCRUD_006_patchStockLocationTypeUpdatesDescriptionOnly() {
         String originalName = StockTestData.testLocationTypeName("TC-ALTCRUD-006", "KeepName");
-        StockLocationType created = stockService.createStockLocationType(
+        StockLocationType created = stockLocationService.createStockLocationType(
                 StockTestData.fullLocationType(originalName, "Original description",
                         StockTestData.ICON_BOX_OUTLINE),
                 Role.ADMIN);
         int typePk = created.getPk();
         createdLocationTypeIds.add(typePk);
 
-        StockLocationType patched = stockService.patchStockLocationType(typePk,
+        StockLocationType patched = stockLocationService.patchStockLocationType(typePk,
                 StockLocationTypeRequest.builder().description("Patched description only").build(),
                 Role.ADMIN);
 
@@ -180,7 +180,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Partial Update Icon")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALTCRUD_007_patchStockLocationTypeUpdatesIcon() {
-        StockLocationType created = stockService.createStockLocationType(
+        StockLocationType created = stockLocationService.createStockLocationType(
                 StockTestData.fullLocationType(
                         StockTestData.testLocationTypeName("TC-ALTCRUD-007", "IconSwap"),
                         "icon patch target", StockTestData.ICON_BOX_OUTLINE),
@@ -188,7 +188,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
         int typePk = created.getPk();
         createdLocationTypeIds.add(typePk);
 
-        StockLocationType patched = stockService.patchStockLocationType(typePk,
+        StockLocationType patched = stockLocationService.patchStockLocationType(typePk,
                 StockLocationTypeRequest.builder().icon(StockTestData.ICON_ARCHIVE_OUTLINE).build(),
                 Role.ADMIN);
 
@@ -199,20 +199,20 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Delete Unreferenced Location Type")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALTCRUD_008_deleteStockLocationTypeRemovesUnreferencedType() {
-        StockLocationType created = stockService.createStockLocationType(
+        StockLocationType created = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALTCRUD-008", "ToDelete")),
                 Role.ADMIN);
         int typePk = created.getPk();
 
-        StockLocationType state = stockService.getStockLocationTypeById(typePk, Role.READER);
+        StockLocationType state = stockLocationService.getStockLocationTypeById(typePk, Role.READER);
         assertEquals(state.getLocationCount(), Integer.valueOf(0),
                 "location_count must be 0 before delete");
 
-        Response deleteResponse = stockService.deleteStockLocationTypeRaw(typePk, Role.ADMIN);
+        Response deleteResponse = stockLocationService.deleteStockLocationTypeRaw(typePk, Role.ADMIN);
         deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);
 
-        stockService.getStockLocationTypeByIdRaw(typePk, Role.READER).then()
+        stockLocationService.getStockLocationTypeByIdRaw(typePk, Role.READER).then()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
@@ -220,23 +220,23 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Delete Location Type Referenced by Locations")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALTCRUD_009_deleteStockLocationTypeReferencedByLocations() {
-        StockLocationType type = stockService.createStockLocationType(
+        StockLocationType type = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALTCRUD-009", "InUse")),
                 Role.ADMIN);
         int typePk = type.getPk();
         createdLocationTypeIds.add(typePk);
 
-        StockLocationDetail location = stockService.createStockLocation(
+        StockLocationDetail location = stockLocationService.createStockLocation(
                 StockTestData.locationWithType(
                         StockTestData.testLocationName("TC-ALTCRUD-009", "WithType"), typePk),
                 Role.ADMIN);
         createdLocationIds.add(location.getPk());
 
-        StockLocationType state = stockService.getStockLocationTypeById(typePk, Role.READER);
+        StockLocationType state = stockLocationService.getStockLocationTypeById(typePk, Role.READER);
         assertTrue(state.getLocationCount() > 0, "location_count must be > 0");
 
-        Response deleteResponse = stockService.deleteStockLocationTypeRaw(typePk, Role.ADMIN);
+        Response deleteResponse = stockLocationService.deleteStockLocationTypeRaw(typePk, Role.ADMIN);
         int status = deleteResponse.statusCode();
         assertTrue(status == HttpStatus.SC_BAD_REQUEST
                         || status == HttpStatus.SC_CONFLICT
@@ -245,7 +245,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
 
         if (status == HttpStatus.SC_NO_CONTENT) {
             createdLocationTypeIds.remove(Integer.valueOf(typePk));
-            StockLocationDetail afterDelete = stockService.getStockLocationById(
+            StockLocationDetail afterDelete = stockLocationService.getStockLocationById(
                     location.getPk(), Role.READER);
             assertTrue(afterDelete.getLocationType() == null
                             || !afterDelete.getLocationType().equals(typePk),
@@ -257,7 +257,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Create Location Type - Negative: Missing Name")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALTCRUD_010_postStockLocationTypeWithMissingNameReturns400() {
-        Response response = stockService.createStockLocationTypeRaw(
+        Response response = stockLocationService.createStockLocationTypeRaw(
                 Map.of("description", "No name provided"), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
         assertNotNull(response.jsonPath().get("name"),
@@ -268,7 +268,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Create Location Type - Negative: Name Over 100 Chars")
     @Severity(SeverityLevel.MINOR)
     public void tc_ALTCRUD_011_postStockLocationTypeWithOverlongNameReturns400() {
-        Response response = stockService.createStockLocationTypeRaw(
+        Response response = stockLocationService.createStockLocationTypeRaw(
                 Map.of("name", StockTestData.LOC_TYPE_NAME_101_CHARS), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
         assertNotNull(response.jsonPath().get("name"),
@@ -279,7 +279,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Get Location Type - Negative: Non-existent PK")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALTCRUD_012_getStockLocationTypeWithNonExistentPkReturns404() {
-        Response response = stockService.getStockLocationTypeByIdRaw(
+        Response response = stockLocationService.getStockLocationTypeByIdRaw(
                 StockTestData.NONEXISTENT_PK, Role.READER);
         response.then().statusCode(HttpStatus.SC_NOT_FOUND);
     }
@@ -288,7 +288,7 @@ public class StockLocationTypesCrudTest extends BaseTest {
     @Story("Create Location Type - Security: No Auth")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALTCRUD_013_postStockLocationTypeWithoutAuthenticationReturns401Or403() {
-        Response response = stockService.createStockLocationTypeUnauthenticated(
+        Response response = stockLocationService.createStockLocationTypeUnauthenticated(
                 Map.of("name", "Unauthorized Type"));
         int status = response.statusCode();
         assertTrue(status == HttpStatus.SC_UNAUTHORIZED || status == HttpStatus.SC_FORBIDDEN,

@@ -4,9 +4,12 @@ import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
 import com.inventree.model.Part;
 import com.inventree.model.PartCategory;
+import com.inventree.model.PartCategoryRequest;
 import com.inventree.model.PartListParams;
+import com.inventree.model.PartRequest;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.testdata.FilteringTestData;
+import com.inventree.testdata.PartTestData;
 import com.inventree.util.HttpStatus;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -14,7 +17,9 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -34,6 +39,60 @@ import static org.testng.Assert.assertTrue;
 public class PartFilteringPaginationSearchTest extends BaseTest {
 
     private final List<Integer> createdPartIds = new ArrayList<>();
+    private int parentCategoryPk;
+    private int childCategoryPk;
+    private int ipnPartPk;
+    private String ipnPartValue;
+    private final List<Integer> setupCreatedPartIds = new ArrayList<>();
+    private final List<Integer> setupCreatedCategoryIds = new ArrayList<>();
+
+    @BeforeClass(alwaysRun = true)
+    public void setupFilteringTestData() {
+        parentCategoryPk = findOrCreateParentCategory();
+        childCategoryPk = findOrCreateChildCategory(parentCategoryPk);
+
+        ipnPartValue = "IPN-FILTER-" + PartTestData.RUN_ID;
+        PartRequest ipnPart = PartRequest.builder()
+                .name("IPN-FILTER-PART-" + PartTestData.RUN_ID)
+                .ipn(ipnPartValue)
+                .build();
+        Part created = partService.createPart(ipnPart, Role.ADMIN);
+        ipnPartPk = created.getPk();
+        setupCreatedPartIds.add(ipnPartPk);
+
+        Part parentCatPart = partService.createPart(
+                PartTestData.minimalPartWithCategory(
+                        PartTestData.testPartName("APFLT-SETUP", "parent"), parentCategoryPk),
+                Role.ADMIN);
+        setupCreatedPartIds.add(parentCatPart.getPk());
+
+        Part childCatPart = partService.createPart(
+                PartTestData.minimalPartWithCategory(
+                        PartTestData.testPartName("APFLT-SETUP", "child"), childCategoryPk),
+                Role.ADMIN);
+        setupCreatedPartIds.add(childCatPart.getPk());
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void teardownFilteringTestData() {
+        setupCreatedPartIds.forEach(id -> {
+            try {
+                partService.patchPart(id, PartTestData.patchActiveOnly(false), Role.ADMIN);
+                partService.deletePart(id, Role.ADMIN);
+            } catch (Exception e) {
+                log.error("Error while deleting setup part {}", id, e);
+            }
+        });
+        setupCreatedPartIds.clear();
+        setupCreatedCategoryIds.forEach(id -> {
+            try {
+                partCategoryService.deleteCategory(id, Role.ADMIN);
+            } catch (Exception e) {
+                log.error("Error while deleting setup category {}", id, e);
+            }
+        });
+        setupCreatedCategoryIds.clear();
+    }
 
     @AfterMethod(alwaysRun = true)
     public void cleanupTestData() {
@@ -134,17 +193,17 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     public void tc_APFLT_003_categoryFilterReturnPartsInSpecifiedCategory() {
         PaginatedResponse<Part> directResult = partService.listParts(
                 PartListParams.builder()
-                        .category(FilteringTestData.ELECTRONICS_CATEGORY_PK)
+                        .category(parentCategoryPk)
                         .limit(FilteringTestData.SMALL_PAGE_LIMIT)
                         .build(), Role.ADMIN);
 
         assertTrue(directResult.getCount() > 0,
-                "count must be > 0 for category=" + FilteringTestData.ELECTRONICS_CATEGORY_PK);
+                "count must be > 0 for category=" + parentCategoryPk);
         int directCount = directResult.getCount();
 
         PaginatedResponse<Part> cascadeResult = partService.listParts(
                 PartListParams.builder()
-                        .category(FilteringTestData.ELECTRONICS_CATEGORY_PK)
+                        .category(parentCategoryPk)
                         .cascade(true)
                         .limit(FilteringTestData.SMALL_PAGE_LIMIT)
                         .build(), Role.ADMIN);
@@ -243,16 +302,16 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     public void tc_APFLT_018_ipnExactMatchReturnsSingleMatchingPartNonExistentReturnsEmpty() {
         PaginatedResponse<Part> existingIpnResult = partService.listParts(
                 PartListParams.builder()
-                        .ipn(FilteringTestData.IPN_EXISTING)
+                        .ipn(ipnPartValue)
                         .limit(FilteringTestData.SMALL_PAGE_LIMIT)
                         .build(), Role.ADMIN);
 
         assertEquals(existingIpnResult.getCount(), Integer.valueOf(1),
-                "count must be 1 for IPN=" + FilteringTestData.IPN_EXISTING);
-        assertEquals(existingIpnResult.getResults().getFirst().getIpn(), FilteringTestData.IPN_EXISTING,
+                "count must be 1 for IPN=" + ipnPartValue);
+        assertEquals(existingIpnResult.getResults().getFirst().getIpn(), ipnPartValue,
                 "IPN of returned part must match filter value");
         assertEquals(existingIpnResult.getResults().getFirst().getPk(),
-                Integer.valueOf(FilteringTestData.IPN_EXISTING_PK),
+                Integer.valueOf(ipnPartPk),
                 "pk of returned part must match expected pk");
 
         PaginatedResponse<Part> nonExistentIpnResult = partService.listParts(
@@ -415,15 +474,15 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
                         + FilteringTestData.SEARCH_CATEGORY_NAME + "'");
 
         PaginatedResponse<PartCategory> parentResponse = partCategoryService.listCategories(
-                Map.of("parent", FilteringTestData.PARENT_CATEGORY_PK,
+                Map.of("parent", parentCategoryPk,
                        "limit", FilteringTestData.LARGE_LIMIT), Role.ADMIN);
 
         List<Integer> parents = parentResponse.getResults().stream()
                 .map(PartCategory::getParent)
                 .toList();
         parents.forEach(p ->
-                assertEquals(p, Integer.valueOf(FilteringTestData.PARENT_CATEGORY_PK),
-                        "All results must have parent=" + FilteringTestData.PARENT_CATEGORY_PK));
+                assertEquals(p, Integer.valueOf(parentCategoryPk),
+                        "All results must have parent=" + parentCategoryPk));
 
         PaginatedResponse<PartCategory> topLevelResponse = partCategoryService.listCategories(
                 Map.of(FilteringTestData.FILTER_PARAM_TOP_LEVEL, FilteringTestData.FILTER_VALUE_TRUE,
@@ -739,7 +798,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
     public void tc_APFLT_022_categoryWithCascadeTrueIncludesPartsInChildCategories() {
         PaginatedResponse<Part> cascadeResult = partService.listParts(
                 PartListParams.builder()
-                        .category(FilteringTestData.CATEGORY_WITH_CHILD_PK)
+                        .category(parentCategoryPk)
                         .cascade(true)
                         .limit(FilteringTestData.LARGE_LIMIT)
                         .build(), Role.ADMIN);
@@ -750,23 +809,20 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
                 .map(Part::getCategory)
                 .toList();
 
-        assertTrue(categories.contains(FilteringTestData.CATEGORY_WITH_CHILD_PK),
-                "Results must include parts from parent category pk="
-                        + FilteringTestData.CATEGORY_WITH_CHILD_PK);
-        assertTrue(categories.contains(FilteringTestData.CHILD_CATEGORY_PK),
-                "Results must include parts from child category pk="
-                        + FilteringTestData.CHILD_CATEGORY_PK);
+        assertTrue(categories.contains(parentCategoryPk),
+                "Results must include parts from parent category pk=" + parentCategoryPk);
+        assertTrue(categories.contains(childCategoryPk),
+                "Results must include parts from child category pk=" + childCategoryPk);
 
         PaginatedResponse<Part> childOnlyResult = partService.listParts(
                 PartListParams.builder()
-                        .category(FilteringTestData.CHILD_CATEGORY_PK)
+                        .category(childCategoryPk)
                         .limit(FilteringTestData.SMALL_PAGE_LIMIT)
                         .build(), Role.ADMIN);
 
         childOnlyResult.getResults().forEach(p ->
-                assertEquals(p.getCategory(), Integer.valueOf(FilteringTestData.CHILD_CATEGORY_PK),
-                        "All results must belong to child category pk="
-                                + FilteringTestData.CHILD_CATEGORY_PK));
+                assertEquals(p.getCategory(), Integer.valueOf(childCategoryPk),
+                        "All results must belong to child category pk=" + childCategoryPk));
     }
 
     @Test(groups = {"regression", "parts", "ordering"})
@@ -820,5 +876,34 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
                     "in_stock must be ascending: " + stockAsc.get(i)
                             + " > " + stockAsc.get(i + 1));
         }
+    }
+
+    private int findOrCreateParentCategory() {
+        PaginatedResponse<PartCategory> listing = partCategoryService.listCategories(
+                Map.of("top_level", "true", "limit", 1), Role.ADMIN);
+        if (!listing.getResults().isEmpty()) {
+            return listing.getResults().getFirst().getPk();
+        }
+        PartCategoryRequest request = PartCategoryRequest.builder()
+                .name("FILTER-PARENT-CAT-" + PartTestData.RUN_ID)
+                .build();
+        PartCategory created = partCategoryService.createCategory(request, Role.ADMIN);
+        setupCreatedCategoryIds.add(created.getPk());
+        return created.getPk();
+    }
+
+    private int findOrCreateChildCategory(int parentPk) {
+        PaginatedResponse<PartCategory> listing = partCategoryService.listCategories(
+                Map.of("parent", parentPk, "limit", 1), Role.ADMIN);
+        if (!listing.getResults().isEmpty()) {
+            return listing.getResults().getFirst().getPk();
+        }
+        PartCategoryRequest request = PartCategoryRequest.builder()
+                .name("FILTER-CHILD-CAT-" + PartTestData.RUN_ID)
+                .parent(parentPk)
+                .build();
+        PartCategory created = partCategoryService.createCategory(request, Role.ADMIN);
+        setupCreatedCategoryIds.add(created.getPk());
+        return created.getPk();
     }
 }

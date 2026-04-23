@@ -13,7 +13,9 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -31,6 +33,34 @@ import static org.testng.Assert.assertTrue;
 public class PartCategoryCrudTest extends BaseTest {
 
     private final List<Integer> createdCategoryIds = new ArrayList<>();
+    private int passivesCategoryPk;
+    private boolean passivesCreatedBySetup;
+
+    @BeforeClass(alwaysRun = true)
+    public void setupPassivesCategory() {
+        PaginatedResponse<PartCategory> result = partCategoryService.listCategories(
+                Map.of("search", CategoryTestData.PASSIVES_NAME), Role.ADMIN);
+        if (!result.getResults().isEmpty()) {
+            passivesCategoryPk = result.getResults().get(0).getPk();
+            passivesCreatedBySetup = false;
+        } else {
+            PartCategory created = partCategoryService.createCategory(
+                    CategoryTestData.minimalTopLevel(CategoryTestData.PASSIVES_NAME), Role.ADMIN);
+            passivesCategoryPk = created.getPk();
+            passivesCreatedBySetup = true;
+        }
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void teardownPassivesCategory() {
+        if (passivesCreatedBySetup) {
+            try {
+                partCategoryService.deleteCategory(passivesCategoryPk, Role.ADMIN);
+            } catch (Throwable t) {
+                log.error("Error while deleting setup passives category", t);
+            }
+        }
+    }
 
     @AfterMethod(alwaysRun = true)
     public void cleanupTestData() {
@@ -89,12 +119,12 @@ public class PartCategoryCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ACCRUD_002_getPartCategoryByIdReturnsCorrectData() {
         Response rawResponse = partCategoryService.getCategoryByIdRaw(
-                CategoryTestData.ELECTRONICS_PK, Role.ADMIN);
+                passivesCategoryPk, Role.ADMIN);
         rawResponse.then().statusCode(HttpStatus.SC_OK);
 
         PartCategory category = rawResponse.as(PartCategory.class);
-        assertEquals(category.getPk(), Integer.valueOf(CategoryTestData.ELECTRONICS_PK));
-        assertEquals(category.getName(), CategoryTestData.ELECTRONICS_NAME);
+        assertEquals(category.getPk(), Integer.valueOf(passivesCategoryPk));
+        assertEquals(category.getName(), CategoryTestData.PASSIVES_NAME);
         assertEquals(category.getLevel(), Integer.valueOf(0));
         assertNull(category.getParent(), "Top-level category parent must be null");
 
@@ -102,7 +132,7 @@ public class PartCategoryCrudTest extends BaseTest {
                 "path field must be absent when path_detail is not requested");
 
         Response pathDetailResponse = partCategoryService.getCategoryByIdRaw(
-                CategoryTestData.ELECTRONICS_PK, Role.ADMIN,
+                passivesCategoryPk, Role.ADMIN,
                 Map.of(CategoryTestData.QUERY_PARAM_PATH_DETAIL, CategoryTestData.QUERY_VALUE_TRUE));
         pathDetailResponse.then().statusCode(HttpStatus.SC_OK);
 
@@ -111,9 +141,9 @@ public class PartCategoryCrudTest extends BaseTest {
         assertFalse(path.isEmpty(), "path array must not be empty");
 
         Map<String, Object> firstElement = path.getFirst();
-        assertEquals(firstElement.get("pk"), CategoryTestData.ELECTRONICS_PK,
+        assertEquals(firstElement.get("pk"), passivesCategoryPk,
                 "First path element pk must match category pk");
-        assertEquals(firstElement.get("name"), CategoryTestData.ELECTRONICS_NAME,
+        assertEquals(firstElement.get("name"), CategoryTestData.PASSIVES_NAME,
                 "First path element name must match category name");
     }
 
@@ -152,10 +182,10 @@ public class PartCategoryCrudTest extends BaseTest {
     @Story("Create Category")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ACCRUD_004_postPartCategoryCreatesChildCategoryWithParentAssigned() {
-        int parentPk = CategoryTestData.ELECTRONICS_PK;
+        int parentPk = passivesCategoryPk;
         String childName = CategoryTestData.testCategoryName("TC-ACCRUD-004", "ChildCat");
         String description = "Child category for CRUD test";
-        String expectedPathstring = CategoryTestData.ELECTRONICS_NAME + "/" + childName;
+        String expectedPathstring = CategoryTestData.PASSIVES_NAME + "/" + childName;
 
         PartCategoryRequest request = CategoryTestData.withParentAndDescription(
                 childName, parentPk, description);
@@ -176,7 +206,7 @@ public class PartCategoryCrudTest extends BaseTest {
         assertNotNull(path, "path array must be present in POST response");
         assertEquals(path.size(), 2, "path array must contain two elements for level-1 category");
         assertEquals(path.get(0).get("pk"), parentPk);
-        assertEquals(path.get(0).get("name"), CategoryTestData.ELECTRONICS_NAME);
+        assertEquals(path.get(0).get("name"), CategoryTestData.PASSIVES_NAME);
         assertEquals(path.get(1).get("pk"), childPk);
         assertEquals(path.get(1).get("name"), childName);
 

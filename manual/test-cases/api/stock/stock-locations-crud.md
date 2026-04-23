@@ -505,9 +505,9 @@
 
 ---
 
-## TC-ALCRUD-018: DELETE /api/stock/location/{id}/ on a location with stock items returns 400
+## TC-ALCRUD-018: DELETE /api/stock/location/{id}/ on a location with stock items returns 204
 
-**Type:** API / Negative
+**Type:** API / Functional
 **Priority:** P2
 **Endpoint:** `DELETE /api/stock/location/{id}/`
 
@@ -524,16 +524,16 @@
 
 1. Confirm `items` is greater than `0` for `{location_pk}`: `GET /api/stock/location/{location_pk}/`.
 2. Send `DELETE /api/stock/location/{location_pk}/` with write credentials.
-3. Verify response status is `400` (or `409`).
-4. Verify response body contains an error message indicating the location cannot be deleted because it contains items.
+3. Verify response status is `204`.
+4. Verify the deleted location returns `404` on subsequent `GET /api/stock/location/{location_pk}/`.
 
-**Expected Result:** `400` or `409`. A location with stock items cannot be deleted directly.
+**Expected Result:** `204 No Content`. The location is deleted regardless of contained stock items. Stock items previously at this location will have their location assignment removed.
 
 ---
 
-## TC-ALCRUD-019: DELETE /api/stock/location/{id}/ on a location with child locations returns 400
+## TC-ALCRUD-019: DELETE /api/stock/location/{id}/ on a location with child locations returns 204
 
-**Type:** API / Negative
+**Type:** API / Functional
 **Priority:** P2
 **Endpoint:** `DELETE /api/stock/location/{id}/`
 
@@ -550,10 +550,11 @@
 
 1. Confirm `sublocations` is greater than `0` for `{parent_pk}`: `GET /api/stock/location/{parent_pk}/`.
 2. Send `DELETE /api/stock/location/{parent_pk}/` with write credentials.
-3. Verify response status is `400` (or `409`).
-4. Verify the response indicates the location has child locations and cannot be deleted.
+3. Verify response status is `204`.
+4. Verify the deleted location returns `404` on subsequent `GET /api/stock/location/{parent_pk}/`.
+5. Verify that child locations still exist but have `parent: null` (they become root-level locations).
 
-**Expected Result:** `400` or `409`. A location with child sub-locations cannot be deleted.
+**Expected Result:** `204 No Content`. The location is deleted regardless of child locations. Child locations survive but are re-parented to `null` (become root-level).
 
 ---
 

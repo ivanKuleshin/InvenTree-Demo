@@ -8,7 +8,9 @@ import com.inventree.service.PartCategoryService;
 import com.inventree.service.PartService;
 import com.inventree.service.PartTestTemplateService;
 import com.inventree.service.PricingService;
-import com.inventree.service.StockService;
+import com.inventree.service.StockAdjustmentService;
+import com.inventree.service.StockItemService;
+import com.inventree.service.StockLocationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
@@ -26,7 +28,9 @@ public abstract class BaseTest {
     protected static PartService partService;
     protected static PartCategoryService partCategoryService;
     protected static PartTestTemplateService partTestTemplateService;
-    protected static StockService stockService;
+    protected static StockItemService stockItemService;
+    protected static StockLocationService stockLocationService;
+    protected static StockAdjustmentService stockAdjustmentService;
     protected static CompanyService companyService;
     protected static PricingService pricingService;
 
@@ -39,7 +43,9 @@ public abstract class BaseTest {
         partService = new PartService();
         partCategoryService = new PartCategoryService();
         partTestTemplateService = new PartTestTemplateService();
-        stockService = new StockService();
+        stockItemService = new StockItemService();
+        stockLocationService = new StockLocationService();
+        stockAdjustmentService = new StockAdjustmentService();
         companyService = new CompanyService();
         pricingService = new PricingService();
 

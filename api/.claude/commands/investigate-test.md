@@ -73,7 +73,8 @@ Instructions:
 2. Confirm your hypothesis with additional API probes if needed
 3. If documentation and actual behaviour conflict → STOP and present the
    conflict to the human with options A / B / C / D before making any changes
-4. Apply the fix using test-automation agent only after root cause is confirmed and (if needed) human has decided
+4. Do NOT implement any test fix yourself — delegate ALL test file changes to
+   the test-automation agent with a precise description of what to change and why
 5. Verify the fix by re-running the test using test-runner agent
 6. Produce the final investigation report
 ```

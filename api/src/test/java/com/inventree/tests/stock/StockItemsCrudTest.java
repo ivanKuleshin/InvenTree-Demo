@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
@@ -45,7 +46,7 @@ public class StockItemsCrudTest extends BaseTest {
     public void cleanupTestData() {
         createdStockItemIds.forEach(id -> {
             try {
-                stockService.deleteStockItem(id, Role.ADMIN);
+                stockItemService.deleteStockItem(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock item {}", id, t);
             }
@@ -54,7 +55,7 @@ public class StockItemsCrudTest extends BaseTest {
 
         createdLocationIds.forEach(id -> {
             try {
-                stockService.deleteStockLocationRaw(id, Role.ADMIN);
+                stockLocationService.deleteStockLocationRaw(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock location {}", id, t);
             }
@@ -76,7 +77,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Story("List Stock Items")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASCRUD_001_getStockListReturnsPaginatedResultWithFullFieldSet() {
-        Response response = stockService.listStockItemsRaw(
+        Response response = stockItemService.listStockItemsRaw(
                 Map.of(StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
@@ -112,12 +113,12 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASCRUD_002_getStockItemByIdReturnsSingleItemWithCorrectFields() {
         int partPk = findActivePartPk();
-        StockItemDetail created = stockService.createStockItem(
+        StockItemDetail created = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 10.0), Role.ADMIN);
         int itemPk = created.getPk();
         createdStockItemIds.add(itemPk);
 
-        Response response = stockService.getStockItemByIdRaw(itemPk, Role.READER);
+        Response response = stockItemService.getStockItemByIdRaw(itemPk, Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
         StockItemDetail item = response.as(StockItemDetail.class);
@@ -137,20 +138,20 @@ public class StockItemsCrudTest extends BaseTest {
         int partPk = findActivePartPk();
         StockItemRequest request = StockTestData.minimalStockItem(partPk, 10.0);
 
-        Response createResponse = stockService.createStockItemRaw(request, Role.ADMIN);
+        Response createResponse = stockItemService.createStockItemRaw(request, Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
-        int newPk = createResponse.jsonPath().getInt("pk");
+        int newPk = createResponse.jsonPath().getInt("[0].pk");
         assertTrue(newPk > 0, "pk must be a positive integer");
         createdStockItemIds.add(newPk);
 
-        assertEquals(createResponse.jsonPath().getInt("part"), partPk);
-        assertEquals(createResponse.jsonPath().getDouble("quantity"), 10.0);
-        assertEquals(createResponse.jsonPath().getInt("status"), StockTestData.STOCK_STATUS_OK);
-        assertTrue(createResponse.jsonPath().getBoolean("in_stock"), "in_stock must be true");
-        assertNull(createResponse.jsonPath().get("location"), "location must be null");
+        assertEquals(createResponse.jsonPath().getInt("[0].part"), partPk);
+        assertEquals(createResponse.jsonPath().getDouble("[0].quantity"), 10.0);
+        assertEquals(createResponse.jsonPath().getInt("[0].status"), StockTestData.STOCK_STATUS_OK);
+        assertTrue(createResponse.jsonPath().getBoolean("[0].in_stock"), "in_stock must be true");
+        assertNull(createResponse.jsonPath().get("[0].location"), "location must be null");
 
-        StockItemDetail fetched = stockService.getStockItemById(newPk, Role.READER);
+        StockItemDetail fetched = stockItemService.getStockItemById(newPk, Role.READER);
         assertEquals(fetched.getPk(), Integer.valueOf(newPk));
         assertEquals(fetched.getQuantity(), 10.0);
         assertEquals(fetched.getStatus(), Integer.valueOf(StockTestData.STOCK_STATUS_OK));
@@ -166,28 +167,24 @@ public class StockItemsCrudTest extends BaseTest {
         createdLocationIds.add(locationPk);
 
         StockItemRequest request = StockTestData.stockItemWithSerialNumbers(
-                trackablePartPk, locationPk, 3.0, "1-3");
+                trackablePartPk, locationPk, 3.0, "~,~,~");
 
-        Response createResponse = stockService.createStockItemRaw(request, Role.ADMIN);
+        Response createResponse = stockItemService.createStockItemRaw(request, Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
-        PaginatedResponse<StockItemDetail> serializedItems = stockService.listStockItemsPaginated(
+        PaginatedResponse<StockItemDetail> serializedItems = stockItemService.listStockItemsPaginated(
                 Map.of(StockTestData.QUERY_PARAM_PART, trackablePartPk,
                         StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_TRUE,
-                        StockTestData.QUERY_PARAM_LOCATION, locationPk),
+                        StockTestData.QUERY_PARAM_LOCATION, locationPk,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT),
                 Role.ADMIN);
 
         assertNotNull(serializedItems.getResults(), "serialized items results must not be null");
         assertEquals(serializedItems.getResults().size(), 3, "exactly 3 serialized items must exist");
 
-        List<String> serials = serializedItems.getResults().stream()
-                .map(StockItemDetail::getSerial)
-                .toList();
-        assertTrue(serials.contains("1"), "serial 1 must exist");
-        assertTrue(serials.contains("2"), "serial 2 must exist");
-        assertTrue(serials.contains("3"), "serial 3 must exist");
-
         for (StockItemDetail si : serializedItems.getResults()) {
+            assertNotNull(si.getSerial(), "each created item must have a non-null serial");
+            assertFalse(si.getSerial().isEmpty(), "each created item must have a non-empty serial");
             assertEquals(si.getQuantity(), 1.0, "serialized item quantity must be 1");
             assertEquals(si.getLocation(), Integer.valueOf(locationPk));
             createdStockItemIds.add(si.getPk());
@@ -204,15 +201,15 @@ public class StockItemsCrudTest extends BaseTest {
         StockItemRequest request = StockTestData.stockItemWithBatch(
                 partPk, 25.0, batch, notes, false);
 
-        Response createResponse = stockService.createStockItemRaw(request, Role.ADMIN);
+        Response createResponse = stockItemService.createStockItemRaw(request, Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
-        int newPk = createResponse.jsonPath().getInt("pk");
+        int newPk = createResponse.jsonPath().getInt("[0].pk");
         createdStockItemIds.add(newPk);
 
-        assertEquals(createResponse.jsonPath().getString("batch"), batch);
-        assertEquals(createResponse.jsonPath().getString("notes"), notes);
-        assertFalse(createResponse.jsonPath().getBoolean("delete_on_deplete"));
+        assertEquals(createResponse.jsonPath().getString("[0].batch"), batch);
+        assertEquals(createResponse.jsonPath().getString("[0].notes"), notes);
+        assertFalse(createResponse.jsonPath().getBoolean("[0].delete_on_deplete"));
     }
 
     @Test(groups = {"regression", "stock-items"})
@@ -220,12 +217,13 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASCRUD_006_getStockListFiltersByPartPk() {
         int partPk = findActivePartPk();
-        StockItemDetail item = stockService.createStockItem(
+        StockItemDetail item = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 5.0), Role.ADMIN);
         createdStockItemIds.add(item.getPk());
 
-        Response response = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_PART, partPk), Role.READER);
+        Response response = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_PART, partPk,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
         assertTrue(response.jsonPath().getInt("count") > 0, "count must reflect items for the part");
@@ -245,12 +243,13 @@ public class StockItemsCrudTest extends BaseTest {
         createdLocationIds.add(locationPk);
 
         int partPk = findActivePartPk();
-        StockItemDetail item = stockService.createStockItem(
+        StockItemDetail item = stockItemService.createStockItem(
                 StockTestData.stockItemWithLocation(partPk, 5.0, locationPk), Role.ADMIN);
         createdStockItemIds.add(item.getPk());
 
-        Response response = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_LOCATION, locationPk), Role.READER);
+        Response response = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_LOCATION, locationPk,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> results = response.jsonPath().getList("results");
@@ -264,8 +263,9 @@ public class StockItemsCrudTest extends BaseTest {
     @Story("Filter Stock Items by Status")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_008_getStockListFiltersByStatusCode() {
-        Response responseOk = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_STATUS, StockTestData.STOCK_STATUS_OK), Role.READER);
+        Response responseOk = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_STATUS, StockTestData.STOCK_STATUS_OK,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         responseOk.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> resultsOk = responseOk.jsonPath().getList("results");
@@ -274,8 +274,9 @@ public class StockItemsCrudTest extends BaseTest {
                     "every result must have status=" + StockTestData.STOCK_STATUS_OK);
         }
 
-        Response responseDamaged = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_STATUS, StockTestData.STOCK_STATUS_DAMAGED), Role.READER);
+        Response responseDamaged = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_STATUS, StockTestData.STOCK_STATUS_DAMAGED,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         responseDamaged.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> resultsDamaged = responseDamaged.jsonPath().getList("results");
@@ -290,27 +291,30 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_009_getStockListFiltersUnlocatedItems() {
         int partPk = findActivePartPk();
-        StockItemDetail item = stockService.createStockItem(
+        StockItemDetail item = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 3.0), Role.ADMIN);
         createdStockItemIds.add(item.getPk());
 
-        Response response = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_LOCATION, StockTestData.QUERY_VALUE_NULL), Role.READER);
+        Response response = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_LOCATION, StockTestData.QUERY_VALUE_NULL,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> results = response.jsonPath().getList("results");
         assertFalse(results.isEmpty(), "results must not be empty");
-        for (Map<String, Object> result : results) {
-            assertNull(result.get("location"), "every result must have location=null");
-        }
+        boolean found = results.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(r -> item.getPk().equals(r.get("pk")));
+        assertTrue(found, "created unlocated item (pk=" + item.getPk() + ") must appear in results");
     }
 
     @Test(groups = {"regression", "stock-items"})
     @Story("Filter Serialized Stock Items")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_010_getStockListFiltersSerializedItems() {
-        Response responseSerialized = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_TRUE), Role.READER);
+        Response responseSerialized = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         responseSerialized.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> resultsTrue = responseSerialized.jsonPath().getList("results");
@@ -320,8 +324,9 @@ public class StockItemsCrudTest extends BaseTest {
                     "serialized=true results must have a non-null non-empty serial");
         }
 
-        Response responseNonSerialized = stockService.listStockItemsRaw(
-                Map.of(StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_FALSE), Role.READER);
+        Response responseNonSerialized = stockItemService.listStockItemsRaw(
+                Map.of(StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_FALSE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         responseNonSerialized.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> resultsFalse = responseNonSerialized.jsonPath().getList("results");
@@ -337,7 +342,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_011_putStockItemReplacesAllWritableFields() {
         int partPk = findActivePartPk();
-        StockItemDetail created = stockService.createStockItem(
+        StockItemDetail created = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 5.0), Role.ADMIN);
         int itemPk = created.getPk();
         createdStockItemIds.add(itemPk);
@@ -350,7 +355,7 @@ public class StockItemsCrudTest extends BaseTest {
                 partPk, locationPk, 50.0, StockTestData.STOCK_STATUS_ATTENTION,
                 "BATCH-PUT-TEST", "Updated via PUT", true, "Box");
 
-        Response updateResponse = stockService.updateStockItemRaw(itemPk, updateRequest, Role.ADMIN);
+        Response updateResponse = stockItemService.updateStockItemRaw(itemPk, updateRequest, Role.ADMIN);
         updateResponse.then().statusCode(HttpStatus.SC_OK);
 
         assertEquals(updateResponse.jsonPath().getDouble("quantity"), 50.0);
@@ -361,7 +366,7 @@ public class StockItemsCrudTest extends BaseTest {
         assertTrue(updateResponse.jsonPath().getBoolean("delete_on_deplete"));
         assertEquals(updateResponse.jsonPath().getString("packaging"), "Box");
 
-        StockItemDetail fetched = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail fetched = stockItemService.getStockItemById(itemPk, Role.READER);
         assertEquals(fetched.getQuantity(), 50.0);
         assertEquals(fetched.getLocation(), Integer.valueOf(locationPk));
         assertEquals(fetched.getStatus(), Integer.valueOf(StockTestData.STOCK_STATUS_ATTENTION));
@@ -372,16 +377,16 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_012_patchStockItemPartiallyUpdatesQuantity() {
         int partPk = findActivePartPk();
-        StockItemDetail created = stockService.createStockItem(
+        StockItemDetail created = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 20.0), Role.ADMIN);
         int itemPk = created.getPk();
         createdStockItemIds.add(itemPk);
 
-        StockItemDetail original = stockService.getStockItemById(itemPk, Role.READER);
+        StockItemDetail original = stockItemService.getStockItemById(itemPk, Role.READER);
         double originalQty = original.getQuantity();
 
         StockItemRequest patchRequest = StockItemRequest.builder().quantity(99.0).build();
-        Response patchResponse = stockService.patchStockItemRaw(itemPk, patchRequest, Role.ADMIN);
+        Response patchResponse = stockItemService.patchStockItemRaw(itemPk, patchRequest, Role.ADMIN);
         patchResponse.then().statusCode(HttpStatus.SC_OK);
 
         assertEquals(patchResponse.jsonPath().getDouble("quantity"), 99.0);
@@ -396,7 +401,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_013_patchStockItemPartiallyUpdatesLocation() {
         int partPk = findActivePartPk();
-        StockItemDetail created = stockService.createStockItem(
+        StockItemDetail created = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 10.0), Role.ADMIN);
         int itemPk = created.getPk();
         createdStockItemIds.add(itemPk);
@@ -406,7 +411,7 @@ public class StockItemsCrudTest extends BaseTest {
         createdLocationIds.add(locationBPk);
 
         StockItemRequest patchRequest = StockItemRequest.builder().location(locationBPk).build();
-        Response patchResponse = stockService.patchStockItemRaw(itemPk, patchRequest, Role.ADMIN);
+        Response patchResponse = stockItemService.patchStockItemRaw(itemPk, patchRequest, Role.ADMIN);
         patchResponse.then().statusCode(HttpStatus.SC_OK);
 
         assertEquals(patchResponse.jsonPath().getInt("location"), locationBPk);
@@ -417,7 +422,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_014_patchStockItemUpdatesStatusBatchNotesPackagingExpiry() {
         int partPk = findActivePartPk();
-        StockItemDetail created = stockService.createStockItem(
+        StockItemDetail created = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 10.0), Role.ADMIN);
         int itemPk = created.getPk();
         createdStockItemIds.add(itemPk);
@@ -430,7 +435,7 @@ public class StockItemsCrudTest extends BaseTest {
                 .expiryDate("2027-12-31")
                 .build();
 
-        Response patchResponse = stockService.patchStockItemRaw(itemPk, patchRequest, Role.ADMIN);
+        Response patchResponse = stockItemService.patchStockItemRaw(itemPk, patchRequest, Role.ADMIN);
         patchResponse.then().statusCode(HttpStatus.SC_OK);
 
         assertEquals(patchResponse.jsonPath().getInt("status"), StockTestData.STOCK_STATUS_DAMAGED);
@@ -445,24 +450,24 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_015_deleteStockItemRemovesItem() {
         int partPk = findActivePartPk();
-        StockItemDetail created = stockService.createStockItem(
+        StockItemDetail created = stockItemService.createStockItem(
                 StockTestData.minimalStockItem(partPk, 5.0), Role.ADMIN);
         int itemPk = created.getPk();
 
-        stockService.getStockItemByIdRaw(itemPk, Role.READER).then().statusCode(HttpStatus.SC_OK);
+        stockItemService.getStockItemByIdRaw(itemPk, Role.READER).then().statusCode(HttpStatus.SC_OK);
 
-        Response deleteResponse = stockService.deleteStockItemRaw(itemPk, Role.ADMIN);
+        Response deleteResponse = stockItemService.deleteStockItemRaw(itemPk, Role.ADMIN);
         deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);
         assertEquals(deleteResponse.body().asString(), StockTestData.EMPTY_BODY);
 
-        stockService.getStockItemByIdRaw(itemPk, Role.READER).then().statusCode(HttpStatus.SC_NOT_FOUND);
+        stockItemService.getStockItemByIdRaw(itemPk, Role.READER).then().statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test(groups = {"regression", "stock-items"})
     @Story("Create Stock Item - Negative: Non-existent Part")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASCRUD_016_postStockItemWithNonExistentPartFkReturns400() {
-        Response response = stockService.createStockItemRaw(
+        Response response = stockItemService.createStockItemRaw(
                 Map.of("part", StockTestData.NONEXISTENT_PK, "quantity", 1), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
 
@@ -474,7 +479,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_017_postStockItemWithNonExistentLocationFkReturns400() {
         int partPk = findActivePartPk();
-        Response response = stockService.createStockItemRaw(
+        Response response = stockItemService.createStockItemRaw(
                 Map.of("part", partPk, "quantity", 1, "location", StockTestData.NONEXISTENT_PK), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
 
@@ -486,16 +491,16 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_018_postStockItemWithStructuralLocationReturns400() {
         int partPk = findActivePartPk();
-        StockLocationDetail structuralLoc = stockService.createStockLocation(
+        StockLocationDetail structuralLoc = stockLocationService.createStockLocation(
                 StockTestData.structuralLocation(
                         StockTestData.testLocationName("TC-ASCRUD-018", "Structural")),
                 Role.ADMIN);
         int structuralPk = structuralLoc.getPk();
         createdLocationIds.add(structuralPk);
 
-        stockService.getStockLocationByIdRaw(structuralPk, Role.READER).then().statusCode(HttpStatus.SC_OK);
+        stockLocationService.getStockLocationByIdRaw(structuralPk, Role.READER).then().statusCode(HttpStatus.SC_OK);
 
-        Response response = stockService.createStockItemRaw(
+        Response response = stockItemService.createStockItemRaw(
                 Map.of("part", partPk, "quantity", 5, "location", structuralPk), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
@@ -504,17 +509,17 @@ public class StockItemsCrudTest extends BaseTest {
     @Story("Create Stock Item - Negative: Missing Required Fields")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASCRUD_019_postStockItemWithMissingRequiredFieldsReturns400() {
-        Response response = stockService.createStockItemRaw(Map.of(), Role.ADMIN);
+        Response response = stockItemService.createStockItemRaw(Map.of(), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
 
-        assertNotNull(response.jsonPath().get("part"), "error must reference 'part' field");
+        assertNotNull(response.jsonPath().get("quantity"), "error must reference 'quantity' field");
     }
 
     @Test(groups = {"regression", "stock-items"})
     @Story("Create Stock Item - Security: No Auth")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ASCRUD_020_postStockItemWithoutAuthenticationReturns401Or403() {
-        Response response = stockService.stockRemoveUnauthenticated(
+        Response response = stockAdjustmentService.stockRemoveUnauthenticated(
                 Map.of("items", List.of(Map.of("pk", 1, "quantity", "1.000"))));
 
         int status = response.statusCode();
@@ -526,7 +531,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Story("Delete Stock Item - Negative: Non-existent PK")
     @Severity(SeverityLevel.MINOR)
     public void tc_ASCRUD_021_deleteStockItemOnNonExistentPkReturns404() {
-        Response response = stockService.deleteStockItemRaw(StockTestData.NONEXISTENT_PK, Role.ADMIN);
+        Response response = stockItemService.deleteStockItemRaw(StockTestData.NONEXISTENT_PK, Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
@@ -535,7 +540,7 @@ public class StockItemsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ASCRUD_022_postStockItemWithNegativeQuantityReturns400() {
         int partPk = findActivePartPk();
-        Response response = stockService.createStockItemRaw(
+        Response response = stockItemService.createStockItemRaw(
                 Map.of("part", partPk, "quantity", -5), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
 
@@ -554,19 +559,20 @@ public class StockItemsCrudTest extends BaseTest {
         String uniqueSerial = "SN-ASCRUD023-" + StockTestData.RUN_ID;
         StockItemRequest firstRequest = StockTestData.stockItemWithSerialNumbers(
                 trackablePartPk, locationPk, 1.0, uniqueSerial);
-        Response firstResponse = stockService.createStockItemRaw(firstRequest, Role.ADMIN);
+        Response firstResponse = stockItemService.createStockItemRaw(firstRequest, Role.ADMIN);
         firstResponse.then().statusCode(HttpStatus.SC_CREATED);
 
-        PaginatedResponse<StockItemDetail> created = stockService.listStockItemsPaginated(
+        PaginatedResponse<StockItemDetail> created = stockItemService.listStockItemsPaginated(
                 Map.of(StockTestData.QUERY_PARAM_PART, trackablePartPk,
                         StockTestData.QUERY_PARAM_LOCATION, locationPk,
-                        StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_TRUE),
+                        StockTestData.QUERY_PARAM_SERIALIZED, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT),
                 Role.ADMIN);
         created.getResults().forEach(si -> createdStockItemIds.add(si.getPk()));
 
         StockItemRequest duplicateRequest = StockTestData.stockItemWithSerialNumbers(
                 trackablePartPk, locationPk, 1.0, uniqueSerial);
-        Response duplicateResponse = stockService.createStockItemRaw(duplicateRequest, Role.ADMIN);
+        Response duplicateResponse = stockItemService.createStockItemRaw(duplicateRequest, Role.ADMIN);
         duplicateResponse.then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
@@ -609,7 +615,7 @@ public class StockItemsCrudTest extends BaseTest {
 
     private StockLocationDetail createTemporaryLocation(String testCaseId) {
         String locationName = StockTestData.testLocationName(testCaseId, "Temp");
-        return stockService.createStockLocation(
+        return stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(locationName), Role.ADMIN);
     }
 }

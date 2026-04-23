@@ -40,6 +40,20 @@ public final class SpecBuilder {
         return requestSpec(role).build();
     }
 
+    public static RequestSpecification buildNoAuth() {
+        return new RequestSpecBuilder()
+                .setBaseUri(ApiConfig.getBaseUrl())
+                .setContentType(ContentType.JSON)
+                .addHeader("Accept", ContentType.JSON.toString())
+                .setRelaxedHTTPSValidation()
+                .setConfig(io.restassured.config.RestAssuredConfig.config()
+                        .httpClient(io.restassured.config.HttpClientConfig.httpClientConfig()
+                                .setParam("http.connection.timeout", ApiConfig.getRequestTimeoutMs())
+                                .setParam("http.socket.timeout", ApiConfig.getRequestTimeoutMs())))
+                .addFilter(new ResponseLoggingFilter())
+                .build();
+    }
+
     public static ResponseSpecBuilder responseSpec(int expectedStatus) {
         return new ResponseSpecBuilder()
                 .expectStatusCode(expectedStatus)

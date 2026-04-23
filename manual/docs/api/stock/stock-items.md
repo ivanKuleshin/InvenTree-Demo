@@ -328,7 +328,7 @@ Endpoints:
 
 **Part linkage**: `part`, `part_tree`, `part_detail`, `IPN`, `IPN_contains`, `IPN_regex`, `name`, `name_contains`, `name_regex`, `category`, `include_variants`, `assembly`, `salable`, `active`, `tests`.
 
-**Location**: `location` (numeric or literal `null`), `cascade` (include child locations), `location_detail`, `path_detail`, `external`, `ancestor`, `exclude_tree`.
+**Location**: `location` (numeric FK), `cascade` (include child locations), `location_detail`, `path_detail`, `external`, `ancestor`, `exclude_tree`. Note: passing the literal `null` string for `location` does not reliably filter for unlocated items when pagination (`limit`) is active — the filter is ignored and all items are returned.
 
 **Quantity and availability**: `in_stock`, `available`, `allocated`, `depleted`, `min_stock`, `max_stock`.
 

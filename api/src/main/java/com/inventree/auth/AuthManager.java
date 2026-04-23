@@ -10,8 +10,8 @@ import io.restassured.http.ContentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.EnumMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 
@@ -20,7 +20,7 @@ public final class AuthManager {
     private static final Logger log = LogManager.getLogger(AuthManager.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private final Map<Role, String> tokenCache = new EnumMap<>(Role.class);
+    private final Map<Role, String> tokenCache = new ConcurrentHashMap<>();
 
     private AuthManager() {}
 

@@ -2,8 +2,6 @@ package com.inventree.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inventree.auth.Role;
-import com.inventree.config.ApiConfig;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,10 +70,7 @@ public abstract class BaseClient {
     protected final Response executePostNoAuth(String path, Object body) {
         log.debug("POST {} [unauthenticated]", path);
         return given()
-                .baseUri(ApiConfig.getBaseUrl())
-                .contentType(ContentType.JSON)
-                .header("Accept", ContentType.JSON.toString())
-                .relaxedHTTPSValidation()
+                .spec(SpecBuilder.buildNoAuth())
                 .body(body)
                 .when()
                 .post(path);

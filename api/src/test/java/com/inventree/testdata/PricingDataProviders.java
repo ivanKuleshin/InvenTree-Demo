@@ -21,12 +21,12 @@ public final class PricingDataProviders {
     @DataProvider(name = "invalidInternalPricePayloads")
     public static Object[][] invalidInternalPricePayloads() {
         Map<String, Object> missingPrice = new HashMap<>();
-        missingPrice.put(PricingTestData.FIELD_PART, PricingTestData.PRICING_PART_PK);
+        missingPrice.put(PricingTestData.FIELD_PART, PricingTestData.NON_EXISTENT_PK);
         missingPrice.put(PricingTestData.FIELD_QUANTITY, PricingTestData.CREATE_QUANTITY);
         missingPrice.put(PricingTestData.FIELD_PRICE_CURRENCY, PricingTestData.CURRENCY_USD);
 
         Map<String, Object> missingQuantity = new HashMap<>();
-        missingQuantity.put(PricingTestData.FIELD_PART, PricingTestData.PRICING_PART_PK);
+        missingQuantity.put(PricingTestData.FIELD_PART, PricingTestData.NON_EXISTENT_PK);
         missingQuantity.put(PricingTestData.FIELD_PRICE, PricingTestData.CREATE_PRICE);
         missingQuantity.put(PricingTestData.FIELD_PRICE_CURRENCY, PricingTestData.CURRENCY_USD);
 
@@ -57,7 +57,7 @@ public final class PricingDataProviders {
     @DataProvider(name = "invalidSalePricePayloads")
     public static Object[][] invalidSalePricePayloads() {
         Map<String, Object> missingPrice = new HashMap<>();
-        missingPrice.put(PricingTestData.FIELD_PART, PricingTestData.SALABLE_PART_PK);
+        missingPrice.put(PricingTestData.FIELD_PART, PricingTestData.NON_EXISTENT_PK);
         missingPrice.put(PricingTestData.FIELD_QUANTITY, PricingTestData.SALE_CREATE_QUANTITY);
         missingPrice.put(PricingTestData.FIELD_PRICE_CURRENCY, PricingTestData.CURRENCY_USD);
 

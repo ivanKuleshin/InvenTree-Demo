@@ -4,6 +4,8 @@ import com.inventree.auth.Role;
 import com.inventree.base.BaseTest;
 import com.inventree.model.CategoryDetail;
 import com.inventree.model.CategoryPathEntry;
+import com.inventree.model.PartCategory;
+import com.inventree.model.PartCategoryRequest;
 import com.inventree.model.Company;
 import com.inventree.model.PaginatedResponse;
 import com.inventree.model.Part;
@@ -25,6 +27,7 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -45,14 +48,20 @@ import static org.testng.Assert.assertTrue;
 public class PartCrudTest extends BaseTest {
 
     private final List<Integer> createdPartIds = new ArrayList<>();
+    private int defaultCategoryPk;
+
+    @BeforeClass(alwaysRun = true)
+    public void setupTestData() {
+        defaultCategoryPk = findOrCreateDefaultCategory();
+    }
 
     @AfterMethod(alwaysRun = true)
     public void cleanupTestData() {
         createdPartIds.forEach(id -> {
             try {
-                List<StockItem> stockItems = stockService.listStockItems(
+                List<StockItem> stockItems = stockItemService.listStockItems(
                     Map.of(PartTestData.QUERY_PARAM_PART, id), Role.ADMIN);
-                stockItems.forEach(item -> stockService.deleteStockItem(item.getPk(), Role.ADMIN));
+                stockItems.forEach(item -> stockItemService.deleteStockItem(item.getPk(), Role.ADMIN));
             } catch (Throwable t) {
                 log.error("Error while deleting stock items for part {}", id, t);
             }
@@ -225,7 +234,7 @@ public class PartCrudTest extends BaseTest {
     public void tc_APCRUD_004_putPartReplacesAllWritableFields() {
         String setupName = PartTestData.testPartName("TC-APCRUD-004", "Setup");
         PartRequest setupRequest = PartTestData.minimalPartWithCategory(
-            setupName, PartTestData.DEFAULT_CATEGORY_PK);
+            setupName, defaultCategoryPk);
         Part created = partService.createPart(setupRequest, Role.ADMIN);
         int partPk = created.getPk();
         createdPartIds.add(partPk);
@@ -244,7 +253,7 @@ public class PartCrudTest extends BaseTest {
             false,
             true,
             PartTestData.PUT_UPDATE_KEYWORDS,
-            PartTestData.DEFAULT_CATEGORY_PK);
+            defaultCategoryPk);
 
         Part updated = partService.updatePart(partPk, updateRequest, Role.ADMIN);
 
@@ -335,7 +344,7 @@ public class PartCrudTest extends BaseTest {
     @Story("Create Part with Initial Stock")
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
-        PaginatedResponse<StockLocationDetail> locations = stockService.listStockLocations(
+        PaginatedResponse<StockLocationDetail> locations = stockLocationService.listStockLocations(
             Map.of(PartTestData.QUERY_PARAM_LIMIT, DEFAULT_PAGE_LIMIT), Role.ADMIN);
         assertFalse(locations.getResults().isEmpty(), "stock locations must be non-empty");
         int locationPk = locations.getResults().getFirst().getPk();
@@ -356,7 +365,7 @@ public class PartCrudTest extends BaseTest {
         assertNull(createResponse.jsonPath().get(PartTestData.FIELD_INITIAL_STOCK),
             "initial_stock must be absent from response (write-only)");
 
-        List<StockItem> stockItems = stockService.listStockItems(
+        List<StockItem> stockItems = stockItemService.listStockItems(
             Map.of(PartTestData.QUERY_PARAM_PART, newPartPk), Role.ADMIN);
         assertEquals(stockItems.size(), 1, "exactly one stock item must exist");
         StockItem stockItem = stockItems.getFirst();
@@ -401,6 +410,18 @@ public class PartCrudTest extends BaseTest {
         SupplierPart supplierPart = supplierParts.getFirst();
         assertEquals(supplierPart.getSupplier(), Integer.valueOf(supplierPk), "supplier pk must match");
         assertEquals(supplierPart.getSku(), PartTestData.SUPPLIER_SKU, "SKU must match");
+    }
+
+    private int findOrCreateDefaultCategory() {
+        PaginatedResponse<PartCategory> listing = partCategoryService.listCategories(
+                Map.of("limit", 1), Role.ADMIN);
+        if (!listing.getResults().isEmpty()) {
+            return listing.getResults().getFirst().getPk();
+        }
+        PartCategoryRequest newCategory = PartCategoryRequest.builder()
+                .name("TC-APCRUD-DEFAULT-CAT-" + PartTestData.RUN_ID)
+                .build();
+        return partCategoryService.createCategory(newCategory, Role.ADMIN).getPk();
     }
 
     private int findPartWithParametersPk() {

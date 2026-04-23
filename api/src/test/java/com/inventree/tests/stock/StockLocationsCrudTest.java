@@ -45,7 +45,7 @@ public class StockLocationsCrudTest extends BaseTest {
     public void cleanupTestData() {
         createdStockItemIds.forEach(id -> {
             try {
-                stockService.deleteStockItem(id, Role.ADMIN);
+                stockItemService.deleteStockItem(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock item {}", id, t);
             }
@@ -54,7 +54,7 @@ public class StockLocationsCrudTest extends BaseTest {
 
         createdLocationIds.forEach(id -> {
             try {
-                stockService.deleteStockLocationRaw(id, Role.ADMIN);
+                stockLocationService.deleteStockLocationRaw(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock location {}", id, t);
             }
@@ -63,7 +63,7 @@ public class StockLocationsCrudTest extends BaseTest {
 
         createdLocationTypeIds.forEach(id -> {
             try {
-                stockService.deleteStockLocationTypeRaw(id, Role.ADMIN);
+                stockLocationService.deleteStockLocationTypeRaw(id, Role.ADMIN);
             } catch (Throwable t) {
                 log.error("Error deleting stock location type {}", id, t);
             }
@@ -85,7 +85,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("List Locations")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_001_getStockLocationListReturnsPaginatedResultWithFullFieldSet() {
-        Response response = stockService.listStockLocationsRaw(
+        Response response = stockLocationService.listStockLocationsRaw(
                 Map.of(StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
@@ -116,14 +116,14 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Get Location by ID")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_002_getStockLocationByIdReturnsSingleLocationWithCorrectFields() {
-        StockLocationDetail created = stockService.createStockLocation(
+        StockLocationDetail created = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(
                         StockTestData.testLocationName("TC-ALCRUD-002", "GetById")),
                 Role.ADMIN);
         int locationPk = created.getPk();
         createdLocationIds.add(locationPk);
 
-        Response response = stockService.getStockLocationByIdRaw(locationPk, Role.READER);
+        Response response = stockLocationService.getStockLocationByIdRaw(locationPk, Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
         StockLocationDetail location = response.as(StockLocationDetail.class);
@@ -140,7 +140,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Location Tree")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_003_getStockLocationTreeReturnsLightweightTreeNodes() {
-        Response response = stockService.getStockLocationTreeRaw(Role.READER);
+        Response response = stockLocationService.getStockLocationTreeRaw(Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
         List<Map<String, Object>> tree = response.jsonPath().getList("$");
@@ -160,23 +160,26 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Filter Top-Level Locations")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_004_getStockLocationListFiltersTopLevelLocations() {
-        stockService.createStockLocation(
+        stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(
                         StockTestData.testLocationName("TC-ALCRUD-004", "Root")),
                 Role.ADMIN).getPk();
 
-        Response response = stockService.listStockLocationsRaw(
-                Map.of(StockTestData.QUERY_PARAM_TOP_LEVEL, StockTestData.QUERY_VALUE_TRUE), Role.READER);
+        Response response = stockLocationService.listStockLocationsRaw(
+                Map.of(StockTestData.QUERY_PARAM_TOP_LEVEL, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);
 
-        PaginatedResponse<StockLocationDetail> paged = stockService.listStockLocations(
-                Map.of(StockTestData.QUERY_PARAM_TOP_LEVEL, StockTestData.QUERY_VALUE_TRUE), Role.READER);
+        PaginatedResponse<StockLocationDetail> paged = stockLocationService.listStockLocations(
+                Map.of(StockTestData.QUERY_PARAM_TOP_LEVEL, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         for (StockLocationDetail loc : paged.getResults()) {
             assertNull(loc.getParent(), "top_level=true must return only locations with parent=null");
         }
 
-        PaginatedResponse<StockLocationDetail> topLevel = stockService.listStockLocations(
-                Map.of(StockTestData.QUERY_PARAM_TOP_LEVEL, StockTestData.QUERY_VALUE_TRUE), Role.ADMIN);
+        PaginatedResponse<StockLocationDetail> topLevel = stockLocationService.listStockLocations(
+                Map.of(StockTestData.QUERY_PARAM_TOP_LEVEL, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.ADMIN);
         topLevel.getResults().forEach(loc -> createdLocationIds.add(loc.getPk()));
     }
 
@@ -184,14 +187,15 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Filter Structural Locations")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_005_getStockLocationListFiltersStructuralLocations() {
-        StockLocationDetail structural = stockService.createStockLocation(
+        StockLocationDetail structural = stockLocationService.createStockLocation(
                 StockTestData.structuralLocation(
                         StockTestData.testLocationName("TC-ALCRUD-005", "Structural")),
                 Role.ADMIN);
         createdLocationIds.add(structural.getPk());
 
-        PaginatedResponse<StockLocationDetail> paged = stockService.listStockLocations(
-                Map.of(StockTestData.QUERY_PARAM_STRUCTURAL, StockTestData.QUERY_VALUE_TRUE), Role.READER);
+        PaginatedResponse<StockLocationDetail> paged = stockLocationService.listStockLocations(
+                Map.of(StockTestData.QUERY_PARAM_STRUCTURAL, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
 
         assertFalse(paged.getResults().isEmpty(), "at least one structural location must exist");
         for (StockLocationDetail loc : paged.getResults()) {
@@ -204,14 +208,15 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Filter External Locations")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_006_getStockLocationListFiltersExternalLocations() {
-        StockLocationDetail external = stockService.createStockLocation(
+        StockLocationDetail external = stockLocationService.createStockLocation(
                 StockTestData.externalLocation(
                         StockTestData.testLocationName("TC-ALCRUD-006", "External")),
                 Role.ADMIN);
         createdLocationIds.add(external.getPk());
 
-        PaginatedResponse<StockLocationDetail> paged = stockService.listStockLocations(
-                Map.of(StockTestData.QUERY_PARAM_EXTERNAL, StockTestData.QUERY_VALUE_TRUE), Role.READER);
+        PaginatedResponse<StockLocationDetail> paged = stockLocationService.listStockLocations(
+                Map.of(StockTestData.QUERY_PARAM_EXTERNAL, StockTestData.QUERY_VALUE_TRUE,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
 
         assertFalse(paged.getResults().isEmpty(), "at least one external location must exist");
         for (StockLocationDetail loc : paged.getResults()) {
@@ -225,7 +230,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_007_postStockLocationCreatesRootLocationWithRequiredFieldsOnly() {
         String name = StockTestData.testLocationName("TC-ALCRUD-007", "Root");
-        Response createResponse = stockService.createStockLocationRaw(
+        Response createResponse = stockLocationService.createStockLocationRaw(
                 StockTestData.minimalLocation(name), Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
@@ -245,7 +250,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Create Child Location")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_008_postStockLocationCreatesNestedChildLocation() {
-        StockLocationDetail parent = stockService.createStockLocation(
+        StockLocationDetail parent = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(
                         StockTestData.testLocationName("TC-ALCRUD-008", "Parent")),
                 Role.ADMIN);
@@ -255,7 +260,7 @@ public class StockLocationsCrudTest extends BaseTest {
         int parentLevel = parent.getLevel();
 
         String childName = "Child Shelf";
-        Response createResponse = stockService.createStockLocationRaw(
+        Response createResponse = stockLocationService.createStockLocationRaw(
                 StockTestData.locationWithParent(childName, parentPk, "Second-level shelf under parent"),
                 Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
@@ -273,7 +278,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_009_postStockLocationCreatesStructuralLocation() {
         String name = StockTestData.testLocationName("TC-ALCRUD-009", "Structural");
-        Response createResponse = stockService.createStockLocationRaw(
+        Response createResponse = stockLocationService.createStockLocationRaw(
                 StockTestData.structuralLocation(name), Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
@@ -289,7 +294,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_010_postStockLocationCreatesExternalLocation() {
         String name = StockTestData.testLocationName("TC-ALCRUD-010", "External");
-        Response createResponse = stockService.createStockLocationRaw(
+        Response createResponse = stockLocationService.createStockLocationRaw(
                 StockTestData.externalLocation(name), Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
@@ -304,7 +309,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Create Location with Type")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_011_postStockLocationCreatesLocationWithLocationType() {
-        StockLocationType locType = stockService.createStockLocationType(
+        StockLocationType locType = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALCRUD-011", "Type")),
                 Role.ADMIN);
@@ -312,7 +317,7 @@ public class StockLocationsCrudTest extends BaseTest {
         createdLocationTypeIds.add(typePk);
 
         String name = StockTestData.testLocationName("TC-ALCRUD-011", "Typed");
-        Response createResponse = stockService.createStockLocationRaw(
+        Response createResponse = stockLocationService.createStockLocationRaw(
                 StockTestData.locationWithType(name, typePk), Role.ADMIN);
         createResponse.then().statusCode(HttpStatus.SC_CREATED);
 
@@ -330,17 +335,17 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_012_putStockLocationRenamesLocationAndUpdatesPathstring() {
         String originalName = StockTestData.testLocationName("TC-ALCRUD-012", "OldName");
-        StockLocationDetail created = stockService.createStockLocation(
+        StockLocationDetail created = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(originalName), Role.ADMIN);
         int locationPk = created.getPk();
         createdLocationIds.add(locationPk);
 
         String newName = StockTestData.testLocationName("TC-ALCRUD-012", "NewName");
-        Response updateResponse = stockService.listStockLocationsRaw(
+        Response updateResponse = stockLocationService.listStockLocationsRaw(
                 Map.of(StockTestData.QUERY_PARAM_LIMIT, 1), Role.READER);
         updateResponse.then().statusCode(HttpStatus.SC_OK);
 
-        StockLocationDetail updated = stockService.updateStockLocation(locationPk,
+        StockLocationDetail updated = stockLocationService.updateStockLocation(locationPk,
                 StockTestData.minimalLocation(newName), Role.ADMIN);
 
         assertEquals(updated.getName(), newName);
@@ -353,19 +358,19 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_013_patchStockLocationTogglesStructuralFlag() {
         String name = StockTestData.testLocationName("TC-ALCRUD-013", "ToggleStructural");
-        StockLocationDetail created = stockService.createStockLocation(
+        StockLocationDetail created = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(name), Role.ADMIN);
         int locationPk = created.getPk();
         createdLocationIds.add(locationPk);
 
         assertFalse(Boolean.TRUE.equals(created.getStructural()), "initial structural must be false");
 
-        StockLocationDetail patched = stockService.patchStockLocation(locationPk,
+        StockLocationDetail patched = stockLocationService.patchStockLocation(locationPk,
                 StockLocationRequest.builder().structural(true).build(), Role.ADMIN);
         assertTrue(Boolean.TRUE.equals(patched.getStructural()), "structural must be true after patch");
 
         int partPk = findActivePartPk();
-        Response stockCreateResponse = stockService.createStockItemRaw(
+        Response stockCreateResponse = stockItemService.createStockItemRaw(
                 Map.of("part", partPk, "quantity", 1, "location", locationPk), Role.ADMIN);
         stockCreateResponse.then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
@@ -375,16 +380,16 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_014_patchStockLocationTogglesExternalFlag() {
         String name = StockTestData.testLocationName("TC-ALCRUD-014", "ToggleExternal");
-        StockLocationDetail created = stockService.createStockLocation(
+        StockLocationDetail created = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(name), Role.ADMIN);
         int locationPk = created.getPk();
         createdLocationIds.add(locationPk);
 
-        StockLocationDetail patchedTrue = stockService.patchStockLocation(locationPk,
+        StockLocationDetail patchedTrue = stockLocationService.patchStockLocation(locationPk,
                 StockLocationRequest.builder().external(true).build(), Role.ADMIN);
         assertTrue(Boolean.TRUE.equals(patchedTrue.getExternal()), "external must be true after patch");
 
-        StockLocationDetail patchedFalse = stockService.patchStockLocation(locationPk,
+        StockLocationDetail patchedFalse = stockLocationService.patchStockLocation(locationPk,
                 StockLocationRequest.builder().external(false).build(), Role.ADMIN);
         assertFalse(Boolean.TRUE.equals(patchedFalse.getExternal()), "external must be false after second patch");
     }
@@ -393,27 +398,27 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Reparent Location")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_015_patchStockLocationReparentsToNewParent() {
-        StockLocationDetail locA = stockService.createStockLocation(
+        StockLocationDetail locA = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(StockTestData.testLocationName("TC-ALCRUD-015", "A")),
                 Role.ADMIN);
         int locAPk = locA.getPk();
         createdLocationIds.add(locAPk);
 
-        StockLocationDetail locB = stockService.createStockLocation(
+        StockLocationDetail locB = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(StockTestData.testLocationName("TC-ALCRUD-015", "B")),
                 Role.ADMIN);
         int locBPk = locB.getPk();
         createdLocationIds.add(locBPk);
         String locBName = locB.getName();
 
-        StockLocationDetail locC = stockService.createStockLocation(
+        StockLocationDetail locC = stockLocationService.createStockLocation(
                 StockTestData.locationWithParent(
                         StockTestData.testLocationName("TC-ALCRUD-015", "C"), locAPk, "child of A"),
                 Role.ADMIN);
         int locCPk = locC.getPk();
         createdLocationIds.add(locCPk);
 
-        StockLocationDetail reparented = stockService.patchStockLocation(locCPk,
+        StockLocationDetail reparented = stockLocationService.patchStockLocation(locCPk,
                 StockLocationRequest.builder().parent(locBPk).build(), Role.ADMIN);
 
         assertEquals(reparented.getParent(), Integer.valueOf(locBPk));
@@ -425,27 +430,27 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Change Location Type")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_016_patchStockLocationChangesLocationType() {
-        StockLocationType typeA = stockService.createStockLocationType(
+        StockLocationType typeA = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALCRUD-016", "TypeA")),
                 Role.ADMIN);
         createdLocationTypeIds.add(typeA.getPk());
 
-        StockLocationType typeB = stockService.createStockLocationType(
+        StockLocationType typeB = stockLocationService.createStockLocationType(
                 StockTestData.minimalLocationType(
                         StockTestData.testLocationTypeName("TC-ALCRUD-016", "TypeB")),
                 Role.ADMIN);
         int typeBPk = typeB.getPk();
         createdLocationTypeIds.add(typeBPk);
 
-        StockLocationDetail location = stockService.createStockLocation(
+        StockLocationDetail location = stockLocationService.createStockLocation(
                 StockTestData.locationWithType(
                         StockTestData.testLocationName("TC-ALCRUD-016", "Loc"), typeA.getPk()),
                 Role.ADMIN);
         int locationPk = location.getPk();
         createdLocationIds.add(locationPk);
 
-        StockLocationDetail patched = stockService.patchStockLocation(locationPk,
+        StockLocationDetail patched = stockLocationService.patchStockLocation(locationPk,
                 StockLocationRequest.builder().locationType(typeBPk).build(), Role.ADMIN);
 
         assertEquals(patched.getLocationType(), Integer.valueOf(typeBPk));
@@ -458,77 +463,81 @@ public class StockLocationsCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_017_deleteStockLocationRemovesEmptyLocation() {
         String name = StockTestData.testLocationName("TC-ALCRUD-017", "ToDelete");
-        StockLocationDetail created = stockService.createStockLocation(
+        StockLocationDetail created = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(name), Role.ADMIN);
         int locationPk = created.getPk();
 
-        StockLocationDetail state = stockService.getStockLocationById(locationPk, Role.READER);
+        StockLocationDetail state = stockLocationService.getStockLocationById(locationPk, Role.READER);
         assertEquals(state.getItems(), Integer.valueOf(0), "items must be 0");
         assertEquals(state.getSublocations(), Integer.valueOf(0), "sublocations must be 0");
 
-        Response deleteResponse = stockService.deleteStockLocationRaw(locationPk, Role.ADMIN);
+        Response deleteResponse = stockLocationService.deleteStockLocationRaw(locationPk, Role.ADMIN);
         deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);
 
-        stockService.getStockLocationByIdRaw(locationPk, Role.READER).then()
+        stockLocationService.getStockLocationByIdRaw(locationPk, Role.READER).then()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test(groups = {"regression", "stock-locations"})
-    @Story("Delete Location with Stock Items - Negative")
+    @Story("Delete Location with Stock Items")
     @Severity(SeverityLevel.NORMAL)
-    public void tc_ALCRUD_018_deleteStockLocationWithStockItemsReturns400() {
+    public void tc_ALCRUD_018_deleteStockLocationWithStockItemsReturns204() {
         String locationName = StockTestData.testLocationName("TC-ALCRUD-018", "WithItems");
-        StockLocationDetail location = stockService.createStockLocation(
+        StockLocationDetail location = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(locationName), Role.ADMIN);
         int locationPk = location.getPk();
-        createdLocationIds.add(locationPk);
 
         int partPk = findActivePartPk();
-        StockItemDetail item = stockService.createStockItem(
+        StockItemDetail item = stockItemService.createStockItem(
                 StockTestData.stockItemWithLocation(partPk, 5.0, locationPk), Role.ADMIN);
         createdStockItemIds.add(item.getPk());
 
-        StockLocationDetail state = stockService.getStockLocationById(locationPk, Role.READER);
+        StockLocationDetail state = stockLocationService.getStockLocationById(locationPk, Role.READER);
         assertTrue(state.getItems() > 0, "items must be > 0");
 
-        Response deleteResponse = stockService.deleteStockLocationRaw(locationPk, Role.ADMIN);
-        int statusCode = deleteResponse.statusCode();
-        assertTrue(statusCode == HttpStatus.SC_BAD_REQUEST || statusCode == HttpStatus.SC_CONFLICT,
-                "status must be 400 or 409, got: " + statusCode);
+        Response deleteResponse = stockLocationService.deleteStockLocationRaw(locationPk, Role.ADMIN);
+        deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);
+
+        stockLocationService.getStockLocationByIdRaw(locationPk, Role.READER).then()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test(groups = {"regression", "stock-locations"})
-    @Story("Delete Location with Children - Negative")
+    @Story("Delete Location with Children")
     @Severity(SeverityLevel.NORMAL)
-    public void tc_ALCRUD_019_deleteStockLocationWithChildrenReturns400() {
-        StockLocationDetail parent = stockService.createStockLocation(
+    public void tc_ALCRUD_019_deleteStockLocationWithChildrenReturns204() {
+        StockLocationDetail parent = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(
                         StockTestData.testLocationName("TC-ALCRUD-019", "Parent")),
                 Role.ADMIN);
         int parentPk = parent.getPk();
-        createdLocationIds.add(parentPk);
 
-        StockLocationDetail child = stockService.createStockLocation(
+        StockLocationDetail child = stockLocationService.createStockLocation(
                 StockTestData.locationWithParent(
                         StockTestData.testLocationName("TC-ALCRUD-019", "Child"),
                         parentPk, "child location"),
                 Role.ADMIN);
-        createdLocationIds.add(child.getPk());
+        int childPk = child.getPk();
+        createdLocationIds.add(childPk);
 
-        StockLocationDetail state = stockService.getStockLocationById(parentPk, Role.READER);
+        StockLocationDetail state = stockLocationService.getStockLocationById(parentPk, Role.READER);
         assertTrue(state.getSublocations() > 0, "sublocations must be > 0");
 
-        Response deleteResponse = stockService.deleteStockLocationRaw(parentPk, Role.ADMIN);
-        int statusCode = deleteResponse.statusCode();
-        assertTrue(statusCode == HttpStatus.SC_BAD_REQUEST || statusCode == HttpStatus.SC_CONFLICT,
-                "status must be 400 or 409, got: " + statusCode);
+        Response deleteResponse = stockLocationService.deleteStockLocationRaw(parentPk, Role.ADMIN);
+        deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);
+
+        stockLocationService.getStockLocationByIdRaw(parentPk, Role.READER).then()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
+
+        StockLocationDetail orphanedChild = stockLocationService.getStockLocationById(childPk, Role.READER);
+        assertNull(orphanedChild.getParent(), "child location must have parent=null after parent is deleted");
     }
 
     @Test(groups = {"regression", "stock-locations"})
     @Story("Create Location - Negative: Missing Name")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_020_postStockLocationWithMissingNameReturns400() {
-        Response response = stockService.createStockLocationRaw(
+        Response response = stockLocationService.createStockLocationRaw(
                 Map.of("description", "No name supplied"), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
 
@@ -539,7 +548,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Create Location - Negative: Non-existent Parent")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_021_postStockLocationWithNonExistentParentReturns400() {
-        Response response = stockService.createStockLocationRaw(
+        Response response = stockLocationService.createStockLocationRaw(
                 Map.of("name", "Orphan Location", "parent", StockTestData.NONEXISTENT_PK), Role.ADMIN);
         response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
 
@@ -550,13 +559,13 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Patch Location - Negative: Cyclic Parent")
     @Severity(SeverityLevel.MINOR)
     public void tc_ALCRUD_022_patchStockLocationWithCyclicParentReturns400() {
-        StockLocationDetail locA = stockService.createStockLocation(
+        StockLocationDetail locA = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(StockTestData.testLocationName("TC-ALCRUD-022", "A")),
                 Role.ADMIN);
         int locAPk = locA.getPk();
         createdLocationIds.add(locAPk);
 
-        StockLocationDetail locB = stockService.createStockLocation(
+        StockLocationDetail locB = stockLocationService.createStockLocation(
                 StockTestData.locationWithParent(
                         StockTestData.testLocationName("TC-ALCRUD-022", "B"),
                         locAPk, "child of A"),
@@ -564,7 +573,7 @@ public class StockLocationsCrudTest extends BaseTest {
         int locBPk = locB.getPk();
         createdLocationIds.add(locBPk);
 
-        Response patchResponse = stockService.patchStockLocationRaw(locAPk,
+        Response patchResponse = stockLocationService.patchStockLocationRaw(locAPk,
                 StockLocationRequest.builder().parent(locBPk).build(), Role.ADMIN);
         patchResponse.then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
@@ -573,7 +582,7 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Create Location - Security: No Auth")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_023_postStockLocationWithoutAuthenticationReturns401Or403() {
-        Response response = stockService.createStockLocationUnauthenticated(
+        Response response = stockLocationService.createStockLocationUnauthenticated(
                 Map.of("name", "Unauthorized Location"));
 
         int status = response.statusCode();
@@ -585,14 +594,15 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("Search Locations by Name")
     @Severity(SeverityLevel.NORMAL)
     public void tc_ALCRUD_024_getStockLocationListSearchFilterMatchesNameAndPathstring() {
-        StockLocationDetail shelfLoc = stockService.createStockLocation(
+        StockLocationDetail shelfLoc = stockLocationService.createStockLocation(
                 StockTestData.minimalLocation(
                         StockTestData.testLocationName("TC-ALCRUD-024", "Shelf")),
                 Role.ADMIN);
         createdLocationIds.add(shelfLoc.getPk());
 
-        PaginatedResponse<StockLocationDetail> results = stockService.listStockLocations(
-                Map.of(StockTestData.QUERY_PARAM_SEARCH, StockTestData.LOCATION_SEARCH_TERM), Role.READER);
+        PaginatedResponse<StockLocationDetail> results = stockLocationService.listStockLocations(
+                Map.of(StockTestData.QUERY_PARAM_SEARCH, StockTestData.LOCATION_SEARCH_TERM,
+                        StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
 
         assertFalse(results.getResults().isEmpty(), "search must return at least one result");
         for (StockLocationDetail loc : results.getResults()) {

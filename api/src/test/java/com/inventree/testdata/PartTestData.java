@@ -8,7 +8,6 @@ public final class PartTestData {
 
     public static final int DEFAULT_PAGE_LIMIT = 5;
     public static final int PAGE_LIMIT_FOR_SEARCH = 50;
-    public static final int DEFAULT_CATEGORY_PK = 17;
 
     public static final String QUERY_VALUE_TRUE = "true";
     public static final String QUERY_PARAM_PARAMETERS = "parameters";
