@@ -4,8 +4,8 @@ import com.inventree.model.PartCategoryRequest;
 
 public final class CategoryTestData {
 
-    public static final int ELECTRONICS_PK = 4;
-    public static final String ELECTRONICS_NAME = "Passives";
+    public static final String RUN_ID = String.valueOf(System.currentTimeMillis() % 100000);
+    public static final String PASSIVES_NAME = "Passives";
 
     public static final int DEFAULT_PAGE_LIMIT = 10;
     public static final String QUERY_PARAM_PATH_DETAIL = "path_detail";
@@ -48,6 +48,6 @@ public final class CategoryTestData {
     }
 
     public static String testCategoryName(String testCaseId, String description) {
-        return testCaseId + "-" + description;
+        return testCaseId + "-" + description + "-" + RUN_ID;
     }
 }

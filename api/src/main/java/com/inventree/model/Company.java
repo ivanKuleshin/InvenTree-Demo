@@ -22,4 +22,7 @@ public class Company {
 
     @JsonProperty("is_manufacturer")
     private Boolean isManufacturer;
+
+    @JsonProperty("is_customer")
+    private Boolean isCustomer;
 }

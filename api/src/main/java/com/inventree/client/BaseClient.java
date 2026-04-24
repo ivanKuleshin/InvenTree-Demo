@@ -1,5 +1,6 @@
 package com.inventree.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inventree.auth.Role;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
@@ -13,15 +14,20 @@ public abstract class BaseClient {
 
     protected final Logger log = LogManager.getLogger(getClass());
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     protected final Response executeGet(String path, Role role) {
-        return executeGet(path, role, null);
+        return executeGet(path, role, (Map<String, Object>) null);
     }
 
-    protected final Response executeGet(String path, Role role, Map<String, Object> queryParams) {
+    protected final Response executeGet(String path, Role role, Object queryParams) {
         log.debug("GET {} [role={}]", path, role);
         var spec = given().spec(SpecBuilder.build(role));
-        if (queryParams != null && !queryParams.isEmpty()) {
-            spec = spec.queryParams(queryParams);
+        if (queryParams != null) {
+            Map<String, Object> map = MAPPER.convertValue(queryParams, Map.class);
+            if (!map.isEmpty()) {
+                spec = spec.queryParams(map);
+            }
         }
         return spec.when().get(path);
     }
@@ -59,5 +65,14 @@ public abstract class BaseClient {
                 .spec(SpecBuilder.build(role))
                 .when()
                 .delete(path);
+    }
+
+    protected final Response executePostNoAuth(String path, Object body) {
+        log.debug("POST {} [unauthenticated]", path);
+        return given()
+                .spec(SpecBuilder.buildNoAuth())
+                .body(body)
+                .when()
+                .post(path);
     }
 }

@@ -27,6 +27,8 @@ public final class SpecBuilder {
 
         AuthManager.getInstance().applyAuth(builder, role);
 
+        builder.addFilter(new ResponseLoggingFilter());
+
         if (ApiConfig.isLoggingEnabled()) {
             builder.addFilter(new AllureRestAssured());
         }
@@ -36,6 +38,20 @@ public final class SpecBuilder {
 
     public static RequestSpecification build(Role role) {
         return requestSpec(role).build();
+    }
+
+    public static RequestSpecification buildNoAuth() {
+        return new RequestSpecBuilder()
+                .setBaseUri(ApiConfig.getBaseUrl())
+                .setContentType(ContentType.JSON)
+                .addHeader("Accept", ContentType.JSON.toString())
+                .setRelaxedHTTPSValidation()
+                .setConfig(io.restassured.config.RestAssuredConfig.config()
+                        .httpClient(io.restassured.config.HttpClientConfig.httpClientConfig()
+                                .setParam("http.connection.timeout", ApiConfig.getRequestTimeoutMs())
+                                .setParam("http.socket.timeout", ApiConfig.getRequestTimeoutMs())))
+                .addFilter(new ResponseLoggingFilter())
+                .build();
     }
 
     public static ResponseSpecBuilder responseSpec(int expectedStatus) {

@@ -4,6 +4,7 @@
     <test name="All API Tests">
         <packages>
             <package name="com.inventree.tests"/>
+            <package name="com.inventree.tests.*"/>
         </packages>
     </test>
 

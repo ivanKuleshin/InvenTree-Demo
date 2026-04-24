@@ -6,17 +6,12 @@ public final class PartTestData {
 
     public static final String RUN_ID = String.valueOf(System.currentTimeMillis() % 100000);
 
-    public static final int KNOWN_PART_PK = 82;
-    public static final String KNOWN_PART_NAME = "1551ABK";
-    public static final boolean KNOWN_PART_ACTIVE = true;
-    public static final boolean KNOWN_PART_COMPONENT = true;
-    public static final boolean KNOWN_PART_PURCHASEABLE = true;
-    public static final boolean KNOWN_PART_ASSEMBLY = false;
-
     public static final int DEFAULT_PAGE_LIMIT = 5;
-    public static final int DEFAULT_CATEGORY_PK = 17;
+    public static final int PAGE_LIMIT_FOR_SEARCH = 50;
 
     public static final String QUERY_VALUE_TRUE = "true";
+    public static final String QUERY_VALUE_FALSE = "false";
+    public static final String QUERY_PARAM_STRUCTURAL = "structural";
     public static final String QUERY_PARAM_PARAMETERS = "parameters";
     public static final String QUERY_PARAM_TAGS = "tags";
     public static final String QUERY_PARAM_CATEGORY_DETAIL = "category_detail";
@@ -37,11 +32,15 @@ public final class PartTestData {
     public static final String PATCH_UPDATE_KEYWORDS = "patch-test qa";
     public static final String ORIGINAL_KEYWORDS = "original";
 
+    public static final String GET_BY_ID_DESCRIPTION = "Full field set part for GET by ID test";
+    public static final String GET_BY_ID_IPN = "IPN-APCRUD-002-" + RUN_ID;
+    public static final String GET_BY_ID_KEYWORDS = "get-by-id test";
+
     public static final String DUPLICATE_PART_NAME_SUFFIX = "DuplicatePart";
     public static final String INITIAL_STOCK_PART_NAME_SUFFIX = "InitialStockPart";
     public static final String INITIAL_SUPPLIER_PART_NAME_SUFFIX = "InitialSupplierPart";
 
-    public static final int INITIAL_STOCK_QUANTITY = 50;
+    public static final double INITIAL_STOCK_QUANTITY = 50.0;
     public static final int STOCK_STATUS_OK = 10;
     public static final String SUPPLIER_SKU = "SKU-TC-APCRUD-009-" + RUN_ID;
 
@@ -140,6 +139,21 @@ public final class PartTestData {
                 .name(name)
                 .active(true)
                 .keywords(keywords)
+                .build();
+    }
+
+    public static PartRequest fullPartRequest(String name, String description, String ipn, String keywords,
+                                              boolean active, boolean component, boolean purchaseable,
+                                              boolean assembly) {
+        return PartRequest.builder()
+                .name(name)
+                .description(description)
+                .ipn(ipn)
+                .keywords(keywords)
+                .active(active)
+                .component(component)
+                .purchaseable(purchaseable)
+                .assembly(assembly)
                 .build();
     }
 }
