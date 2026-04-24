@@ -18,6 +18,7 @@ import com.inventree.model.StockItem;
 import com.inventree.model.StockLocationDetail;
 import com.inventree.model.SupplierPart;
 import com.inventree.testdata.PartTestData;
+import com.inventree.testdata.StockTestData;
 import com.inventree.util.HttpStatus;
 import com.inventree.util.ResponseValidator;
 import io.qameta.allure.Epic;
@@ -48,6 +49,7 @@ import static org.testng.Assert.assertTrue;
 public class PartCrudTest extends BaseTest {
 
     private final List<Integer> createdPartIds = new ArrayList<>();
+    private final List<Integer> createdStockLocationIds = new ArrayList<>();
     private int defaultCategoryPk;
 
     @BeforeClass(alwaysRun = true)
@@ -84,6 +86,14 @@ public class PartCrudTest extends BaseTest {
             }
         });
         createdPartIds.clear();
+        createdStockLocationIds.forEach(id -> {
+            try {
+                stockLocationService.deleteStockLocation(id, Role.ADMIN);
+            } catch (Throwable t) {
+                log.error("Error while deleting stock location {}", id, t);
+            }
+        });
+        createdStockLocationIds.clear();
     }
 
     @Test(groups = {"regression", "parts"})
@@ -345,13 +355,20 @@ public class PartCrudTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void tc_APCRUD_008_postPartWithInitialStockCreatesStockItem() {
         PaginatedResponse<StockLocationDetail> locations = stockLocationService.listStockLocations(
-            Map.of(PartTestData.QUERY_PARAM_LIMIT, DEFAULT_PAGE_LIMIT,
+            Map.of(PartTestData.QUERY_PARAM_LIMIT, PAGE_LIMIT_FOR_SEARCH,
                 PartTestData.QUERY_PARAM_STRUCTURAL, PartTestData.QUERY_VALUE_FALSE), Role.ADMIN);
         int locationPk = locations.getResults().stream()
             .filter(l -> !Boolean.TRUE.equals(l.getStructural()))
             .findFirst()
-            .orElseThrow(() -> new IllegalStateException("No non-structural stock location found"))
-            .getPk();
+            .map(StockLocationDetail::getPk)
+            .orElseGet(() -> {
+                StockLocationDetail created = stockLocationService.createStockLocation(
+                    StockTestData.minimalLocation(
+                        StockTestData.testLocationName("TC-APCRUD-008", "precondition")),
+                    Role.ADMIN);
+                createdStockLocationIds.add(created.getPk());
+                return created.getPk();
+            });
 
         String newName = PartTestData.testPartName("TC-APCRUD-008", PartTestData.INITIAL_STOCK_PART_NAME_SUFFIX);
         Map<String, Object> payload = Map.of(

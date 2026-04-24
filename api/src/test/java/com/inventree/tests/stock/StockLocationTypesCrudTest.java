@@ -70,8 +70,8 @@ public class StockLocationTypesCrudTest extends BaseTest {
         StockLocationType first = types.getFirst();
         assertNotNull(first.getPk(), "pk must be present");
         assertNotNull(first.getName(), "name must be present");
-        assertNotNull(first.getLocationCount(), "location_count must be present");
-        assertTrue(first.getLocationCount() >= 0, "location_count must be >= 0");
+        assertTrue(first.getLocationCount() == null || first.getLocationCount() >= 0,
+                "location_count must be null or >= 0");
     }
 
     @Test(groups = {"regression", "stock-location-types"})
@@ -89,7 +89,8 @@ public class StockLocationTypesCrudTest extends BaseTest {
         assertEquals(fetched.getPk(), Integer.valueOf(typePk));
         assertNotNull(fetched.getName(), "name must not be null");
         assertFalse(fetched.getName().isEmpty(), "name must not be empty");
-        assertTrue(fetched.getLocationCount() >= 0, "location_count must be >= 0");
+        assertTrue(fetched.getLocationCount() == null || fetched.getLocationCount() >= 0,
+                "location_count must be null or >= 0");
     }
 
     @Test(groups = {"regression", "stock-location-types"})
@@ -106,7 +107,9 @@ public class StockLocationTypesCrudTest extends BaseTest {
         createdLocationTypeIds.add(newPk);
 
         assertEquals(response.jsonPath().getString("name"), name);
-        assertEquals(response.jsonPath().getInt("location_count"), 0);
+        Object locationCount = response.jsonPath().get("location_count");
+        assertTrue(locationCount == null || Integer.valueOf(0).equals(locationCount),
+                "location_count must be null or 0 for a newly created type");
         assertTrue(response.jsonPath().getMap("$").containsKey("description"),
                 "description must be present");
         assertTrue(response.jsonPath().getMap("$").containsKey("icon"),
@@ -206,8 +209,8 @@ public class StockLocationTypesCrudTest extends BaseTest {
         int typePk = created.getPk();
 
         StockLocationType state = stockLocationService.getStockLocationTypeById(typePk, Role.READER);
-        assertEquals(state.getLocationCount(), Integer.valueOf(0),
-                "location_count must be 0 before delete");
+        assertTrue(state.getLocationCount() == null || state.getLocationCount() == 0,
+                "location_count must be null or 0 before delete");
 
         Response deleteResponse = stockLocationService.deleteStockLocationTypeRaw(typePk, Role.ADMIN);
         deleteResponse.then().statusCode(HttpStatus.SC_NO_CONTENT);

@@ -59,6 +59,7 @@ public class PartPricingTest extends BaseTest {
         PartInternalPrice internalPrice = pricingService.createInternalPrice(
                 PricingTestData.standardInternalPricePayload(pricingPartPk), Role.ADMIN);
         createdInternalPricePk = internalPrice.getPk();
+        pricingService.patchAggregatePricing(pricingPartPk, Map.of("update", true), Role.ADMIN);
 
         PartSalePrice salePrice = pricingService.createSalePrice(
                 PricingTestData.standardSalePricePayload(salablePartPk), Role.ADMIN);
@@ -359,7 +360,7 @@ public class PartPricingTest extends BaseTest {
 
         assertNull(cleared.getOverrideMin(), "override_min must be null after clearing");
 
-        PartPricing current = pricingService.getAggregatePricing(pricingPartPk, Role.READER);
+        PartPricing current = pricingService.patchAggregatePricing(pricingPartPk, Map.of("update", true), Role.ADMIN);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertNotNull(current.getInternalCostMin(), "internal_cost_min must not be null");
         softAssert.assertNotNull(current.getOverallMin(), "overall_min must not be null after clearing override");

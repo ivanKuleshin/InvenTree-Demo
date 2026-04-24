@@ -254,14 +254,18 @@ All boolean parameters accept `true` or `false` (case-insensitive). Multiple boo
 **Observed IPN behavior:**
 
 - `IPN=RES-001` → `count: 1` (exact match, case-sensitive).
-- `IPN_regex=^RES` → `count: 7` (all parts whose IPN starts with "RES").
+- `IPN_regex=^RES` → regex filter works correctly and returns all parts whose IPN matches the pattern. The specific count depends on the dataset; the demo instance had 7 such parts at the time of original observation, but this may change. Always use a dynamically known IPN prefix when writing tests against this filter.
+
+> Updated 2026-04-23: Removed the hardcoded count claim of "7 parts" for `IPN_regex=^RES`. The filter functions correctly but requires parts with matching IPNs to exist in the dataset. Tests should use a dynamically created part with a known IPN and build the regex from that known value rather than relying on pre-existing demo data.
 
 **Observed category behavior:**
 
 - `category=24` → `count: 2` (only parts directly in category 24).
 - `category=24&cascade=true` → `count: 2` (same as without cascade when no child categories exist; increases if
   category has children).
-- `category=null` → `count: ~1427` (parts with no category assigned — vast majority in demo dataset).
+- `category=null` → on this demo instance, passing the literal string `'null'` as the category value does NOT filter to uncategorized parts. The parameter appears to be ignored and the full unfiltered part list is returned (count matches total parts, e.g. ~467). The literal string `'null'` is not recognized as a null sentinel by this InvenTree version.
+
+> Updated 2026-04-23: Corrected `category=null` observed behavior. Previously documented as returning ~1427 uncategorized parts. Actual behavior on this demo instance: the `null` string is not treated as a filter sentinel — the request returns all parts unfiltered. Tests should not assert that results are restricted to uncategorized parts when using `category=null`.
 
 **Observed name_regex behavior:**
 
@@ -415,7 +419,7 @@ Fields observed on each Part object in the default (no expansion) response:
 | `offset=99999` (beyond count)           | Returns envelope with `count` = actual total, empty `results`, `next=null`, `previous` pointing to near-last page. |
 | `ordering=invalid_field`                | Silent no-op; HTTP 200 returned with results in default database order.                                            |
 | Multiple boolean filters                | Combined with AND logic: `assembly=true&active=true` → 133 parts (vs. assembly alone: 135).                        |
-| `category=null`                         | Returns all parts with no category assigned. Majority of demo parts fall into this bucket (~1427).                 |
+| `category=null`                         | On this demo instance, the literal string `'null'` is not recognized as a null sentinel. The filter is ignored and all parts are returned unfiltered. Do not assert uncategorized-only results when using this parameter value. |
 | `search` with no matches                | HTTP 200, `count: 0`, `results: []`.                                                                               |
 | `IPN` exact match                       | Returns exactly 1 part when IPN is unique. Case-sensitive.                                                         |
 
@@ -445,7 +449,8 @@ GET /api/part/?created_after=2024-01-01&created_before=2024-12-31&limit=25&offse
 # Trackable salable parts with pricing, ordered by price descending
 GET /api/part/?trackable=true&salable=true&has_pricing=true&ordering=-pricing_min&limit=25
 
-# Uncategorised virtual parts
+# Uncategorised virtual parts (NOTE: category=null is not reliably filtered on this demo instance — the literal
+# string 'null' is not recognized as a null sentinel; the parameter is ignored and all parts are returned)
 GET /api/part/?category=null&virtual=true&limit=25
 
 # Parts 26-50 sorted by creation date descending

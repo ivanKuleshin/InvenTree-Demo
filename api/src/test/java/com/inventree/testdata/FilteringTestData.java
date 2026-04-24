@@ -31,7 +31,6 @@ public final class FilteringTestData {
     public static final String SEARCH_CATEGORY_NAME = "Passives";
 
     public static final String IPN_NON_EXISTENT = "RES-999";
-    public static final String IPN_REGEX_PREFIX_RES = "^RES";
     public static final String IPN_REGEX_NO_MATCH = "^XYZ_NOMATCH_99999";
     public static final String NAME_REGEX_PREFIX_R = "^R";
 

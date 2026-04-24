@@ -169,8 +169,10 @@ This parameter is available on the `/api/part/` list endpoint:
 
 | Parameter | Type | Description |
 |---|---|---|
-| `category` | integer | Filter parts by numeric category ID, or the literal `'null'` to filter for uncategorized parts |
+| `category` | integer | Filter parts by numeric category ID. The literal `'null'` is documented as a way to filter for uncategorized parts, but this behavior was NOT observed on the demo instance — see caveat below. |
 | `cascade` | boolean | If `true`, include parts in all child categories of the specified category |
+
+> **Caveat (Updated 2026-04-23):** On the InvenTree demo instance, passing `category=null` (the literal string `'null'`) does not filter to uncategorized parts. The parameter appears to be silently ignored and the full unfiltered part list is returned. Tests that rely on `category=null` returning only uncategorized parts will fail on this environment. Use a numeric category PK to filter by category reliably.
 
 ### User-Configurable Filters
 

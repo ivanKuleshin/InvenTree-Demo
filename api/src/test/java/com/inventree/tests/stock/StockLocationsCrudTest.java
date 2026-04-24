@@ -85,6 +85,12 @@ public class StockLocationsCrudTest extends BaseTest {
     @Story("List Locations")
     @Severity(SeverityLevel.CRITICAL)
     public void tc_ALCRUD_001_getStockLocationListReturnsPaginatedResultWithFullFieldSet() {
+        StockLocationDetail precondition = stockLocationService.createStockLocation(
+                StockTestData.minimalLocation(
+                        StockTestData.testLocationName("TC-ALCRUD-001", "Precondition")),
+                Role.ADMIN);
+        createdLocationIds.add(precondition.getPk());
+
         Response response = stockLocationService.listStockLocationsRaw(
                 Map.of(StockTestData.QUERY_PARAM_LIMIT, StockTestData.DEFAULT_PAGE_LIMIT), Role.READER);
         response.then().statusCode(HttpStatus.SC_OK);

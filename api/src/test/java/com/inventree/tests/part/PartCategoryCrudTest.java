@@ -34,31 +34,23 @@ public class PartCategoryCrudTest extends BaseTest {
 
     private final List<Integer> createdCategoryIds = new ArrayList<>();
     private int passivesCategoryPk;
-    private boolean passivesCreatedBySetup;
+    private String passivesName;
 
     @BeforeClass(alwaysRun = true)
     public void setupPassivesCategory() {
-        PaginatedResponse<PartCategory> result = partCategoryService.listCategories(
-                Map.of("search", CategoryTestData.PASSIVES_NAME), Role.ADMIN);
-        if (!result.getResults().isEmpty()) {
-            passivesCategoryPk = result.getResults().get(0).getPk();
-            passivesCreatedBySetup = false;
-        } else {
-            PartCategory created = partCategoryService.createCategory(
-                    CategoryTestData.minimalTopLevel(CategoryTestData.PASSIVES_NAME), Role.ADMIN);
-            passivesCategoryPk = created.getPk();
-            passivesCreatedBySetup = true;
-        }
+        String name = CategoryTestData.testCategoryName("TC-ACCRUD-SETUP", "Passives");
+        PartCategory created = partCategoryService.createCategory(
+                CategoryTestData.minimalTopLevel(name), Role.ADMIN);
+        passivesCategoryPk = created.getPk();
+        passivesName = name;
     }
 
     @AfterClass(alwaysRun = true)
     public void teardownPassivesCategory() {
-        if (passivesCreatedBySetup) {
-            try {
-                partCategoryService.deleteCategory(passivesCategoryPk, Role.ADMIN);
-            } catch (Throwable t) {
-                log.error("Error while deleting setup passives category", t);
-            }
+        try {
+            partCategoryService.deleteCategory(passivesCategoryPk, Role.ADMIN);
+        } catch (Throwable t) {
+            log.error("Error while deleting setup passives category", t);
         }
     }
 
@@ -124,7 +116,7 @@ public class PartCategoryCrudTest extends BaseTest {
 
         PartCategory category = rawResponse.as(PartCategory.class);
         assertEquals(category.getPk(), Integer.valueOf(passivesCategoryPk));
-        assertEquals(category.getName(), CategoryTestData.PASSIVES_NAME);
+        assertEquals(category.getName(), passivesName);
         assertEquals(category.getLevel(), Integer.valueOf(0));
         assertNull(category.getParent(), "Top-level category parent must be null");
 
@@ -143,7 +135,7 @@ public class PartCategoryCrudTest extends BaseTest {
         Map<String, Object> firstElement = path.getFirst();
         assertEquals(firstElement.get("pk"), passivesCategoryPk,
                 "First path element pk must match category pk");
-        assertEquals(firstElement.get("name"), CategoryTestData.PASSIVES_NAME,
+        assertEquals(firstElement.get("name"), passivesName,
                 "First path element name must match category name");
     }
 
@@ -185,7 +177,7 @@ public class PartCategoryCrudTest extends BaseTest {
         int parentPk = passivesCategoryPk;
         String childName = CategoryTestData.testCategoryName("TC-ACCRUD-004", "ChildCat");
         String description = "Child category for CRUD test";
-        String expectedPathstring = CategoryTestData.PASSIVES_NAME + "/" + childName;
+        String expectedPathstring = passivesName + "/" + childName;
 
         PartCategoryRequest request = CategoryTestData.withParentAndDescription(
                 childName, parentPk, description);
@@ -206,7 +198,7 @@ public class PartCategoryCrudTest extends BaseTest {
         assertNotNull(path, "path array must be present in POST response");
         assertEquals(path.size(), 2, "path array must contain two elements for level-1 category");
         assertEquals(path.get(0).get("pk"), parentPk);
-        assertEquals(path.get(0).get("name"), CategoryTestData.PASSIVES_NAME);
+        assertEquals(path.get(0).get("name"), passivesName);
         assertEquals(path.get(1).get("pk"), childPk);
         assertEquals(path.get(1).get("name"), childName);
 
