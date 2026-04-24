@@ -18,7 +18,6 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -38,7 +37,6 @@ import static org.testng.Assert.assertTrue;
 @Feature("Part List — Filtering, Pagination, and Search")
 public class PartFilteringPaginationSearchTest extends BaseTest {
 
-    private final List<Integer> createdPartIds = new ArrayList<>();
     private int parentCategoryPk;
     private int childCategoryPk;
     private int ipnPartPk;
@@ -92,18 +90,6 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
             }
         });
         setupCreatedCategoryIds.clear();
-    }
-
-    @AfterMethod(alwaysRun = true)
-    public void cleanupTestData() {
-        createdPartIds.forEach(id -> {
-            try {
-                partService.deletePart(id, Role.ADMIN);
-            } catch (Exception e) {
-                log.error("Error while deleting part", e);
-            }
-        });
-        createdPartIds.clear();
     }
 
     @Test(groups = {"regression", "parts", "pagination"})
@@ -879,7 +865,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
 
     private int findOrCreateParentCategory() {
         PaginatedResponse<PartCategory> listing = partCategoryService.listCategories(
-                Map.of("top_level", "true", "limit", 1), Role.ADMIN);
+                Map.of("top_level", "true", "structural", "false", "limit", 1), Role.ADMIN);
         if (!listing.getResults().isEmpty()) {
             return listing.getResults().getFirst().getPk();
         }
@@ -893,7 +879,7 @@ public class PartFilteringPaginationSearchTest extends BaseTest {
 
     private int findOrCreateChildCategory(int parentPk) {
         PaginatedResponse<PartCategory> listing = partCategoryService.listCategories(
-                Map.of("parent", parentPk, "limit", 1), Role.ADMIN);
+                Map.of("parent", parentPk, "structural", "false", "limit", 1), Role.ADMIN);
         if (!listing.getResults().isEmpty()) {
             return listing.getResults().getFirst().getPk();
         }
